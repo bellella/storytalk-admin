@@ -1,29 +1,36 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { AdminLayout } from "@/components/admin/admin-layout"
-import { StatusBadge } from "@/components/admin/status-badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { AdminLayout } from "@/components/admin/admin-layout";
+import { StatusBadge } from "@/components/admin/status-badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   ArrowLeft,
   Save,
@@ -34,116 +41,284 @@ import {
   Trash2,
   Plus,
   GripVertical,
-  ImageIcon,
   Clock,
   Calendar,
   FileText,
   UserCircle,
-  Smile,
-  Upload,
-  X,
-} from "lucide-react"
-import { cn } from "@/lib/utils"
+  Loader2,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Mock data
-const mockStory = {
-  id: "1",
-  title: "The Lost Kingdom",
-  category: "Fantasy",
-  difficulty: "Intermediate",
-  description: "A brave young hero embarks on a journey to discover the secrets of an ancient kingdom lost to time. Along the way, they meet fascinating characters and face challenges that test their courage and wit.",
-  estimatedDuration: "45 min",
-  status: "draft" as const,
-  createdAt: "Jan 15, 2024",
-  updatedAt: "2 hours ago",
-  episodeCount: 12,
-}
+type Episode = {
+  id: string;
+  title: string;
+  order: number;
+  isPublished: boolean;
+  _count?: {
+    scenes: number;
+  };
+};
 
-const mockEpisodes = [
-  { id: "1", number: 1, title: "The Beginning", sceneCount: 5, dialogCount: 24, status: "published" as const },
-  { id: "2", number: 2, title: "Into the Forest", sceneCount: 4, dialogCount: 18, status: "published" as const },
-  { id: "3", number: 3, title: "The Hidden Village", sceneCount: 6, dialogCount: 32, status: "draft" as const },
-  { id: "4", number: 4, title: "Secrets Revealed", sceneCount: 3, dialogCount: 15, status: "draft" as const },
-]
+type Story = {
+  id: string;
+  title: string;
+  category: string;
+  icon: string;
+  difficulty: number;
+  description: string | null;
+  coverImage: string | null;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+  episodes: Episode[];
+};
 
-const mockCharacters = [
-  { id: "1", name: "Luna", role: "Main", avatar: null },
-  { id: "2", name: "Marcus", role: "Support", avatar: null },
-  { id: "3", name: "Elder Sage", role: "NPC", avatar: null },
-]
+type StoryCharacter = {
+  id: string;
+  name: string | null;
+  role: string | null;
+  character: {
+    id: string;
+    name: string;
+    avatarImage: string;
+  } | null;
+};
 
-// Expression images for characters in this story
-const mockExpressions = [
-  { 
-    id: "1", 
-    characterId: "1",
-    characterName: "Luna", 
-    expressionName: "happy", 
-    imageUrl: null,
-  },
-  { 
-    id: "2", 
-    characterId: "1",
-    characterName: "Luna", 
-    expressionName: "sad", 
-    imageUrl: null,
-  },
-  { 
-    id: "3", 
-    characterId: "1",
-    characterName: "Luna", 
-    expressionName: "surprised", 
-    imageUrl: null,
-  },
-  { 
-    id: "4", 
-    characterId: "1",
-    characterName: "Luna", 
-    expressionName: "angry", 
-    imageUrl: null,
-  },
-  { 
-    id: "5", 
-    characterId: "2",
-    characterName: "Marcus", 
-    expressionName: "neutral", 
-    imageUrl: null,
-  },
-  { 
-    id: "6", 
-    characterId: "2",
-    characterName: "Marcus", 
-    expressionName: "thinking", 
-    imageUrl: null,
-  },
-  { 
-    id: "7", 
-    characterId: "3",
-    characterName: "Elder Sage", 
-    expressionName: "wise", 
-    imageUrl: null,
-  },
-]
+type Character = {
+  id: string;
+  name: string;
+  avatarImage: string;
+  description: string;
+};
 
 const tabs = [
   { id: "overview", label: "Overview", icon: FileText },
   { id: "episodes", label: "Episodes", icon: FileText },
   { id: "characters", label: "Characters", icon: UserCircle },
-  { id: "expressions", label: "Expressions", icon: Smile },
-]
+];
 
-const categories = ["Fantasy", "Romance", "Mystery", "Sci-Fi", "Drama", "Adventure"]
-const difficulties = ["Beginner", "Intermediate", "Advanced"]
+const categories = [
+  "Fantasy",
+  "Romance",
+  "Mystery",
+  "Sci-Fi",
+  "Drama",
+  "Adventure",
+];
+const difficulties = [
+  { value: 1, label: "Beginner" },
+  { value: 2, label: "Intermediate" },
+  { value: 3, label: "Advanced" },
+];
+
+function getDifficultyLabel(level: number) {
+  if (level <= 1) return "Beginner";
+  if (level === 2) return "Intermediate";
+  return "Advanced";
+}
+
+function getStatus(isPublished: boolean): "draft" | "published" {
+  return isPublished ? "published" : "draft";
+}
 
 export default function StoryDetailPage() {
-  const params = useParams()
-  const [activeTab, setActiveTab] = useState("overview")
-  const [story, setStory] = useState(mockStory)
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const params = useParams();
+  const storyId = params.id as string;
 
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setStory({ ...story, [field]: value })
-    setHasUnsavedChanges(true)
+  const [activeTab, setActiveTab] = useState("overview");
+  const [story, setStory] = useState<Story | null>(null);
+  const [characters, setCharacters] = useState<StoryCharacter[]>([]);
+  const [allCharacters, setAllCharacters] = useState<Character[]>([]);
+  const [isCharacterDialogOpen, setIsCharacterDialogOpen] = useState(false);
+  const [newCharacterName, setNewCharacterName] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // Fetch story and characters
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [storyRes, charactersRes] = await Promise.all([
+          fetch(`/api/stories/${storyId}`),
+          fetch(`/api/stories/${storyId}/characters`),
+        ]);
+        if (!storyRes.ok) throw new Error("Failed to fetch story");
+        const storyData = await storyRes.json();
+        setStory(storyData);
+        if (charactersRes.ok) {
+          const charactersData = await charactersRes.json();
+          setCharacters(charactersData);
+        }
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [storyId]);
+
+  // Fetch all available characters when dialog opens
+  useEffect(() => {
+    if (!isCharacterDialogOpen) return;
+    const fetchAllCharacters = async () => {
+      const res = await fetch("/api/characters");
+      if (res.ok) {
+        const data = await res.json();
+        setAllCharacters(data);
+      }
+    };
+    fetchAllCharacters();
+  }, [isCharacterDialogOpen]);
+
+  const handleInputChange = (
+    field: string,
+    value: string | number | boolean
+  ) => {
+    if (!story) return;
+    setStory({ ...story, [field]: value });
+    setHasUnsavedChanges(true);
+  };
+
+  const handleSave = async () => {
+    if (!story) return;
+    try {
+      setSaving(true);
+      const res = await fetch(`/api/stories/${storyId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: story.title,
+          category: story.category,
+          icon: story.icon,
+          difficulty: story.difficulty,
+          description: story.description,
+          coverImage: story.coverImage,
+          isPublished: story.isPublished,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      setHasUnsavedChanges(false);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handlePublish = async () => {
+    if (!story) return;
+    try {
+      setSaving(true);
+      await fetch(`/api/stories/${storyId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isPublished: true }),
+      });
+      setStory({ ...story, isPublished: true });
+      setHasUnsavedChanges(false);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCreateEpisode = async () => {
+    if (!story) return;
+    try {
+      const nextOrder = story.episodes.length + 1;
+      const res = await fetch(`/api/stories/${storyId}/episodes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: `Episode ${nextOrder}`,
+          order: nextOrder,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to create episode");
+      const newEpisode = await res.json();
+      setStory({ ...story, episodes: [...story.episodes, newEpisode] });
+    } catch (e: any) {
+      setError(e.message);
+    }
+  };
+
+  const handleAddCharacter = () => {
+    setIsCharacterDialogOpen(true);
+  };
+
+  const handleSelectCharacter = async (characterId: string) => {
+    try {
+      const res = await fetch(`/api/stories/${storyId}/characters`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ characterId }),
+      });
+      if (!res.ok) throw new Error("Failed to add character");
+      const newStoryCharacter = await res.json();
+      setCharacters([...characters, newStoryCharacter]);
+      setIsCharacterDialogOpen(false);
+    } catch (e: any) {
+      setError(e.message);
+    }
+  };
+
+  const handleRemoveCharacter = async (storyCharacterId: string) => {
+    if (!confirm("Remove this character from the story?")) return;
+    try {
+      await fetch(`/api/stories/${storyId}/characters?id=${storyCharacterId}`, {
+        method: "DELETE",
+      });
+      setCharacters(characters.filter((c) => c.id !== storyCharacterId));
+    } catch (e: any) {
+      setError(e.message);
+    }
+  };
+
+  const handleCreateStoryCharacter = async () => {
+    if (!newCharacterName.trim()) return;
+    try {
+      const res = await fetch(`/api/stories/${storyId}/characters`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newCharacterName.trim() }),
+      });
+      if (!res.ok) throw new Error("Failed to create character");
+      const newStoryCharacter = await res.json();
+      setCharacters([...characters, newStoryCharacter]);
+      setNewCharacterName("");
+    } catch (e: any) {
+      setError(e.message);
+    }
+  };
+
+  // Filter out already added characters
+  const availableCharacters = allCharacters.filter(
+    (c) => !characters.some((sc) => sc.character?.id === c.id)
+  );
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center py-24 text-muted-foreground">
+          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+          Loading story...
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (error || !story) {
+    return (
+      <AdminLayout>
+        <div className="py-12 text-center text-destructive">
+          Failed to load story: {error || "Not found"}
+        </div>
+      </AdminLayout>
+    );
   }
 
   return (
@@ -159,16 +334,19 @@ export default function StoryDetailPage() {
         </Link>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <ImageIcon className="w-7 h-7 text-primary" />
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-2xl">
+              {story.icon || "📖"}
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-semibold text-foreground">{story.title}</h1>
-                <StatusBadge status={story.status} />
+                <h1 className="text-2xl font-semibold text-foreground">
+                  {story.title}
+                </h1>
+                <StatusBadge status={getStatus(story.isPublished)} />
               </div>
               <p className="text-muted-foreground mt-1">
-                {story.category} · {story.difficulty} · {story.episodeCount} episodes
+                {story.category} · {getDifficultyLabel(story.difficulty)} ·{" "}
+                {story.episodes.length} episodes
               </p>
             </div>
           </div>
@@ -176,14 +354,29 @@ export default function StoryDetailPage() {
             {hasUnsavedChanges && (
               <span className="text-sm text-warning">Unsaved changes</span>
             )}
-            <Button variant="outline" className="rounded-xl bg-transparent">
-              <Save className="w-4 h-4 mr-2" />
+            <Button
+              variant="outline"
+              className="rounded-xl bg-transparent"
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
               Save
             </Button>
-            <Button className="rounded-xl shadow-lg shadow-primary/25">
-              <Send className="w-4 h-4 mr-2" />
-              Publish
-            </Button>
+            {!story.isPublished && (
+              <Button
+                className="rounded-xl shadow-lg shadow-primary/25"
+                onClick={handlePublish}
+                disabled={saving}
+              >
+                <Send className="w-4 h-4 mr-2" />
+                Publish
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -214,11 +407,15 @@ export default function StoryDetailPage() {
           <div className="col-span-2 space-y-6">
             <Card className="rounded-2xl border-border/50 shadow-sm">
               <CardHeader className="pb-4">
-                <CardTitle className="text-lg font-medium">Story Details</CardTitle>
+                <CardTitle className="text-lg font-medium">
+                  Story Details
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
                 <div>
-                  <Label htmlFor="title" className="text-sm font-medium">Title</Label>
+                  <Label htmlFor="title" className="text-sm font-medium">
+                    Title
+                  </Label>
                   <Input
                     id="title"
                     value={story.title}
@@ -231,14 +428,20 @@ export default function StoryDetailPage() {
                     <Label className="text-sm font-medium">Category</Label>
                     <Select
                       value={story.category}
-                      onValueChange={(value) => handleInputChange("category", value)}
+                      onValueChange={(value) =>
+                        handleInputChange("category", value)
+                      }
                     >
                       <SelectTrigger className="mt-2 rounded-xl bg-secondary border-0">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="rounded-xl">
                         {categories.map((cat) => (
-                          <SelectItem key={cat} value={cat} className="rounded-lg">
+                          <SelectItem
+                            key={cat}
+                            value={cat}
+                            className="rounded-lg"
+                          >
                             {cat}
                           </SelectItem>
                         ))}
@@ -248,16 +451,22 @@ export default function StoryDetailPage() {
                   <div>
                     <Label className="text-sm font-medium">Difficulty</Label>
                     <Select
-                      value={story.difficulty}
-                      onValueChange={(value) => handleInputChange("difficulty", value)}
+                      value={String(story.difficulty)}
+                      onValueChange={(value) =>
+                        handleInputChange("difficulty", Number(value))
+                      }
                     >
                       <SelectTrigger className="mt-2 rounded-xl bg-secondary border-0">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="rounded-xl">
                         {difficulties.map((diff) => (
-                          <SelectItem key={diff} value={diff} className="rounded-lg">
-                            {diff}
+                          <SelectItem
+                            key={diff.value}
+                            value={String(diff.value)}
+                            className="rounded-lg"
+                          >
+                            {diff.label}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -265,22 +474,27 @@ export default function StoryDetailPage() {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="description" className="text-sm font-medium">Description</Label>
+                  <Label htmlFor="description" className="text-sm font-medium">
+                    Description
+                  </Label>
                   <Textarea
                     id="description"
-                    value={story.description}
-                    onChange={(e) => handleInputChange("description", e.target.value)}
+                    value={story.description || ""}
+                    onChange={(e) =>
+                      handleInputChange("description", e.target.value)
+                    }
                     className="mt-2 rounded-xl bg-secondary border-0 min-h-[120px]"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="duration" className="text-sm font-medium">Estimated Duration</Label>
+                  <Label htmlFor="icon" className="text-sm font-medium">
+                    Icon (emoji)
+                  </Label>
                   <Input
-                    id="duration"
-                    value={story.estimatedDuration}
-                    onChange={(e) => handleInputChange("estimatedDuration", e.target.value)}
-                    className="mt-2 rounded-xl bg-secondary border-0"
-                    placeholder="e.g., 45 min"
+                    id="icon"
+                    value={story.icon}
+                    onChange={(e) => handleInputChange("icon", e.target.value)}
+                    className="mt-2 rounded-xl bg-secondary border-0 w-24"
                   />
                 </div>
               </CardContent>
@@ -291,25 +505,16 @@ export default function StoryDetailPage() {
                 <CardTitle className="text-lg font-medium">Media</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-sm font-medium">Icon</Label>
-                    <div className="mt-2 h-32 rounded-xl bg-secondary border-2 border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-secondary/80 transition-colors">
-                      <div className="text-center">
-                        <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                        <span className="text-sm text-muted-foreground">Upload icon</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-sm font-medium">Cover Image</Label>
-                    <div className="mt-2 h-32 rounded-xl bg-secondary border-2 border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-secondary/80 transition-colors">
-                      <div className="text-center">
-                        <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                        <span className="text-sm text-muted-foreground">Upload cover</span>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <Label className="text-sm font-medium">Cover Image URL</Label>
+                  <Input
+                    value={story.coverImage || ""}
+                    onChange={(e) =>
+                      handleInputChange("coverImage", e.target.value)
+                    }
+                    placeholder="https://..."
+                    className="mt-2 rounded-xl bg-secondary border-0"
+                  />
                 </div>
               </CardContent>
             </Card>
@@ -323,11 +528,13 @@ export default function StoryDetailPage() {
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Published</span>
+                  <span className="text-sm text-muted-foreground">
+                    Published
+                  </span>
                   <Switch
-                    checked={story.status === "published"}
+                    checked={story.isPublished}
                     onCheckedChange={(checked) =>
-                      handleInputChange("status", checked ? "published" : "draft")
+                      handleInputChange("isPublished", checked)
                     }
                   />
                 </div>
@@ -342,17 +549,23 @@ export default function StoryDetailPage() {
                 <div className="flex items-center gap-3 text-sm">
                   <Calendar className="w-4 h-4 text-muted-foreground" />
                   <span className="text-muted-foreground">Created:</span>
-                  <span className="text-foreground">{story.createdAt}</span>
+                  <span className="text-foreground">
+                    {new Date(story.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Clock className="w-4 h-4 text-muted-foreground" />
                   <span className="text-muted-foreground">Updated:</span>
-                  <span className="text-foreground">{story.updatedAt}</span>
+                  <span className="text-foreground">
+                    {new Date(story.updatedAt).toLocaleDateString()}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <FileText className="w-4 h-4 text-muted-foreground" />
                   <span className="text-muted-foreground">Episodes:</span>
-                  <span className="text-foreground">{story.episodeCount}</span>
+                  <span className="text-foreground">
+                    {story.episodes.length}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -364,44 +577,55 @@ export default function StoryDetailPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <p className="text-muted-foreground">Drag to reorder episodes</p>
-            <Button className="rounded-xl shadow-lg shadow-primary/25">
+            <Button
+              className="rounded-xl shadow-lg shadow-primary/25"
+              onClick={handleCreateEpisode}
+            >
               <Plus className="w-4 h-4 mr-2" />
               Create Episode
             </Button>
           </div>
           <Card className="rounded-2xl border-border/50 shadow-sm overflow-hidden">
             <div className="divide-y divide-border/50">
-              {mockEpisodes.map((episode) => (
+              {story.episodes.map((episode) => (
                 <div
                   key={episode.id}
                   className="flex items-center gap-4 p-4 hover:bg-secondary/50 transition-colors group"
                 >
                   <GripVertical className="w-5 h-5 text-muted-foreground/50 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-semibold">
-                    {episode.number}
+                    {episode.order}
                   </div>
                   <div className="flex-1">
                     <Link
-                      href={`/stories/${params.id}/episodes/${episode.id}`}
+                      href={`/stories/${storyId}/episodes/${episode.id}`}
                       className="font-medium text-foreground hover:text-primary transition-colors"
                     >
                       {episode.title}
                     </Link>
                     <p className="text-sm text-muted-foreground">
-                      {episode.sceneCount} scenes · {episode.dialogCount} dialogs
+                      {episode._count?.scenes ?? 0} scenes
                     </p>
                   </div>
-                  <StatusBadge status={episode.status} />
+                  <StatusBadge status={getStatus(episode.isPublished)} />
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="rounded-xl h-9 w-9">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-xl h-9 w-9"
+                      >
                         <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="rounded-xl">
-                      <DropdownMenuItem className="rounded-lg">
-                        <Pencil className="w-4 h-4 mr-2" />
-                        Edit
+                      <DropdownMenuItem className="rounded-lg" asChild>
+                        <Link
+                          href={`/stories/${storyId}/episodes/${episode.id}`}
+                        >
+                          <Pencil className="w-4 h-4 mr-2" />
+                          Edit
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem className="rounded-lg">
                         <Copy className="w-4 h-4 mr-2" />
@@ -416,6 +640,12 @@ export default function StoryDetailPage() {
                 </div>
               ))}
             </div>
+            {story.episodes.length === 0 && (
+              <div className="p-12 text-center">
+                <FileText className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                <p className="text-muted-foreground">No episodes yet</p>
+              </div>
+            )}
           </Card>
         </div>
       )}
@@ -423,273 +653,142 @@ export default function StoryDetailPage() {
       {activeTab === "characters" && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <p className="text-muted-foreground">Characters appearing in this story</p>
-            <Button variant="outline" className="rounded-xl bg-transparent">
+            <p className="text-muted-foreground">
+              Characters appearing in this story
+            </p>
+            <Button
+              variant="outline"
+              className="rounded-xl bg-transparent"
+              onClick={handleAddCharacter}
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Character
             </Button>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            {mockCharacters.map((character) => (
-              <Card key={character.id} className="rounded-2xl border-border/50 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <UserCircle className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground">{character.name}</p>
-                      <p className="text-sm text-muted-foreground">{character.role}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
+            {characters.length === 0 && (
+              <div className="col-span-3 p-12 text-center">
+                <UserCircle className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                <p className="text-muted-foreground">
+                  No characters linked yet
+                </p>
+              </div>
+            )}
+            {characters.map((sc) => {
+              const displayName = sc.character?.name || sc.name || "Unknown";
+              const avatarImage = sc.character?.avatarImage;
+              const isLinked = !!sc.character;
 
-      {activeTab === "expressions" && (
-        <ExpressionsTab />
-      )}
-    </AdminLayout>
-  )
-}
-
-function ExpressionsTab() {
-  const [expressions, setExpressions] = useState(mockExpressions)
-  const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null)
-  const [isAddingNew, setIsAddingNew] = useState(false)
-  const [newExpression, setNewExpression] = useState({ characterId: "", expressionName: "" })
-
-  // Group expressions by character
-  const expressionsByCharacter = expressions.reduce((acc, expr) => {
-    if (!acc[expr.characterId]) {
-      acc[expr.characterId] = {
-        characterName: expr.characterName,
-        expressions: []
-      }
-    }
-    acc[expr.characterId].expressions.push(expr)
-    return acc
-  }, {} as Record<string, { characterName: string; expressions: typeof mockExpressions }>)
-
-  const filteredCharacters = selectedCharacter 
-    ? { [selectedCharacter]: expressionsByCharacter[selectedCharacter] }
-    : expressionsByCharacter
-
-  const handleAddExpression = () => {
-    if (!newExpression.characterId || !newExpression.expressionName.trim()) return
-    
-    const character = mockCharacters.find(c => c.id === newExpression.characterId)
-    if (!character) return
-
-    const newExpr = {
-      id: String(expressions.length + 1),
-      characterId: newExpression.characterId,
-      characterName: character.name,
-      expressionName: newExpression.expressionName.toLowerCase().trim(),
-      imageUrl: null,
-    }
-    
-    setExpressions([...expressions, newExpr])
-    setNewExpression({ characterId: "", expressionName: "" })
-    setIsAddingNew(false)
-  }
-
-  const handleDeleteExpression = (id: string) => {
-    setExpressions(expressions.filter(e => e.id !== id))
-  }
-
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <p className="text-muted-foreground">Character expression images used in dialogs</p>
-          <Select
-            value={selectedCharacter || "all"}
-            onValueChange={(value) => setSelectedCharacter(value === "all" ? null : value)}
-          >
-            <SelectTrigger className="w-[180px] rounded-xl bg-card border-border/50">
-              <SelectValue placeholder="All Characters" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="all" className="rounded-lg">All Characters</SelectItem>
-              {mockCharacters.map((char) => (
-                <SelectItem key={char.id} value={char.id} className="rounded-lg">
-                  {char.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <Button 
-          className="rounded-xl shadow-lg shadow-primary/25"
-          onClick={() => setIsAddingNew(true)}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Expression
-        </Button>
-      </div>
-
-      {/* Add New Expression Form */}
-      {isAddingNew && (
-        <Card className="rounded-2xl border-border/50 shadow-sm mb-6 border-2 border-primary/20 bg-primary/5">
-          <CardContent className="p-5">
-            <div className="flex items-end gap-4">
-              <div className="flex-1">
-                <Label className="text-sm font-medium">Character</Label>
-                <Select
-                  value={newExpression.characterId}
-                  onValueChange={(value) => setNewExpression({ ...newExpression, characterId: value })}
+              return (
+                <Card
+                  key={sc.id}
+                  className="rounded-2xl border-border/50 shadow-sm overflow-hidden hover:shadow-md transition-shadow group"
                 >
-                  <SelectTrigger className="mt-2 rounded-xl bg-card border-border/50">
-                    <SelectValue placeholder="Select character" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    {mockCharacters.map((char) => (
-                      <SelectItem key={char.id} value={char.id} className="rounded-lg">
-                        {char.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex-1">
-                <Label className="text-sm font-medium">Expression Name</Label>
-                <Input
-                  value={newExpression.expressionName}
-                  onChange={(e) => setNewExpression({ ...newExpression, expressionName: e.target.value })}
-                  placeholder="e.g., happy, sad, angry"
-                  className="mt-2 rounded-xl bg-card border-border/50"
-                />
-              </div>
-              <Button 
-                className="rounded-xl"
-                onClick={handleAddExpression}
-                disabled={!newExpression.characterId || !newExpression.expressionName.trim()}
-              >
-                Add
-              </Button>
-              <Button 
-                variant="outline" 
-                className="rounded-xl bg-transparent"
-                onClick={() => {
-                  setIsAddingNew(false)
-                  setNewExpression({ characterId: "", expressionName: "" })
-                }}
-              >
-                Cancel
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Expressions grouped by character */}
-      <div className="space-y-8">
-        {Object.entries(filteredCharacters).map(([characterId, data]) => (
-          <div key={characterId}>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <UserCircle className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground">{data.characterName}</h3>
-                <p className="text-sm text-muted-foreground">{data.expressions.length} expressions</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-              {data.expressions.map((expression) => (
-                <Card 
-                  key={expression.id} 
-                  className="rounded-2xl border-border/50 shadow-sm overflow-hidden group hover:shadow-md transition-all"
-                >
-                  <div className="aspect-[3/4] bg-secondary relative">
-                    {expression.imageUrl ? (
-                      <img 
-                        src={expression.imageUrl || "/placeholder.svg"} 
-                        alt={`${expression.characterName} - ${expression.expressionName}`}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center cursor-pointer hover:bg-secondary/80 transition-colors">
-                        <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-3">
-                          <Upload className="w-6 h-6 text-muted-foreground" />
-                        </div>
-                        <span className="text-sm text-muted-foreground">Upload image</span>
-                        <span className="text-xs text-muted-foreground/60 mt-1">Upper-body shot</span>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-12 h-12 rounded-xl">
+                        {avatarImage && <AvatarImage src={avatarImage} />}
+                        <AvatarFallback className="bg-primary/10 text-primary rounded-xl">
+                          {displayName.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <p className="font-medium text-foreground">
+                          {displayName}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {sc.role || (isLinked ? "Linked Character" : "Story Character")}
+                        </p>
                       </div>
-                    )}
-                    {/* Hover overlay with actions */}
-                    <div className="absolute inset-0 bg-foreground/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                      <Button size="sm" variant="secondary" className="rounded-xl">
-                        <Upload className="w-4 h-4 mr-1" />
-                        Replace
-                      </Button>
-                      <Button 
-                        size="icon" 
-                        variant="secondary" 
-                        className="rounded-xl h-9 w-9"
-                        onClick={() => handleDeleteExpression(expression.id)}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-xl h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => handleRemoveCharacter(sc.id)}
                       >
                         <Trash2 className="w-4 h-4 text-destructive" />
                       </Button>
                     </div>
-                  </div>
-                  <CardContent className="p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent text-accent-foreground text-sm font-medium capitalize">
-                        <Smile className="w-3.5 h-3.5" />
-                        {expression.expressionName}
-                      </span>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="rounded-xl h-8 w-8">
-                            <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-xl">
-                          <DropdownMenuItem className="rounded-lg">
-                            <Pencil className="w-4 h-4 mr-2" />
-                            Rename
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="rounded-lg">
-                            <Copy className="w-4 h-4 mr-2" />
-                            Duplicate
-                          </DropdownMenuItem>
-                          <DropdownMenuItem 
-                            className="rounded-lg text-destructive"
-                            onClick={() => handleDeleteExpression(expression.id)}
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
                   </CardContent>
                 </Card>
-              ))}
-              {/* Add more expression card */}
-              <Card 
-                className="rounded-2xl border-2 border-dashed border-border hover:border-primary/50 shadow-sm overflow-hidden cursor-pointer transition-colors group"
-                onClick={() => {
-                  setNewExpression({ characterId, expressionName: "" })
-                  setIsAddingNew(true)
-                }}
-              >
-                <div className="aspect-[3/4] flex flex-col items-center justify-center">
-                  <div className="w-12 h-12 rounded-2xl bg-secondary group-hover:bg-primary/10 flex items-center justify-center mb-3 transition-colors">
-                    <Plus className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                  </div>
-                  <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">Add expression</span>
-                </div>
-              </Card>
-            </div>
+              );
+            })}
           </div>
-        ))}
-      </div>
-    </div>
-  )
+
+          {/* Character Selection Dialog */}
+          <Dialog open={isCharacterDialogOpen} onOpenChange={setIsCharacterDialogOpen}>
+            <DialogContent className="max-w-lg rounded-2xl">
+              <DialogHeader>
+                <DialogTitle>Add Character to Story</DialogTitle>
+              </DialogHeader>
+
+              {/* Create Story-specific Character */}
+              <div className="space-y-2 pb-4 border-b border-border">
+                <Label className="text-sm font-medium">Create Story Character</Label>
+                <p className="text-sm text-muted-foreground">
+                  Create a character that only exists in this story
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    value={newCharacterName}
+                    onChange={(e) => setNewCharacterName(e.target.value)}
+                    placeholder="Character name"
+                    className="rounded-xl bg-secondary border-0"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleCreateStoryCharacter();
+                      }
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    onClick={handleCreateStoryCharacter}
+                    className="rounded-xl"
+                    disabled={!newCharacterName.trim()}
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add
+                  </Button>
+                </div>
+              </div>
+
+              {/* Link Existing Character */}
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Link Existing Character</Label>
+                <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                  {availableCharacters.length === 0 ? (
+                    <div className="py-4 text-center text-muted-foreground text-sm">
+                      No available characters to link
+                    </div>
+                  ) : (
+                    availableCharacters.map((char) => (
+                      <button
+                        key={char.id}
+                        onClick={() => handleSelectCharacter(char.id)}
+                        className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-secondary transition-colors text-left"
+                      >
+                        <Avatar className="w-10 h-10 rounded-xl">
+                          <AvatarImage src={char.avatarImage} />
+                          <AvatarFallback className="bg-primary/10 text-primary rounded-xl">
+                            {char.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-foreground">{char.name}</p>
+                          <p className="text-sm text-muted-foreground line-clamp-1">
+                            {char.description}
+                          </p>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
+    </AdminLayout>
+  );
 }

@@ -11,7 +11,6 @@ export async function GET(
       dialogue: {
         include: {
           character: true,
-          expression: true,
         },
       },
     },

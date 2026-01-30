@@ -46,6 +46,7 @@ model User {
 model Story {
   id          String   @id @default(cuid())
   title       String
+  koreanTitle String?
   category    String
   icon        String
   difficulty  Int      @default(1)
@@ -64,8 +65,10 @@ model Episode {
   id          String   @id @default(cuid())
   storyId     String
   title       String
+  KoreanTitle String?
   order       Int
   description String?
+  koreanDescription String?
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -82,9 +85,10 @@ model Scene {
   id          String   @id @default(cuid())
   episodeId   String
   title       String
+  koreanTitle String?
   order       Int
-  background  String?
-  music       String?
+  bgImageUrl  String?
+  audioUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -98,18 +102,19 @@ model dialogue {
   id             String   @id @default(cuid())
   sceneId        String
   order          Int
-  characterId    String
-  expressionId   String?
-  english        String
-  korean         String
-  emotionTag     String?
-  voiceUrl       String?
+  type           String   @default("dialogue")
+  characterName  String?
+  characterId    String?
+  englishText    String
+  koreanText     String
+  charImageLabel String?
+  imageUrl       String?
+  audioUrl       String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
   scene          Scene      @relation(fields: [sceneId], references: [id])
-  character      Character  @relation(fields: [characterId], references: [id])
-  expression     CharacterImage? @relation(fields: [expressionId], references: [id])
+  character      Character?  @relation(fields: [characterId], references: [id])
 
   bookmarks      dialogueBookmark[]
 
@@ -155,11 +160,12 @@ model EpisodeProgress {
 model Character {
   id           String   @id @default(cuid())
   name         String
-  avatarImage  String
+  koreanName   String?
+  avatarImage  String?
+  mainImage    String?
   description  String
   personality  String?
   aiPrompt     String?
-  isMain       Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -177,20 +183,22 @@ model CharacterImage {
   label       String?   // e.g., "happy", "angry", "sad", "neutral"
   isDefault   Boolean  @default(false)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   character   Character @relation(fields: [characterId], references: [id])
-  dialogues     dialogue[]
 }
 
 model StoryCharacter {
   id          String   @id @default(cuid())
   storyId     String
-  characterId String
-  role        String?
+  characterId String?
+  name        String?
+  isMain      Boolean  @default(true)
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   story       Story     @relation(fields: [storyId], references: [id])
-  character   Character @relation(fields: [characterId], references: [id])
+  character   Character? @relation(fields: [characterId], references: [id])
 
   @@unique([storyId, characterId])
 }
@@ -207,6 +215,7 @@ model CharacterFriend {
   isUnlocked   Boolean  @default(false)
   unlockedAt   DateTime?
   createdAt    DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user         User      @relation(fields: [userId], references: [id])
   character    Character @relation(fields: [characterId], references: [id])
@@ -225,6 +234,7 @@ model CharacterMessage {
   content     String
   isFromUser  Boolean
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user        User      @relation(fields: [userId], references: [id])
   character   Character @relation(fields: [characterId], references: [id])
@@ -239,6 +249,7 @@ model dialogueBookmark {
   userId    String
   dialogueId  String
   createdAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user      User   @relation(fields: [userId], references: [id])
   dialogue    dialogue @relation(fields: [dialogueId], references: [id])
@@ -257,6 +268,7 @@ model EpisodeReward {
   payload    Json
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   episode    Episode @relation(fields: [episodeId], references: [id])
 }
@@ -310,6 +322,7 @@ model SavedExpression {
   userId       String
   expressionId String
   createdAt    DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user         User       @relation(fields: [userId], references: [id])
   expression   Expression @relation(fields: [expressionId], references: [id])
@@ -325,6 +338,7 @@ model Message {
   id          String   @id @default(cuid())
   content     String
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   isRead      Boolean  @default(false)
 
   senderId    String

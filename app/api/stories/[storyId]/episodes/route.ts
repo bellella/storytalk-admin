@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   _: Request,
-  { params }: { params: { storyId: string } }
+  { params }: { params: Promise<{ storyId: string }> }
 ) {
   const episodes = await prisma.episode.findMany({
-    where: { storyId: params.storyId },
+    where: { storyId: (await params).storyId },
     orderBy: { order: "asc" },
   });
   return NextResponse.json(episodes);
@@ -14,13 +14,13 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { storyId: string } }
+  { params }: { params: Promise<{ storyId: string }> }
 ) {
   const body = await req.json();
   const episode = await prisma.episode.create({
     data: {
       ...body,
-      storyId: params.storyId,
+      storyId: (await params).storyId,
     },
   });
   return NextResponse.json(episode);

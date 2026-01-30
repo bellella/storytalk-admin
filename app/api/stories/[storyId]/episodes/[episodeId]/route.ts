@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   _: Request,
-  { params }: { params: { episodeId: string } }
+  { params }: { params: Promise<{ episodeId: string }> }
 ) {
   const episode = await prisma.episode.findUnique({
-    where: { id: params.episodeId },
+    where: { id: (await params).episodeId },
     include: {
       scenes: {
         orderBy: { order: "asc" },
@@ -19,11 +19,11 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { episodeId: string } }
+  { params }: { params: Promise<{ episodeId: string }> }
 ) {
   const body = await req.json();
   const episode = await prisma.episode.update({
-    where: { id: params.episodeId },
+    where: { id: (await params).episodeId },
     data: body,
   });
   return NextResponse.json(episode);
@@ -31,8 +31,8 @@ export async function PATCH(
 
 export async function DELETE(
   _: Request,
-  { params }: { params: { episodeId: string } }
+  { params }: { params: Promise<{ episodeId: string }> }
 ) {
-  await prisma.episode.delete({ where: { id: params.episodeId } });
+  await prisma.episode.delete({ where: { id: (await params).episodeId } });
   return NextResponse.json({ ok: true });
 }

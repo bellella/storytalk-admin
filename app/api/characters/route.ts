@@ -1,33 +1,31 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  _: Request,
-  { params }: { params: { storyId: string } }
-) {
-  const characters = await prisma.storyCharacter.findMany({
-    where: { storyId: params.storyId },
+export async function GET() {
+  const characters = await prisma.character.findMany({
     include: {
-      character: {
+      images: true,
+      storyLinks: {
         include: {
-          images: true,
+          story: true,
         },
       },
     },
+    orderBy: { createdAt: "desc" },
   });
   return NextResponse.json(characters);
 }
 
-export async function POST(
-  req: Request,
-  { params }: { params: { storyId: string } }
-) {
-  const body = await req.json(); // { characterId }
-  const link = await prisma.storyCharacter.create({
+export async function POST(req: Request) {
+  const body = await req.json();
+  const character = await prisma.character.create({
     data: {
-      storyId: params.storyId,
-      characterId: body.characterId,
+      name: body.name,
+      avatarImage: body.avatarImage,
+      description: body.description,
+      personality: body.personality,
+      aiPrompt: body.aiPrompt,
     },
   });
-  return NextResponse.json(link);
+  return NextResponse.json(character);
 }

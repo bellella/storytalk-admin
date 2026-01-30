@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   _: Request,
-  { params }: { params: { sceneId: string } }
+  { params }: { params: Promise<{ sceneId: string }> }
 ) {
   const scene = await prisma.scene.findUnique({
-    where: { id: params.sceneId },
+    where: { id: (await params).sceneId },
     include: {
       dialogues: {
         orderBy: { order: "asc" },
@@ -18,11 +18,11 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { sceneId: string } }
+  { params }: { params: Promise<{ sceneId: string }> }
 ) {
   const body = await req.json();
   const scene = await prisma.scene.update({
-    where: { id: params.sceneId },
+    where: { id: (await params).sceneId },
     data: body,
   });
   return NextResponse.json(scene);
