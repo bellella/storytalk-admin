@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const { imageId } = await params;
   const image = await prisma.characterImage.findUnique({
-    where: { id: imageId },
+    where: { id: parseInt(imageId) },
   });
   return NextResponse.json(image);
 }
@@ -20,7 +20,7 @@ export async function PATCH(
   const body = await req.json();
 
   const image = await prisma.characterImage.update({
-    where: { id: imageId },
+    where: { id: parseInt(imageId) },
     data: {
       imageUrl: body.imageUrl,
       label: body.label,
@@ -37,7 +37,7 @@ export async function DELETE(
 ) {
   const { imageId } = await params;
   await prisma.characterImage.delete({
-    where: { id: imageId },
+    where: { id: parseInt(imageId) },
   });
   return NextResponse.json({ ok: true });
 }

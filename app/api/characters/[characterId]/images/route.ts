@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const { characterId } = await params;
   const images = await prisma.characterImage.findMany({
-    where: { characterId },
+    where: { characterId: parseInt(characterId) },
     orderBy: { createdAt: "asc" },
   });
   return NextResponse.json(images);
@@ -22,7 +22,7 @@ export async function POST(
 
   const image = await prisma.characterImage.create({
     data: {
-      characterId,
+      characterId: parseInt(characterId),
       imageUrl: body.imageUrl,
       label: body.label || null,
       isDefault: body.isDefault ?? false,

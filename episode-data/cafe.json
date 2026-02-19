@@ -1,0 +1,205 @@
+{
+  "scenes": [
+    {
+      "title": "Scene 1: Inside the Cafe",
+      "koreanTitle": "장면 1: 카페 안",
+      "dialogues": [
+        {
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "A small but cozy cafe. The smell of coffee fills the air. Customers line up at the counter.",
+          "koreanText": "작지만 아늑한 카페. 커피 향이 가득하고 손님들이 카운터에 줄을 서 있다.",
+          "imageUrl": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085"
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "happy",
+          "englishText": "Hi there! What can I get for you?",
+          "koreanText": "안녕하세요! 무엇을 도와드릴까요?",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "Scene 2: First Order",
+      "koreanTitle": "장면 2: 첫 번째 주문",
+      "dialogues": [
+        {
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "Can I get a latte, please?",
+          "koreanText": "라떼 한 잔 주세요.",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "happy",
+          "englishText": "Sure. What size would you like?",
+          "koreanText": "네. 어떤 사이즈로 드릴까요?",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "A medium, please.",
+          "koreanText": "미디엄으로 주세요.",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "Scene 3: Second Order",
+      "koreanTitle": "장면 3: 두 번째 주문",
+      "dialogues": [
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "default",
+          "englishText": "Next, please!",
+          "koreanText": "다음 분이요!",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Prince",
+          "charImageLabel": "default",
+          "englishText": "I'd like an iced Americano.",
+          "koreanText": "아이스 아메리카노 주세요.",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "default",
+          "englishText": "Anything else?",
+          "koreanText": "더 필요하신 건 없으신가요?",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Prince",
+          "charImageLabel": "default",
+          "englishText": "No, that's all.",
+          "koreanText": "아니요, 그게 전부예요.",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "Scene 4: Third Order",
+      "koreanTitle": "장면 4: 세 번째 주문",
+      "dialogues": [
+        {
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Can I have a cappuccino to go?",
+          "koreanText": "카푸치노 하나 테이크아웃으로 주세요.",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "happy",
+          "englishText": "Of course. That'll be ready soon.",
+          "koreanText": "물론이죠. 곧 준비해드릴게요.",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "Scene 5: Coffee Pickup",
+      "koreanTitle": "장면 5: 음료 픽업",
+      "dialogues": [
+        {
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "The Riley finishes making the drinks and calls out to the customers.",
+          "koreanText": "바리스타가 음료를 완성하고 손님들을 부른다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "happy",
+          "englishText": "Medium latte!",
+          "koreanText": "미디엄 라떼 나왔습니다!",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "happy",
+          "englishText": "Iced Americano!",
+          "koreanText": "아이스 아메리카노요!",
+          "imageUrl": ""
+        },
+        {
+          "type": "dialogue",
+          "characterName": "Riley",
+          "charImageLabel": "happy",
+          "englishText": "Cappuccino to go!",
+          "koreanText": "테이크아웃 카푸치노 나왔습니다!",
+          "imageUrl": ""
+        }
+      ]
+    }
+  ],
+  "reviewItems": [
+    {
+      "sceneIndex": 1,
+      "dialogueIndex": 0,
+      "description": "\"Can I get ~?\"은 카페에서 주문할 때 가장 자연스러운 표현이에요."
+    },
+    {
+      "sceneIndex": 2,
+      "dialogueIndex": 1,
+      "description": "\"What size would you like?\"는 주문 후 자주 나오는 질문이에요."
+    },
+    {
+      "sceneIndex": 4,
+      "dialogueIndex": 2,
+      "description": "카페에서는 음료가 완성되면 보통 이렇게 짧게 이름이나 메뉴를 불러요."
+    }
+  ],
+  "quizzes": [
+    {
+      "type": "STORY_COMPREHENSION",
+      "questionEnglish": "What did Customer 2 order?",
+      "questionKorean": "두 번째 손님은 무엇을 주문했나요?",
+      "answerIndex": 1,
+      "description": "주문 내용을 정확히 기억해보세요.",
+      "options": ["A hot latte", "An iced Americano", "A cappuccino"]
+    },
+    {
+      "type": "NEXT_DIALOGUE_PREDICTION",
+      "questionEnglish": "What would the Riley most likely say next?",
+      "questionKorean": "바리스타가 다음으로 가장 할 말은 무엇일까요?",
+      "answerIndex": 0,
+      "description": "카페 주문 흐름을 생각해보세요.",
+      "options": [
+        "What size would you like?",
+        "Why are you here?",
+        "Please sit down."
+      ]
+    },
+    {
+      "type": "GRAMMAR",
+      "questionEnglish": "Which sentence is the most polite way to order coffee?",
+      "questionKorean": "커피를 주문할 때 가장 공손한 문장은 무엇인가요?",
+      "answerIndex": 2,
+      "description": "카페에서는 정중한 표현이 중요해요.",
+      "options": [
+        "Give me a latte.",
+        "I want a latte.",
+        "Can I get a latte, please?"
+      ]
+    }
+  ]
+}

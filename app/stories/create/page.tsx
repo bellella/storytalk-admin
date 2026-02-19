@@ -36,7 +36,7 @@ export default function CreateStoryPage() {
     koreanTitle: "",
     category: "",
     icon: "📖",
-    difficulty: 1,
+    level: "BEGINNER",
     description: "",
     coverImage: "",
   });
@@ -71,7 +71,7 @@ export default function CreateStoryPage() {
           koreanTitle: form.koreanTitle.trim(),
           category: form.category,
           icon: form.icon || "📖",
-          difficulty: form.difficulty,
+          level: form.level,
           description: form.description.trim() || null,
           coverImage: form.coverImage.trim() || null,
         }),
@@ -162,9 +162,9 @@ export default function CreateStoryPage() {
 
             {/* Difficulty */}
             <div className="space-y-2">
-              <Label>Difficulty</Label>
+              <Label>Level</Label>
               <Select
-                value={String(form.difficulty)}
+                value={form.level}
                 onValueChange={(value) =>
                   setForm((prev) => ({ ...prev, difficulty: Number(value) }))
                 }

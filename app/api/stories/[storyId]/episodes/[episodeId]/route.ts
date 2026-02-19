@@ -6,10 +6,18 @@ export async function GET(
   { params }: { params: Promise<{ episodeId: string }> }
 ) {
   const episode = await prisma.episode.findUnique({
-    where: { id: (await params).episodeId },
+    where: { id: parseInt((await params).episodeId) },
     include: {
       scenes: {
         orderBy: { order: "asc" },
+        include: {
+          dialogues: {
+            orderBy: { order: "asc" },
+            include: {
+              character: true,
+            },
+          },
+        },
       },
       rewards: true,
     },
@@ -23,7 +31,7 @@ export async function PATCH(
 ) {
   const body = await req.json();
   const episode = await prisma.episode.update({
-    where: { id: (await params).episodeId },
+    where: { id: parseInt((await params).episodeId) },
     data: body,
   });
   return NextResponse.json(episode);
@@ -33,6 +41,8 @@ export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ episodeId: string }> }
 ) {
-  await prisma.episode.delete({ where: { id: (await params).episodeId } });
+  await prisma.episode.delete({
+    where: { id: parseInt((await params).episodeId) },
+  });
   return NextResponse.json({ ok: true });
 }

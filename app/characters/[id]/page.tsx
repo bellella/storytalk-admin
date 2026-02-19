@@ -70,7 +70,7 @@ export default function CharacterEditPage() {
   >([]);
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
 
-  const { register, handleSubmit, control, reset, watch, setValue } =
+  const { register, handleSubmit, control, reset, watch } =
     useForm<CharacterFormData>({
       defaultValues: {
         name: "",
@@ -82,8 +82,6 @@ export default function CharacterEditPage() {
       },
     });
 
-  const avatarImage = watch("avatarImage");
-  const mainImage = watch("mainImage");
   const name = watch("name");
   const description = watch("description");
 
@@ -101,7 +99,6 @@ export default function CharacterEditPage() {
         setImages(data.images || []);
         reset({
           name: data.name,
-          isMain: data.isMain,
           description: data.description,
           personality: data.personality || "",
           aiPrompt: data.aiPrompt || "",
@@ -126,7 +123,7 @@ export default function CharacterEditPage() {
       description: data.description,
       personality: data.personality || null,
       aiPrompt: data.aiPrompt || null,
-      mainImage: data.mainImage,
+      mainImage: data.mainImage ?? null,
     };
 
     try {
@@ -153,11 +150,15 @@ export default function CharacterEditPage() {
       // Save new images
       for (const img of newImages) {
         if (img.imageUrl) {
-          await fetch(`/api/characters/${savedCharacterId}/images`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(img),
-          });
+          const imgRes = await fetch(
+            `/api/characters/${savedCharacterId}/images`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(img),
+            }
+          );
+          if (!imgRes.ok) throw new Error("Failed to save expression image");
         }
       }
 
@@ -168,13 +169,14 @@ export default function CharacterEditPage() {
         });
       }
 
-      // Update existing images (labels, isDefault)
+      // Update existing images (imageUrl, labels, isDefault)
       for (const img of images) {
         if (!deletedImageIds.includes(img.id)) {
           await fetch(`/api/characters/${savedCharacterId}/images/${img.id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              imageUrl: img.imageUrl,
               label: img.label,
               isDefault: img.isDefault,
             }),
@@ -204,7 +206,7 @@ export default function CharacterEditPage() {
 
   const handleUpdateExistingImage = (
     imageId: string,
-    field: "label" | "isDefault",
+    field: "imageUrl" | "label" | "isDefault",
     value: string | boolean
   ) => {
     setImages(
@@ -372,11 +374,14 @@ export default function CharacterEditPage() {
                         key={img.id}
                         className="flex items-start gap-4 p-4 rounded-xl bg-secondary/50"
                       >
-                        <div className="w-24 h-24 rounded-xl overflow-hidden bg-secondary flex-shrink-0">
-                          <img
-                            src={img.imageUrl}
-                            alt={img.label || "Expression"}
-                            className="w-full h-full object-cover"
+                        <div className="w-38 flex-shrink-0">
+                          <ImageUploader
+                            value={img.imageUrl}
+                            onChange={(url) =>
+                              handleUpdateExistingImage(img.id, "imageUrl", url)
+                            }
+                            aspectRatio="square"
+                            maxSizeMB={10}
                           />
                         </div>
                         <div className="flex-1 space-y-3">
@@ -499,11 +504,17 @@ export default function CharacterEditPage() {
                 <CardTitle className="text-lg">Avatar Image</CardTitle>
               </CardHeader>
               <CardContent>
-                <ImageUploader
-                  value={avatarImage}
-                  onChange={(url) => setValue("avatarImage", url)}
-                  aspectRatio="square"
-                  maxSizeMB={10}
+                <Controller
+                  name="avatarImage"
+                  control={control}
+                  render={({ field }) => (
+                    <ImageUploader
+                      value={field.value}
+                      onChange={field.onChange}
+                      aspectRatio="square"
+                      maxSizeMB={10}
+                    />
+                  )}
                 />
               </CardContent>
             </Card>
@@ -512,11 +523,17 @@ export default function CharacterEditPage() {
                 <CardTitle className="text-lg">Main Image</CardTitle>
               </CardHeader>
               <CardContent>
-                <ImageUploader
-                  value={mainImage}
-                  onChange={(url) => setValue("mainImage", url)}
-                  aspectRatio="square"
-                  maxSizeMB={10}
+                <Controller
+                  name="mainImage"
+                  control={control}
+                  render={({ field }) => (
+                    <ImageUploader
+                      value={field.value}
+                      onChange={field.onChange}
+                      aspectRatio="square"
+                      maxSizeMB={10}
+                    />
+                  )}
                 />
               </CardContent>
             </Card>

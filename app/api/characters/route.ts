@@ -22,6 +22,7 @@ export async function POST(req: Request) {
     data: {
       name: body.name,
       avatarImage: body.avatarImage,
+      mainImage: body.mainImage ?? null,
       description: body.description,
       personality: body.personality,
       aiPrompt: body.aiPrompt,

@@ -187,7 +187,7 @@ export function ImageUploader({
   };
 
   const handleBoxClick = () => {
-    if (mode === "upload" && !uploading && !value) {
+    if (mode === "upload" && !uploading) {
       fileInputRef.current?.click();
     }
   };
@@ -294,7 +294,7 @@ export function ImageUploader({
               : isDragging
               ? "border-primary bg-primary/5"
               : "border-border bg-secondary hover:bg-secondary/80 hover:border-primary/50",
-            mode === "upload" && !value && !uploading && "cursor-pointer"
+            mode === "upload" && !uploading && "cursor-pointer"
           )}
           onClick={handleBoxClick}
           onDragOver={handleDragOver}

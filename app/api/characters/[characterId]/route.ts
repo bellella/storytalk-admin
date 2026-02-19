@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ characterId: string }> }
 ) {
   const character = await prisma.character.findUnique({
-    where: { id: (await params).characterId },
+    where: { id: parseInt((await params).characterId) },
     include: {
       images: true,
     },
@@ -14,14 +14,29 @@ export async function GET(
   return NextResponse.json(character);
 }
 
+const ALLOWED_FIELDS = [
+  "name",
+  "avatarImage",
+  "mainImage",
+  "description",
+  "personality",
+  "aiPrompt",
+] as const;
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ characterId: string }> }
 ) {
   const body = await req.json();
+  const data: Record<string, unknown> = {};
+  for (const key of ALLOWED_FIELDS) {
+    if (key in body) {
+      data[key] = body[key];
+    }
+  }
   const character = await prisma.character.update({
-    where: { id: (await params).characterId },
-    data: body,
+    where: { id: parseInt((await params).characterId) },
+    data,
   });
   return NextResponse.json(character);
 }
@@ -30,6 +45,8 @@ export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ characterId: string }> }
 ) {
-  await prisma.character.delete({ where: { id: (await params).characterId } });
+  await prisma.character.delete({
+    where: { id: parseInt((await params).characterId) },
+  });
   return NextResponse.json({ ok: true });
 }

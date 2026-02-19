@@ -17,7 +17,8 @@ import {
   ChevronRight,
   Bell,
   Search,
-  GraduationCap,
+  Layers,
+  Sparkles,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -26,9 +27,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/" },
   { icon: BookOpen, label: "Stories", href: "/stories" },
+  { icon: Layers, label: "Units", href: "/units" },
   { icon: UserCircle, label: "Characters", href: "/characters" },
   { icon: Users, label: "Users", href: "/users" },
-  { icon: GraduationCap, label: "Learning", href: "/learning" },
+  { icon: Sparkles, label: "XP", href: "/xp" },
   { icon: BarChart3, label: "Analytics", href: "/analytics" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ]

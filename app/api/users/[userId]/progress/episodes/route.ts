@@ -3,13 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   _: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
-  const progress = await prisma.episodeProgress.findMany({
-    where: { userId: params.userId },
-    include: {
-      episode: true,
-    },
-  });
-  return NextResponse.json(progress);
+  const { userId } = await params;
+  return NextResponse.json([]);
 }

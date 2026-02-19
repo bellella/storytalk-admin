@@ -1,0 +1,590 @@
+{
+  "scenes": [
+    {
+      "title": "Scene 1: The Choice",
+      "koreanTitle": "장면 1: 선택",
+      "order": 1,
+      "dialogues": [
+        {
+          "order": 1,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun and Lara stand in the dim living room. His grandparents' room door is closed.",
+          "koreanText": "어두운 거실. 준과 라라는 서 있고, 할머니·할아버지 방 문은 닫혀 있다.",
+          "imageUrl": null
+        },
+        {
+          "order": 2,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Listen. My grandparents... they can't take care of you.",
+          "koreanText": "있잖아. 우리 할머니, 할아버지는... 너를 돌볼 여력이 없어.",
+          "imageUrl": null
+        },
+        {
+          "order": 3,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "So... it's either an orphanage, or a hospital.",
+          "koreanText": "그래서... 고아원이든, 정신병원이든... 둘 중 하나야.",
+          "imageUrl": null
+        },
+        {
+          "order": 4,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Lara tilts her head slightly, confused.",
+          "koreanText": "라라는 고개를 살짝 기울이며 이해하지 못한 표정을 짓는다.",
+          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+        },
+        {
+          "order": 5,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "...Hospital?",
+          "koreanText": "...정신병원?",
+          "imageUrl": null
+        },
+        {
+          "order": 6,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "sad",
+          "englishText": "Yeah. Because... no one will believe you.",
+          "koreanText": "응. 왜냐면... 아무도 네 말을 안 믿을 거거든.",
+          "imageUrl": null
+        },
+        {
+          "order": 7,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "You still don't know, do you?",
+          "koreanText": "아직도 잘 모르겠나 보네?",
+          "imageUrl": null
+        },
+        {
+          "order": 8,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Know what?",
+          "koreanText": "뭘?",
+          "imageUrl": null
+        },
+        {
+          "order": 9,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "I'm not from here.",
+          "koreanText": "나는 여기 사람이 아니야.",
+          "imageUrl": null
+        },
+        {
+          "order": 10,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "I'm... from the stars.",
+          "koreanText": "나는... 별에서 왔어.",
+          "imageUrl": null
+        },
+        {
+          "order": 11,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun stares at her, speechless.",
+          "koreanText": "준은 아무 말도 못 한 채 그녀를 바라본다.",
+          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+        },
+        {
+          "order": 12,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "angry",
+          "englishText": "That's not funny.",
+          "koreanText": "웃기지 마.",
+          "imageUrl": null
+        },
+        {
+          "order": 13,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "I'll only say this much.",
+          "koreanText": "여기까지만 말할게.",
+          "imageUrl": null
+        },
+        {
+          "order": 14,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "I have something to do.",
+          "koreanText": "할 일이 있거든.",
+          "imageUrl": null
+        },
+        {
+          "order": 15,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "happy",
+          "englishText": "Good night, Jun.",
+          "koreanText": "잘 자, 준.",
+          "imageUrl": null
+        },
+        {
+          "order": 16,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Lara disappears into light.",
+          "koreanText": "라라는 빛처럼 사라진다.",
+          "imageUrl": null
+        },
+        {
+          "order": 17,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "sad",
+          "englishText": "...Maybe I'm the one who belongs in a hospital.",
+          "koreanText": "...정신병원에 가야 할 사람은 나인가.",
+          "imageUrl": null
+        },
+        {
+          "order": 18,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Sleep pulls him under before he can think anymore.",
+          "koreanText": "더 생각하기도 전에 잠이 그를 끌어당긴다.",
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "title": "Scene 2: The Bread Run",
+      "koreanTitle": "장면 2: 빵셔틀",
+      "order": 2,
+      "dialogues": [
+        {
+          "order": 1,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Morning classroom. Jun sits quietly at his desk.",
+          "koreanText": "아침 교실. 준은 조용히 자리에 앉아 있다.",
+          "imageUrl": null
+        },
+        {
+          "order": 2,
+          "type": "dialogue",
+          "characterName": "Hanjin",
+          "charImageLabel": "default",
+          "englishText": "Hey, Jun. Go buy us some bread.",
+          "koreanText": "야, 준. 가서 빵 좀 사 와.",
+          "imageUrl": null
+        },
+        {
+          "order": 3,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "...",
+          "koreanText": "...",
+          "imageUrl": null
+        },
+        {
+          "order": 4,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "For some reason, his chest doesn't feel as tight as usual.",
+          "koreanText": "이상하게도 가슴이 평소처럼 답답하지 않았다.",
+          "imageUrl": null
+        },
+        {
+          "order": 5,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "If you're too lazy to buy bread, maybe don't eat.",
+          "koreanText": "빵 사러 가기 귀찮으면... 그냥 먹지 마.",
+          "imageUrl": null
+        },
+        {
+          "order": 6,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "The classroom goes silent.",
+          "koreanText": "교실이 조용해진다.",
+          "imageUrl": null
+        },
+        {
+          "order": 7,
+          "type": "dialogue",
+          "characterName": "Hanjin",
+          "charImageLabel": "angry",
+          "englishText": "What did you just say?",
+          "koreanText": "방금 뭐라고 했냐?",
+          "imageUrl": null
+        },
+        {
+          "order": 8,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Hanjin steps closer, raising his fist.",
+          "koreanText": "한진이 다가오며 주먹을 든다.",
+          "imageUrl": null
+        },
+        {
+          "order": 9,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun feels fear climb up his spine.",
+          "koreanText": "두려움이 등줄기를 타고 올라온다.",
+          "imageUrl": null
+        },
+        {
+          "order": 10,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "But last night’s words echo in his head.",
+          "koreanText": "하지만 어젯밤 그녀의 말이 머릿속에 울린다.",
+          "imageUrl": null
+        },
+        {
+          "order": 11,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "angry",
+          "englishText": "...",
+          "koreanText": "...",
+          "imageUrl": null
+        },
+        {
+          "order": 12,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun clenches his fists and glares back.",
+          "koreanText": "준은 주먹을 쥐고 그를 노려본다.",
+          "imageUrl": null
+        },
+        {
+          "order": 13,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "For the first time, he doesn't look away.",
+          "koreanText": "처음으로, 눈을 피하지 않는다.",
+          "imageUrl": null
+        },
+        {
+          "order": 14,
+          "type": "dialogue",
+          "characterName": "Hanjin",
+          "charImageLabel": "angry",
+          "englishText": "Tch.",
+          "koreanText": "쯧.",
+          "imageUrl": null
+        },
+        {
+          "order": 15,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Hanjin backs off, annoyed.",
+          "koreanText": "한진은 짜증 난 듯 물러난다.",
+          "imageUrl": null
+        },
+        {
+          "order": 16,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun's heart is still pounding.",
+          "koreanText": "준의 심장은 여전히 쿵쾅거린다.",
+          "imageUrl": null
+        },
+        {
+          "order": 17,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "But something inside him feels different.",
+          "koreanText": "하지만 마음속 어딘가는 달라져 있었다.",
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "title": "Scene 3: Lara's Day",
+      "koreanTitle": "장면 3: 라라의 하루",
+      "order": 3,
+      "dialogues": [
+        {
+          "order": 1,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Lara walks alone through the city streets.",
+          "koreanText": "라라는 혼자 도시 거리를 걷는다.",
+          "imageUrl": null
+        },
+        {
+          "order": 2,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "So many glowing boxes.",
+          "koreanText": "빛나는 상자들이 정말 많네.",
+          "imageUrl": null
+        },
+        {
+          "order": 3,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Humans must use these often.",
+          "koreanText": "인간들이 자주 이용하는 상점인가 보다.",
+          "imageUrl": null
+        },
+        {
+          "order": 4,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "A stray cat sits under a streetlight.",
+          "koreanText": "가로등 아래 고양이가 앉아 있다.",
+          "imageUrl": null
+        },
+        {
+          "order": 5,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "happy",
+          "englishText": "Hello.",
+          "koreanText": "안녕.",
+          "imageUrl": null
+        },
+        {
+          "order": 6,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "She gently pets the cat. The cat leans into her hand.",
+          "koreanText": "라라는 고양이를 쓰다듬고, 고양이는 손에 몸을 맡긴다.",
+          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+        },
+        {
+          "order": 7,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Warm.",
+          "koreanText": "따뜻해.",
+          "imageUrl": null
+        }
+      ]
+    },
+    {
+      "title": "Scene 4: Back to Jun's Room",
+      "koreanTitle": "장면 4: 다시 준의 방",
+      "order": 4,
+      "dialogues": [
+        {
+          "order": 1,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun sits on his bed watching anime on his phone.",
+          "koreanText": "준은 침대에 앉아 휴대폰으로 애니를 보고 있다.",
+          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+        },
+        {
+          "order": 2,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "You're smiling.",
+          "koreanText": "웃고 있네.",
+          "imageUrl": null
+        },
+        {
+          "order": 3,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "embarrassed",
+          "englishText": "Huh?",
+          "koreanText": "어?",
+          "imageUrl": null
+        },
+        {
+          "order": 4,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "I've never seen you look this happy before.",
+          "koreanText": "이렇게 기분 좋아 보이는 건 처음 봐.",
+          "imageUrl": null
+        },
+        {
+          "order": 5,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "happy",
+          "englishText": "Teach me.",
+          "koreanText": "나한테도 알려줘.",
+          "imageUrl": null
+        },
+        {
+          "order": 6,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "It's just anime.",
+          "koreanText": "그냥 애니야.",
+          "imageUrl": null
+        },
+        {
+          "order": 7,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "happy",
+          "englishText": "This one’s about a girl who saves the world but hates herself. And this one—",
+          "koreanText": "이건 세상을 구하지만 자기를 싫어하는 소녀 이야기인데, 이건 또—",
+          "imageUrl": null
+        },
+        {
+          "order": 8,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun talks faster and faster.",
+          "koreanText": "준은 점점 더 빠르게 말한다.",
+          "imageUrl": null
+        },
+        {
+          "order": 9,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "thinking",
+          "englishText": "...",
+          "koreanText": "...",
+          "imageUrl": null
+        },
+        {
+          "order": 10,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "happy",
+          "englishText": "I think I prefer the world outside the box.",
+          "koreanText": "나는 상자 속 세상보다는, 밖의 세상이 더 좋은 것 같아.",
+          "imageUrl": null
+        },
+        {
+          "order": 11,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "happy",
+          "englishText": "So I guess it's not for me~",
+          "koreanText": "그래서 역시 안 되겠네~",
+          "imageUrl": null
+        },
+        {
+          "order": 12,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Lara flops onto Jun's bed.",
+          "koreanText": "라라는 준의 침대 위에 벌러덩 눕는다.",
+          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+        },
+        {
+          "order": 13,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Where did you sleep last night?",
+          "koreanText": "어제 어디서 잤어?",
+          "imageUrl": null
+        },
+        {
+          "order": 14,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "Somewhere the stars look the prettiest.",
+          "koreanText": "별이 가장 예쁘게 보이는 곳에서.",
+          "imageUrl": null
+        },
+        {
+          "order": 15,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "worried",
+          "englishText": "It's dangerous outside at night.",
+          "koreanText": "밤에 밖은 위험해.",
+          "imageUrl": null
+        },
+        {
+          "order": 16,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Just... stay here for now.",
+          "koreanText": "일단... 우리 집에서 묵어.",
+          "imageUrl": null
+        },
+        {
+          "order": 17,
+          "type": "dialogue",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "And about the orphanage...",
+          "koreanText": "그리고 고아원 얘긴...",
+          "imageUrl": null
+        },
+        {
+          "order": 18,
+          "type": "dialogue",
+          "characterName": "Lara",
+          "charImageLabel": "happy",
+          "englishText": "You really still don't get it.",
+          "koreanText": "정말 아직도 모르겠네!",
+          "imageUrl": null
+        },
+        {
+          "order": 19,
+          "type": "image",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Lara smiles mysteriously.",
+          "koreanText": "라라는 의미심장하게 웃는다.",
+          "imageUrl": null
+        },
+        {
+          "order": 20,
+          "type": "narration",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun feels like he’s missing something important.",
+          "koreanText": "준은 중요한 무언가를 놓치고 있는 느낌이 든다.",
+          "imageUrl": null
+        }
+      ]
+    }
+  ]
+}

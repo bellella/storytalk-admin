@@ -1,122 +1,232 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+// GLOBAL
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+  ARCHIVED
+  DELETED
+}
+
+enum Level {
+  BEGINNER
+  BASIC
+  INTERMEDIATE
+  ADVANCED
+  MASTER
+}
+
 //////////////////////////////////////////////////////
 // USER
 //////////////////////////////////////////////////////
 
+enum AuthProvider {
+  GOOGLE
+  APPLE
+}
+
 model User {
-  id            String   @id @default(cuid())
-  name          String?
-  email         String   @unique
-  profileImage  String?
-  level         Int      @default(1)
-  exp           Int      @default(0)
-  streakDays    Int      @default(0)
-  lastLoginAt   DateTime @default(now())
-  createdAt     DateTime @default(now())
+  id           Int          @id @default(autoincrement())
+  name         String?
+  email        String
+  provider     AuthProvider
+  providerId   String
+  profileImage String?
+  level        Level        @default(BEGINNER)
+  XpLevel      Int          @default(1)
+  xp           Int          @default(0)
+  streakDays   Int          @default(0)
+  lastLoginAt  DateTime     @default(now())
+  registeredAt DateTime?
+  createdAt    DateTime     @default(now())
+
+  isNew Boolean @default(true)
 
   storyProgress     StoryProgress[]
-  episodeProgress   EpisodeProgress[]
-  dialogueBookmarks   dialogueBookmark[]
-  masteryProgress   MasteryProgress[]
-  savedExpressions  SavedExpression[]
+  userEpisodes      UserEpisode[]
+  dialogueBookmarks dialogueBookmark[]
   characterFriends  CharacterFriend[]
-  characterMessages CharacterMessage[]
-  sentMessages      Message[] @relation("SentMessages")
-  receivedMessages  Message[] @relation("ReceivedMessages")
+  Messages          Message[]
+  userQuizSessions  UserQuizSession[]
+  characterChats    CharacterChat[]
+  userPlayEpisodes  UserPlayEpisode[]
+  products          EpisodeProduct[]
+  userPurchases     UserPurchase[]
+  coinTransactions  CoinTransaction[]
+  userSubscriptions UserSubscription[]
+
+  @@unique([email, provider])
 }
 
 //////////////////////////////////////////////////////
 // STORY SYSTEM
 //////////////////////////////////////////////////////
 
+enum StoryType {
+  UNIT // 학습 중심 (상황회화/유닛 기반)
+  NOVEL // 줄거리/노벨 중심 (스토리 감상 + 대화)
+  PREMIUM //프리미엄 컨텐츠
+}
+
 model Story {
-  id          String   @id @default(cuid())
+  id          Int           @id @default(autoincrement())
   title       String
   koreanTitle String?
-  category    String
+  type        StoryType     @default(NOVEL)
+  category    String?
   icon        String
-  difficulty  Int      @default(1)
+  level       Level         @default(BEGINNER)
   description String?
   coverImage  String?
-  isPublished Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      PublishStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
-  episodes    Episode[]
-  characters  StoryCharacter[]
-  progress    StoryProgress[]
+  episodes        Episode[]
+  storyCharacters StoryCharacter[]
+  progress        StoryProgress[]
+  units           Unit[]
+  storyTags       StoryTag[]
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique // e.g. "healing", "cafe", "romance"
+  color     String? // UI 배지 색 (옵션)
+  icon      String? // 이모지 or 아이콘 키 (옵션)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stories StoryTag[]
+}
+
+model StoryTag {
+  storyId Int
+  tagId   Int
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@id([storyId, tagId])
+  @@index([tagId])
+  @@index([storyId])
+}
+
+model Unit {
+  id        Int           @id @default(autoincrement())
+  storyId   Int
+  order     Int
+  color     String?
+  status    PublishStatus @default(DRAFT)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  story Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+}
+
+enum EpisodeType {
+  STORY // 스토리 리딩형
+  PREMIUM // 구매 에피소드형
+  EVENT // 이벤트형
 }
 
 model Episode {
-  id          String   @id @default(cuid())
-  storyId     String
-  title       String
-  KoreanTitle String?
-  order       Int
-  description String?
+  id                Int           @id @default(autoincrement())
+  storyId           Int?
+  type              EpisodeType   @default(STORY)
+  title             String
+  koreanTitle       String?
+  order             Int
+  description       String?
   koreanDescription String?
-  isPublished Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status            PublishStatus @default(DRAFT)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
-  story       Story        @relation(fields: [storyId], references: [id])
-  scenes      Scene[]
-  rewards     EpisodeReward[]
-  progress    EpisodeProgress[]
+  story            Story?            @relation(fields: [storyId], references: [id])
+  scenes           Scene[]
+  rewards          EpisodeReward[]
+  userEpisodes     UserEpisode[]
+  userPlayEpisodes UserPlayEpisode[]
+  episodeProducts  EpisodeProduct[]
 
   @@unique([storyId, order])
 }
 
+enum SceneType {
+  VISUAL
+  CHAT
+}
+
 model Scene {
-  id          String   @id @default(cuid())
-  episodeId   String
+  id        Int @id @default(autoincrement())
+  episodeId Int
+
+  type        SceneType @default(VISUAL)
   title       String
   koreanTitle String?
   order       Int
   bgImageUrl  String?
   audioUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  episode     Episode @relation(fields: [episodeId], references: [id])
-  dialogues     dialogue[]
+  episode   Episode    @relation(fields: [episodeId], references: [id])
+  dialogues Dialogue[]
 
   @@unique([episodeId, order])
 }
 
-model dialogue {
-  id             String   @id @default(cuid())
-  sceneId        String
+enum DialogueType {
+  // 기본 스토리/서사
+  NARRATION // 내레이션
+  DIALOGUE // 캐릭터 대사
+  IMAGE
+  HEADING
+
+  // 분기/선택
+  CHOICE // 선택지 표시
+  // AI
+  AI_INPUT_SLOT // 텍스트 입력 받기
+  AI_SLOT
+  // 학습/미션형
+  SPEAKING_MISSION // 따라 말하기
+}
+
+model Dialogue {
+  id             Int          @id @default(autoincrement())
+  sceneId        Int
   order          Int
-  type           String   @default("dialogue")
+  type           DialogueType @default(DIALOGUE)
   characterName  String?
-  characterId    String?
+  characterId    Int?
   englishText    String
   koreanText     String
   charImageLabel String?
   imageUrl       String?
   audioUrl       String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
 
-  scene          Scene      @relation(fields: [sceneId], references: [id])
-  character      Character?  @relation(fields: [characterId], references: [id])
+  data Json?
 
-  bookmarks      dialogueBookmark[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  scene     Scene      @relation(fields: [sceneId], references: [id])
+  character Character? @relation(fields: [characterId], references: [id])
+
+  bookmarks        dialogueBookmark[]
+  playEpisodeSlots PlayEpisodeSlot[]
 
   @@unique([sceneId, order])
 }
@@ -126,81 +236,190 @@ model dialogue {
 //////////////////////////////////////////////////////
 
 model StoryProgress {
-  id          String   @id @default(cuid())
-  userId      String
-  storyId     String
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  storyId     Int
   progressPct Float    @default(0)
   isCompleted Boolean  @default(false)
   updatedAt   DateTime @updatedAt
 
-  user        User  @relation(fields: [userId], references: [id])
-  story       Story @relation(fields: [storyId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  story Story @relation(fields: [storyId], references: [id])
 
   @@unique([userId, storyId])
 }
 
-model EpisodeProgress {
-  id          String   @id @default(cuid())
-  userId      String
-  episodeId   String
-  isCompleted Boolean  @default(false)
+model ReviewItem {
+  id          Int     @id @default(autoincrement())
+  episodeId   Int
+  dialogueId  Int
+  description String?
+  order       Int
+
+  @@unique([episodeId, dialogueId])
+  @@index([episodeId])
+}
+
+enum QuizType {
+  SENTENCE_BUILD // 단어 카드로 문장 전체 조립
+  SENTENCE_CLOZE_BUILD // 문장 중간 빈칸 채우기
+  SPEAK_REPEAT // 따라하기
+}
+
+enum QuizSourceType {
+  EPISODE
+  LESSON
+  PLAY
+}
+
+model Quiz {
+  id         Int            @id @default(autoincrement())
+  sourceType QuizSourceType
+  sourceId   Int
+  dialogueId Int?
+  type       QuizType
+  level      Level          @default(BEGINNER)
+
+  questionEnglish String
+  questionKorean  String?
+  description     String?
+  order           Int?
+
+  data Json?
+
+  isActive         Boolean           @default(true)
+  userQuizAnswers  UserQuizAnswer[]
+  quizSessionItems QuizSessionItem[]
+
+  @@index([sourceType, sourceId])
+}
+
+enum QuizSessionType {
+  EPISODE // 에피소드 끝나고 푸는 퀴즈
+  DAILY_QUIZ // 오늘의 학습
+  PLAY
+}
+
+model UserQuizSession {
+  id     Int @id @default(autoincrement())
+  userId Int
+
+  type QuizSessionType
+
+  // EPISODE/PLAY 등 소스 ID (에피소드 ID 또는 플레이 에피소드 ID)
+  sourceId Int?
+
+  // 진행 상태
+  startedAt   DateTime  @default(now())
   completedAt DateTime?
-  createdAt   DateTime @default(now())
 
-  user        User    @relation(fields: [userId], references: [id])
-  episode     Episode @relation(fields: [episodeId], references: [id])
+  // 결과 요약 (완료 시 집계해서 저장)
+  totalCount   Int?
+  correctCount Int?
+  score        Int?
 
-  @@unique([userId, episodeId])
+  meta Json?
+
+  // 관계
+  user             User              @relation(fields: [userId], references: [id])
+  answers          UserQuizAnswer[]
+  quizSessionItems QuizSessionItem[]
+
+  @@index([userId])
+  @@index([sourceId])
+  @@index([type])
+}
+
+model QuizSessionItem {
+  id                Int  @id @default(autoincrement())
+  userQuizSessionId Int
+  quizId            Int
+  order             Int?
+
+  createdAt DateTime @default(now())
+
+  userQuizSession UserQuizSession @relation(fields: [userQuizSessionId], references: [id], onDelete: Cascade)
+  quiz            Quiz            @relation(fields: [quizId], references: [id], onDelete: Restrict)
+
+  @@unique([userQuizSessionId, quizId])
+  @@index([userQuizSessionId, order])
+}
+
+model UserQuizAnswer {
+  id            Int @id @default(autoincrement())
+  userId        Int
+  quizId        Int
+  quizSessionId Int
+
+  isCorrect Boolean?
+  payload   Json
+
+  createdAt DateTime @default(now())
+
+  quiz            Quiz             @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userQuizSession UserQuizSession? @relation(fields: [quizSessionId], references: [id])
+
+  @@index([userId])
+  @@index([quizId])
+  @@index([quizSessionId])
 }
 
 //////////////////////////////////////////////////////
 // CHARACTER SYSTEM
 //////////////////////////////////////////////////////
 
-model Character {
-  id           String   @id @default(cuid())
-  name         String
-  koreanName   String?
-  avatarImage  String?
-  mainImage    String?
-  description  String
-  personality  String?
-  aiPrompt     String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+enum CharacterScope {
+  GLOBAL
+  STORY
+}
 
-  images        CharacterImage[]
-  dialogues       dialogue[]
-  storyLinks    StoryCharacter[]
-  friends       CharacterFriend[]
-  messages      CharacterMessage[]
+model Character {
+  id    Int            @id @default(autoincrement())
+  scope CharacterScope @default(GLOBAL)
+
+  name        String
+  koreanName  String?
+  avatarImage String?
+  mainImage   String?
+  description String
+  personality String?
+  aiPrompt    String?
+  status      PublishStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  images         CharacterImage[]
+  dialogues      Dialogue[]
+  friends        CharacterFriend[]
+  messages       Message[]
+  storyLinks     StoryCharacter[]
+  characterChats CharacterChat[]
+  slotDialogues  SlotDialogue[]
+}
+
+model StoryCharacter {
+  id          Int      @id @default(autoincrement())
+  storyId     Int
+  characterId Int
+  name        String
+  createdAt   DateTime @default(now())
+
+  story     Story     @relation(fields: [storyId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
+
+  @@unique([storyId, characterId])
 }
 
 model CharacterImage {
-  id          String   @id @default(cuid())
-  characterId String
+  id          Int      @id @default(autoincrement())
+  characterId Int
   imageUrl    String
-  label       String?   // e.g., "happy", "angry", "sad", "neutral"
+  label       String? // e.g., "happy", "angry", "sad", "neutral"
   isDefault   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  character   Character @relation(fields: [characterId], references: [id])
-}
-
-model StoryCharacter {
-  id          String   @id @default(cuid())
-  storyId     String
-  characterId String?
-  name        String?
-  isMain      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  story       Story     @relation(fields: [storyId], references: [id])
-  character   Character? @relation(fields: [characterId], references: [id])
-
-  @@unique([storyId, characterId])
+  character Character @relation(fields: [characterId], references: [id])
 }
 
 //////////////////////////////////////////////////////
@@ -208,17 +427,15 @@ model StoryCharacter {
 //////////////////////////////////////////////////////
 
 model CharacterFriend {
-  id           String   @id @default(cuid())
-  userId       String
-  characterId  String
-  affinity     Int      @default(0)
-  isUnlocked   Boolean  @default(false)
-  unlockedAt   DateTime?
-  createdAt    DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  characterId Int
+  affinity    Int      @default(0)
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  user         User      @relation(fields: [userId], references: [id])
-  character    Character @relation(fields: [characterId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
 
   @@unique([userId, characterId])
 }
@@ -227,17 +444,71 @@ model CharacterFriend {
 // CHARACTER CHAT SYSTEM
 //////////////////////////////////////////////////////
 
-model CharacterMessage {
-  id          String   @id @default(cuid())
-  userId      String
-  characterId String
-  content     String
-  isFromUser  Boolean
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// 채팅방
+model CharacterChat {
+  id          Int @id @default(autoincrement())
+  userId      Int
+  characterId Int
 
-  user        User      @relation(fields: [userId], references: [id])
-  character   Character @relation(fields: [characterId], references: [id])
+  lastMessageId Int?
+  lastMessageAt DateTime?
+  unreadCount   Int       @default(0)
+
+  lastReadMessageId Int?
+  lastReadAt        DateTime?
+
+  isPinned Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
+
+  // ✅ 추가 1) 일반 메시지 목록 관계(반대편)
+  messages Message[] @relation("CharacterChatMessages")
+
+  // ✅ 추가 2) lastMessageId 관계(반대편)
+  lastMessage Message? @relation("CharacterChatLastMessage", fields: [lastMessageId], references: [id])
+
+  @@unique([userId, characterId])
+  @@index([userId, lastMessageAt])
+}
+
+enum MessageType {
+  TEXT
+  SYSTEM
+  STICKER
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+
+  chatId      Int
+  userId      Int
+  characterId Int
+
+  isFromUser Boolean
+  type       MessageType @default(TEXT)
+
+  content String
+  payload Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // ✅ 일반 messages 관계 이름 지정
+  chat CharacterChat @relation("CharacterChatMessages", fields: [chatId], references: [id])
+
+  user      User      @relation(fields: [userId], references: [id])
+  character Character @relation(fields: [characterId], references: [id])
+
+  // ✅ lastMessage 역관계
+  asLastMessageOf CharacterChat[] @relation("CharacterChatLastMessage")
+
+  @@index([chatId, createdAt])
+  @@index([userId, characterId, createdAt])
+  @@index([characterId, createdAt])
 }
 
 //////////////////////////////////////////////////////
@@ -245,14 +516,14 @@ model CharacterMessage {
 //////////////////////////////////////////////////////
 
 model dialogueBookmark {
-  id        String   @id @default(cuid())
-  userId    String
-  dialogueId  String
-  createdAt DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  dialogueId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  user      User   @relation(fields: [userId], references: [id])
-  dialogue    dialogue @relation(fields: [dialogueId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  dialogue Dialogue @relation(fields: [dialogueId], references: [id])
 
   @@unique([userId, dialogueId])
 }
@@ -262,88 +533,444 @@ model dialogueBookmark {
 //////////////////////////////////////////////////////
 
 model EpisodeReward {
-  id         String   @id @default(cuid())
-  episodeId  String
-  type       RewardType
-  payload    Json
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int        @id @default(autoincrement())
+  episodeId Int
+  type      RewardType
+  payload   Json
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
-  episode    Episode @relation(fields: [episodeId], references: [id])
+  episode Episode @relation(fields: [episodeId], references: [id])
 }
 
 enum RewardType {
-  EXP
   CHARACTER_UNLOCK
   ITEM
 }
 
-//////////////////////////////////////////////////////
-// MASTERY SYSTEM (REVIEW / SRS)
-//////////////////////////////////////////////////////
+/////////////
+// XP
 
-model MasteryLevel {
-  id          Int      @id @default(autoincrement())
-  title       String
-  color       String
+model XpLevel {
+  level           Int      @id // 1,2,3...
+  requiredTotalXp Int // 이 레벨이 되려면 필요한 누적 XP (min)
+  title           String? // 선택: "Beginner", "Explorer" 같은 라벨
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  expressions Expression[]
-  progress    MasteryProgress[]
+  @@index([requiredTotalXp])
 }
 
-model Expression {
-  id             String   @id @default(cuid())
-  masteryLevelId Int
-  english        String
-  korean         String
-  detail         String?
-
-  level          MasteryLevel @relation(fields: [masteryLevelId], references: [id])
-  savedBy        SavedExpression[]
+enum XpTriggerType {
+  EPISODE_COMPLETE // 에피소드 완료 시 XP
+  DAILY_QUIZ_COMPLETE // 오늘의 학습 목표 완료 시 XP
 }
 
-model MasteryProgress {
-  id             String   @id @default(cuid())
-  userId         String
-  masteryLevelId Int
-  progressPct    Int      @default(0)
-  lastReviewedAt DateTime @default(now())
-  nextReviewAt   DateTime
+model XpRule {
+  id          Int           @id @default(autoincrement())
+  triggerType XpTriggerType
 
-  user           User         @relation(fields: [userId], references: [id])
-  level          MasteryLevel @relation(fields: [masteryLevelId], references: [id])
+  /// 지급 XP (이 룰이 선택되면 이 값으로 지급)
+  xpAmount Int
 
-  @@unique([userId, masteryLevelId])
+  /// 이벤트/룰 유효기간 (기본 룰은 null/null로 두면 됨)
+  startsAt DateTime?
+  endsAt   DateTime?
+
+  /// 겹치는 룰이 있을 때 우선순위 (큰 값 우선)
+  priority Int @default(0)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([triggerType, isActive])
+  @@index([startsAt, endsAt])
 }
 
-model SavedExpression {
-  id           String   @id @default(cuid())
-  userId       String
-  expressionId String
-  createdAt    DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// =====================
+// XP GRANT LOG (중복 지급 방지 + 감사로그)
+// - "이미 줬는지" 체크용
+// - 세션/에피소드 등 source를 같이 저장
+// =====================
 
-  user         User       @relation(fields: [userId], references: [id])
-  expression   Expression @relation(fields: [expressionId], references: [id])
+enum XpSourceType {
+  EPISODE
+  DAILY_QUIZ_SESSION
+  PRACTICE_SESSION
+}
 
-  @@unique([userId, expressionId])
+model UserXpHistory {
+  id       Int  @id @default(autoincrement())
+  userId   Int
+  xpRuleId Int?
+
+  triggerType XpTriggerType
+  sourceType  XpSourceType
+  sourceId    Int? // episodeId or quizSessionId 등
+  optionCount Int? // daily 10/20/30일 때 저장해두면 좋음
+
+  xpAmount  Int
+  grantedAt DateTime @default(now())
+
+  /// 같은 source에 대해 중복 지급 방지
+  @@unique([userId, sourceType, sourceId, triggerType])
+  @@index([userId, grantedAt])
+}
+
+//////
+//PREMIUM
+/////
+
+enum EpisodeStage {
+  STORY_IN_PROGRESS
+  STORY_COMPLETED
+  QUIZ_IN_PROGRESS
+  QUIZ_COMPLETED
+}
+
+model UserEpisode {
+  id        Int @id @default(autoincrement())
+  userId    Int
+  episodeId Int
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  lastSceneId  Int?
+  currentStage EpisodeStage
+
+  score       Int?
+  isCompleted Boolean @default(false)
+
+  meta    Json?
+  user    User    @relation(fields: [userId], references: [id])
+  episode Episode @relation(fields: [episodeId], references: [id])
+
+  @@unique([userId, episodeId])
+  @@index([userId])
+  @@index([episodeId])
+}
+
+enum PlayEpisodeMode {
+  FREE_CHAT // 자유대화만
+  CHAT_WITH_EVAL // 자유대화 + 교정/평가/점수
+  CHAT_WITH_QUIZ // 대화 + 퀴즈 스테이지
+}
+
+enum SlotStatus {
+  ACTIVE
+  ENDED
+}
+
+enum PlayEpisodeSource {
+  PURCHASE
+  SUBSCRIPTION
+  COUPON
+  EVENT
+  ADMIN_GRANT
+}
+
+enum PlayEpisodeStatus {
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+model UserPlayEpisode {
+  id        Int @id @default(autoincrement())
+  userId    Int
+  episodeId Int
+
+  mode  PlayEpisodeMode @default(FREE_CHAT)
+  title String?
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  lastSceneId  Int?
+  lastSlotId   Int?
+  currentStage EpisodeStage      @default(STORY_IN_PROGRESS)
+  status       PlayEpisodeStatus @default(IN_PROGRESS)
+
+  version Int @default(1)
+
+  result Json?
+  data   Json?
+
+  source PlayEpisodeSource @default(PURCHASE)
+
+  deletedAt  DateTime?
+  archivedAt DateTime?
+
+  purchaseId Int?          @unique
+  purchase   UserPurchase? @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+
+  updatedAt DateTime  @updatedAt
+
+  slots PlayEpisodeSlot[]
+
+  user    User    @relation(fields: [userId], references: [id])
+  episode Episode @relation(fields: [episodeId], references: [id])
+
+  @@index([userId, startedAt])
+  @@index([userId, updatedAt])
+  @@index([userId, status])
+  @@index([userId, episodeId])
+  @@index([episodeId])
+}
+
+model PlayEpisodeSlot {
+  id            Int @id @default(autoincrement())
+  playEpisodeId Int
+
+  dialogueId Int // dialogue.id (USER_INPUT 지점이라고 네가 정의)
+  order      Int?
+
+  status SlotStatus @default(ACTIVE)
+  data   Json?
+
+  slotDialogues SlotDialogue[]
+
+  endedAt DateTime? // ai 호출완료 시각
+
+  playEpisode UserPlayEpisode @relation(fields: [playEpisodeId], references: [id])
+  dialogue    Dialogue        @relation(fields: [dialogueId], references: [id])
+
+  @@index([playEpisodeId])
+  @@index([dialogueId])
+}
+
+enum SlotMessageType {
+  USER
+  NPC
+  SYSTEM
+}
+
+enum SlotDialogueType {
+  DIALOGUE
+  NARRATION
+}
+
+model SlotDialogue {
+  id     Int @id @default(autoincrement())
+  slotId Int
+
+  playEpisodeId Int?
+  sceneId       Int?
+  order         Int
+
+  type        SlotDialogueType @default(DIALOGUE)
+  messageType SlotMessageType  @default(USER)
+
+  characterId    Int?
+  characterName  String?
+  charImageLabel String?
+  koreanText     String?
+  englishText    String?
+
+  data      Json?
+  createdAt DateTime @default(now())
+
+  slot      PlayEpisodeSlot @relation(fields: [slotId], references: [id])
+  character Character?      @relation(fields: [characterId], references: [id])
+
+  @@unique([slotId, order])
+  @@index([slotId, createdAt])
+  @@index([playEpisodeId, sceneId])
+}
+
+model Collection {
+  id           Int     @id @default(autoincrement())
+  title        String
+  description  String?
+  thumbnailUrl String?
+
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+
+  startsAt DateTime?
+  endsAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products CollectionProduct[]
+}
+
+model CollectionProduct {
+  id           Int @id @default(autoincrement())
+  collectionId Int
+  productId    Int
+
+  order Int @default(0)
+
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, productId])
 }
 
 //////////////////////////////////////////////////////
-// USER ↔ USER CHAT SYSTEM
+// COMMERCE
 //////////////////////////////////////////////////////
 
-model Message {
-  id          String   @id @default(cuid())
-  content     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isRead      Boolean  @default(false)
+// Product는 지금은 3종만:
+// - EPISODE_ACCESS: 코인으로 개별 에피소드 해금
+// - COIN_PACK: 인앱결제로 코인 충전
+// - SUBSCRIPTION: 구독(뼈대)
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
 
-  senderId    String
-  receiverId  String
+  type ProductType
 
-  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
-  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  // 코인 결제 상품(에피소드 해금)은 COIN + price=코인값
+  // 코인팩/구독은 storeSku를 사용하고 price는 옵션(표시용)으로 둘 수도 있음
+  currency CurrencyType
+  price    Int
+
+  storeSku String? @unique // 인앱결제 SKU (코인팩/구독에서 사용)
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  episodes           EpisodeProduct[]
+  purchases          UserPurchase[]
+  collectionProducts CollectionProduct[]
+  userSubscriptions  UserSubscription[]
+}
+
+enum ProductType {
+  PLAY_EPISODE
+  COIN_PACK
+  SUBSCRIPTION
+}
+
+enum CurrencyType {
+  COIN
+  KRW
+  USD
+}
+
+model EpisodeProduct {
+  id        Int @id @default(autoincrement())
+  episodeId Int
+  productId Int
+
+  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id])
+  userId  Int?
+
+  @@unique([episodeId, productId])
+}
+
+//////////////////////////////////////////////////////
+// PURCHASE / ENTITLEMENT
+//////////////////////////////////////////////////////
+
+enum PurchaseType {
+  COIN
+  IN_APP
+  SUBSCRIPTION_ACCESS
+}
+
+model UserPurchase {
+  id        Int @id @default(autoincrement())
+  userId    Int
+  productId Int
+
+  // 코인으로 샀는지, 인앱결제로 샀는지, 구독으로 접근인지
+  type PurchaseType
+
+  // 결제 당시 가격(코인이면 코인값)
+  pricePaid Int
+  currency  CurrencyType
+
+  // 인앱결제 영수증/거래키 (코인팩/구독 결제 검증에 사용)
+  storeOrderId String?
+
+  createdAt DateTime @default(now())
+
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product          Product           @relation(fields: [productId], references: [id], onDelete: Restrict)
+  userPlayEpisode  UserPlayEpisode?
+  coinTransactions CoinTransaction[]
+
+  // EPISODE_ACCESS는 보통 1회만 구매 가능하게 막는 게 안전
+  @@unique([userId, productId])
+}
+
+//////////////////////////////////////////////////////
+// COIN (충전/차감)
+//////////////////////////////////////////////////////
+enum CoinTxType {
+  TOPUP // 코인 충전
+  SPEND // 에피소드 구매로 차감
+  REFUND // 환불/롤백
+  AD_REWARD // 광고 보상(추가할 경우)
+  ADMIN_ADJUST
+}
+
+model CoinTransaction {
+  id     Int @id @default(autoincrement())
+  userId Int
+
+  type         CoinTxType
+  amount       Int // +충전, -차감
+  balanceAfter Int // 처리 후 잔액 스냅샷(디버깅/정합성용)
+
+  // 연결 정보
+  relatedPurchaseId Int?
+  relatedPurchase   UserPurchase? @relation(fields: [relatedPurchaseId], references: [id], onDelete: SetNull)
+
+  // 인앱 충전이면 storeOrderId/receipt 키도 남기기 좋음
+  storeOrderId String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+//////////////////////////////////////////////////////
+// SUBSCRIPTION
+//////////////////////////////////////////////////////
+
+enum SubscriptionStatus {
+  INACTIVE
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  EXPIRED
+}
+
+model UserSubscription {
+  id        Int  @id @default(autoincrement())
+  userId    Int
+  productId Int? // SUBSCRIPTION Product 연결(옵션)
+
+  status SubscriptionStatus @default(INACTIVE)
+
+  startedAt          DateTime?
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+
+  // 스토어 결제 식별자
+  storeSku     String?
+  storeOrderId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
 }

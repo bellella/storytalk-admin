@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ sceneId: string }> }
 ) {
   const scene = await prisma.scene.findUnique({
-    where: { id: (await params).sceneId },
+    where: { id: parseInt((await params).sceneId) },
     include: {
       dialogues: {
         orderBy: { order: "asc" },
@@ -16,22 +16,38 @@ export async function GET(
   return NextResponse.json(scene);
 }
 
+const SCENE_UPDATE_FIELDS = [
+  "type",
+  "title",
+  "koreanTitle",
+  "bgImageUrl",
+  "audioUrl",
+  "order",
+] as const;
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ sceneId: string }> }
 ) {
   const body = await req.json();
+  const data: Record<string, unknown> = {};
+  for (const key of SCENE_UPDATE_FIELDS) {
+    if (key in body) {
+      data[key] = body[key];
+    }
+  }
   const scene = await prisma.scene.update({
-    where: { id: (await params).sceneId },
-    data: body,
+    where: { id: parseInt((await params).sceneId) },
+    data,
   });
   return NextResponse.json(scene);
 }
 
 export async function DELETE(
   _: Request,
-  { params }: { params: { sceneId: string } }
+  { params }: { params: Promise<{ sceneId: string }> }
 ) {
-  await prisma.scene.delete({ where: { id: params.sceneId } });
+  const { sceneId } = await params;
+  await prisma.scene.delete({ where: { id: parseInt(sceneId) } });
   return NextResponse.json({ ok: true });
 }

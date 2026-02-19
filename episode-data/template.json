@@ -1,0 +1,60 @@
+{
+  "scenes": [
+    {
+      "title": "",
+      "koreanTitle": "",
+      "dialogues": [
+        {
+          "type": "NARRATION | DIALOGUE | IMAGE | HEADING | SPEAKING_MISSION | REPEAT_AFTER_ME | CHOICE | CHOICE_RESULT | USER_INPUT_SLOT | USER_VOICE_SLOT | AI_OUTPUT_SLOT",
+          "characterName": "",
+          "charImageLabel": "default | happy | sad | angry",
+          "englishText": "",
+          "koreanText": "",
+          "imageUrl": ""
+        }
+      ]
+    }
+  ],
+  "reviewItems": [
+    {
+      "sceneIndex": 0,
+      "dialogueIndex": 0,
+      "description": ""
+    }
+  ],
+  "quizzes": [
+    {
+      "type": "SENTENCE_BUILD | SENTENCE_CLOZE_BUILD",
+      "questionEnglish": "",
+      "questionKorean": "",
+      "answerIndex": 0,
+      "description": "",
+      "options": [],
+      "data": {}
+    },
+    {
+      "type": "SPEAK_REPEAT",
+      "dialogueId": 1,
+      "questionEnglish": "I’d like a latte, please.",
+      "questionKorean": "라떼 하나 주세요.",
+      "description": "문장을 듣고 그대로 따라 말해보세요. (핵심 단어가 모두 포함되면 통과)",
+      "options": [],
+      "data": {
+        "tts": {
+          "text": "I’d like a latte, please.",
+          "locale": "en-US",
+          "rate": 0.95,
+          "pitch": 1.0,
+          "autoPlay": true
+        },
+        "check": {
+          "required": [
+            { "id": "k1", "t": "i'd like" },
+            { "id": "k2", "t": "latte" },
+            { "id": "k3", "t": "please" }
+          ]
+        }
+      }
+    }
+  ]
+}

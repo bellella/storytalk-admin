@@ -1,0 +1,54 @@
+{
+  "quizzes": [
+    {
+      "type": "SENTENCE_BUILD",
+      "dialogueId": 1,
+      "questionEnglish": "I’d like a latte, please.",
+      "questionKorean": "라떼 하나 주세요.",
+      "answerIndex": 0,
+      "description": "I’d like ~ 는 공손하게 원하는 것을 말할 때 쓰는 기본 표현이에요",
+      "options": [],
+      "data": {
+        "tokensAll": [
+          { "id": "d1", "t": "today" },
+          { "id": "t1", "t": "I'd" },
+          { "id": "t2", "t": "like" },
+          { "id": "t3", "t": "the" },
+          { "id": "t4", "t": "latte" },
+          { "id": "t5", "t": "please" },
+          { "id": "t6", "t": "a" }
+        ],
+        "answerTokenIds": ["t1", "t2", "t3", "t4", "t5", "t6"]
+      }
+    },
+    {
+      "type": "SENTENCE_CLOZE_BUILD",
+      "dialogueId": 1,
+      "questionEnglish": "",
+      "questionKorean": "라떼 하나 주세요.",
+      "answerIndex": 0,
+      "description": "I’d like ~ 는 공손하게 원하는 것을 말할 때 쓰는 기본 표현이에요",
+      "options": [],
+      "data": {
+        "parts": [
+          { "type": "text", "t": "I'd like the " },
+          { "type": "slot", "slotId": "s1" },
+          { "type": "text", "t": ", please. " },
+          { "type": "text", "t": "Make it " },
+          { "type": "slot", "slotId": "s2" },
+          { "type": "text", "t": "." }
+        ],
+        "choices": [
+          { "id": "c1", "t": "steak" },
+          { "id": "c2", "t": "salad" },
+          { "id": "c3", "t": "medium" },
+          { "id": "c4", "t": "well-done" }
+        ],
+        "answerBySlot": {
+          "s1": "c1",
+          "s2": "c3"
+        }
+      }
+    }
+  ]
+}

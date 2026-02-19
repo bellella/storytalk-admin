@@ -6,10 +6,13 @@ export async function GET(
   { params }: { params: Promise<{ storyId: string }> }
 ) {
   const story = await prisma.story.findUnique({
-    where: { id: (await params).storyId },
+    where: { id: parseInt((await params).storyId) },
     include: {
       episodes: {
         orderBy: { order: "asc" },
+      },
+      storyTags: {
+        include: { tag: true },
       },
     },
   });
@@ -22,7 +25,7 @@ export async function PATCH(
 ) {
   const body = await req.json();
   const story = await prisma.story.update({
-    where: { id: (await params).storyId },
+    where: { id: parseInt((await params).storyId) },
     data: body,
   });
   return NextResponse.json(story);
@@ -32,6 +35,8 @@ export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ storyId: string }> }
 ) {
-  await prisma.story.delete({ where: { id: (await params).storyId } });
+  await prisma.story.delete({
+    where: { id: parseInt((await params).storyId) },
+  });
   return NextResponse.json({ ok: true });
 }

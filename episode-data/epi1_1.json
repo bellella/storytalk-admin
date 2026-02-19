@@ -1,0 +1,330 @@
+{
+  "scenes": [
+    {
+      "title": "A Boy in the Noise",
+      "koreanTitle": "소음 속의 소년",
+      "dialogues": [
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "The classroom was loud with laughter and random jokes, but none of those sounds felt close to Jun.",
+          "koreanText": "교실은 웃음과 장난으로 시끄러웠지만, 그 소리들은 이상하게도 준에게 닿지 않았다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "He sat by the window, watching the sky instead of the people around him.",
+          "koreanText": "준은 사람들 대신 창밖 하늘을 바라보고 있었다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "I'm surrounded by people, and everyone looks so default together... so why do I feel like I'm the only one left out?",
+          "koreanText": "이렇게 사람들 사이에 있는데 다들 즐거워 보이는데… 왜 나만 혼자 남겨진 기분일까?",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "His phone screen stayed dark. No messages. No missed calls. Just his own reflection.",
+          "koreanText": "휴대폰 화면은 계속 어두운 채였다. 메시지도, 부재중 전화도 없었다. 그저 자기 얼굴만 비칠 뿐이었다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "There were deep scratches on his desk, words carved by someone who never got caught.",
+          "koreanText": "책상에는 누가 남겼는지 모를 깊은 흠집이 새겨져 있었다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "If I pretend it doesn't hurt, maybe it really won't hurt that much.",
+          "koreanText": "아픈 척 안 하면… 진짜로 안 아픈 걸지도 모르지.",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "The bell rang, and everyone rushed out in groups. Jun walked alone.",
+          "koreanText": "종이 울리자 모두가 무리를 지어 나갔고, 준은 혼자 걸었다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Maybe I'm just not the kind of person people choose to stay with.",
+          "koreanText": "어쩌면 난, 누가 곁에 두고 싶어 할 사람이 아닌가 봐.",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "His Small Escape",
+      "koreanTitle": "작은 도피처",
+      "dialogues": [
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "On his way home, Jun stopped in front of a small anime shop filled with colorful posters and figures.",
+          "koreanText": "집으로 가는 길, 준은 형형색색 포스터와 피규어로 가득한 작은 애니메이션 샵 앞에 멈춰 섰다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "In stories, even the loneliest hero gets someone who understands them in the end. I wonder if that ever happens in real life.",
+          "koreanText": "이야기 속에선 아무리 외로운 주인공도 결국 이해해주는 누군가를 만나잖아. 현실에도 그런 일이 있을까?",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Shop Owner",
+          "charImageLabel": "default",
+          "englishText": "You always stare at the sky-themed characters. Do you like default stories that much?",
+          "koreanText": "너 맨날 별이나 하늘 관련 캐릭터만 보더라. 그렇게 슬픈 이야기 좋아해?",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "It's not that I like default stories. I just feel like they understand something other people don't.",
+          "koreanText": "슬픈 이야기를 좋아하는 건 아니에요. 그냥… 그 애들은 다른 사람들이 모르는 걸 아는 것 같아서요.",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "For a brief moment, his eyes shined brighter than any figure on the shelf.",
+          "koreanText": "잠깐이지만, 그의 눈이 진열대 위 어떤 피규어보다도 더 반짝였다.",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "One Message",
+      "koreanTitle": "단 한 명",
+      "dialogues": [
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "As the sun slowly set, his phone finally buzzed in his hand.",
+          "koreanText": "해가 천천히 저물 무렵, 그의 손 안에서 휴대폰이 진동했다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Min",
+          "charImageLabel": "default",
+          "englishText": "Hey, did you survive today? Or did the world try to defeat you again?",
+          "koreanText": "야, 오늘도 살아남았냐? 아니면 또 세상이 널 공격했어?",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "I survived, barely. But I'm getting good at pretending nothing happened.",
+          "koreanText": "간신히. 아무 일도 없는 척하는 건 이제 좀 익숙해졌어.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Min",
+          "charImageLabel": "default",
+          "englishText": "You don't always have to pretend with me. Even if it's just through a screen, I'm here.",
+          "koreanText": "나한테까지 괜히 괜찮은 척 안 해도 돼. 화면 너머라도, 난 네 편이니까.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "I know... and I'm really thankful for that. But sometimes, even when someone says they're here, I still feel empty inside.",
+          "koreanText": "알아… 그래서 고맙지. 근데 누가 옆에 있다고 말해줘도, 이상하게 속이 텅 빈 느낌이 들 때가 있어.",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "The Star Moves",
+      "koreanTitle": "움직이기 시작한 별",
+      "dialogues": [
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "The sky turned deep blue, and one star appeared earlier than the others.",
+          "koreanText": "하늘은 짙은 푸른색으로 물들었고, 별 하나가 유난히 먼저 떠올랐다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Stars are lucky. Even if they shine alone in a huge sky, they never look like they're about to cry.",
+          "koreanText": "별은 좋겠다. 저렇게 넓은 하늘에 혼자 있어도, 울 것처럼 보이진 않잖아.",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Then the star began to move, slowly and quietly, as if it had made up its mind.",
+          "koreanText": "그때 그 별이, 마치 결심한 것처럼 천천히 조용히 움직이기 시작했다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Wait... that's not how stars are supposed to move, right?",
+          "koreanText": "잠깐… 별이 저렇게 움직이는 거 맞나?",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "It wasn't bright enough to grant a wish, and it wasn't scary like a disaster. It just felt like someone quietly coming down.",
+          "koreanText": "소원을 빌 만큼 화려하지도, 재앙처럼 무섭지도 않았다. 그저 누군가 조용히 내려오는 느낌이었다.",
+          "imageUrl": ""
+        }
+      ]
+    },
+    {
+      "title": "The Girl Who Fell from the Sky",
+      "koreanTitle": "하늘에서 내려온 소녀",
+      "dialogues": [
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "At the old playground, a girl was sitting alone on a bench, looking up at the sky as if she had lost something precious.",
+          "koreanText": "폐운동장 벤치 위에는, 무언가를 잃어버린 듯 하늘을 올려다보는 소녀가 앉아 있었다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "I was sure nothing strange would ever happen in my life... so why are you sitting here like you just fell out of the sky?",
+          "koreanText": "내 인생엔 이상한 일은 안 생길 줄 알았는데… 왜 너는 마치 하늘에서 떨어진 것처럼 여기 앉아 있는 거야?",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "Is this... Earth? It feels heavier than I imagined, and the air smells different.",
+          "koreanText": "여기가… 지구야? 생각보다 무겁고, 공기 냄새도 다르네.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "That's not funny. People don't just fall from the sky and ask questions like that.",
+          "koreanText": "그거 농담이지? 사람은 하늘에서 떨어져서 그런 질문 안 해.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "I'm not joking. My home was there... but now it's gone, and I don't know where else to go.",
+          "koreanText": "농담 아니야. 내 집은 저기에 있었는데… 이제 사라졌고, 어디로 가야 할지도 모르겠어.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "Then tell me clearly... what are you?",
+          "koreanText": "그럼 제대로 말해봐… 넌 뭐야?",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "I am... someone who came from a star that no longer exists.",
+          "koreanText": "나는… 이제는 존재하지 않는 별에서 온 아이야.",
+          "imageUrl": ""
+        },
+        {
+          "type": "NARRATION",
+          "characterName": "",
+          "charImageLabel": "default",
+          "englishText": "Jun looked up. One star was missing from the place he had always stared at.",
+          "koreanText": "준은 고개를 들었다. 늘 바라보던 자리의 별 하나가 사라져 있었다.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Jun",
+          "charImageLabel": "default",
+          "englishText": "I just met you, and this makes no sense... but somehow, you look even lonelier than I do.",
+          "koreanText": "처음 만났고, 말도 안 되는 이야기인데… 이상하게도, 넌 나보다 더 외로워 보여.",
+          "imageUrl": ""
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Lara",
+          "charImageLabel": "default",
+          "englishText": "That star right there... that empty place used to be my home.",
+          "koreanText": "저기… 비어 있는 자리. 거기가 내 별이었어.",
+          "imageUrl": ""
+        }
+      ]
+    }
+  ],
+  "reviewItems": [
+    {
+      "sceneIndex": 0,
+      "dialogueIndex": 2,
+      "description": "I'm surrounded by ~ 는 '둘러싸여 있다' 표현이고, feel left out 은 '소외감을 느끼다'라는 감정 표현이에요."
+    },
+    {
+      "sceneIndex": 1,
+      "dialogueIndex": 1,
+      "description": "Even the ~est 는 '가장 ~한 것조차도' 강조 표현이에요. in the end 는 '결국'이라는 뜻이에요."
+    },
+    {
+      "sceneIndex": 2,
+      "dialogueIndex": 3,
+      "description": "You don't have to ~ 는 '~할 필요 없다'라는 조언 표현이에요."
+    },
+    {
+      "sceneIndex": 3,
+      "dialogueIndex": 1,
+      "description": "Even if ~ 는 '비록 ~일지라도'라는 양보 표현이에요."
+    },
+    {
+      "sceneIndex": 4,
+      "dialogueIndex": 2,
+      "description": "It feels + 형용사 는 '~하게 느껴지다'라는 감각 표현이에요."
+    },
+    {
+      "sceneIndex": 4,
+      "dialogueIndex": 6,
+      "description": "no longer 는 '더 이상 ~아니다'라는 의미의 표현이에요."
+    }
+  ]
+}

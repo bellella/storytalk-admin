@@ -1,0 +1,97 @@
+{
+  "scenes": [
+    {
+      "title": "IELTS Speaking Basics",
+      "koreanTitle": "아이엘츠 스피킹 기초",
+      "dialogues": [
+        {
+          "type": "HEADING",
+          "englishText": "IELTS Speaking Practice",
+          "koreanText": "아이엘츠 스피킹 연습"
+        },
+        {
+          "type": "NARRATION",
+          "englishText": "In this lesson, you will practice turning Korean answers into natural English.",
+          "koreanText": "이 레슨에서는 한국어 답변을 자연스러운 영어로 바꾸는 연습을 합니다."
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Tutor Emma",
+          "charImageLabel": "happy",
+          "englishText": "Hi! Today, I’ll help you improve your IELTS speaking answers.",
+          "koreanText": "안녕하세요! 오늘은 아이엘츠 스피킹 답변을 향상시키는 연습을 도와드릴게요."
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Tutor Emma",
+          "charImageLabel": "default",
+          "englishText": "I will give you a Korean answer. Try to say it in English.",
+          "koreanText": "제가 한국어 답변을 줄게요. 영어로 말해보세요."
+        }
+      ]
+    },
+    {
+      "title": "Korean to English Conversion",
+      "koreanTitle": "한국어 → 영어 변환",
+      "dialogues": [
+        {
+          "type": "HEADING",
+          "englishText": "Question 1",
+          "koreanText": "질문 1"
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Tutor Emma",
+          "charImageLabel": "default",
+          "englishText": "Describe your favorite place.",
+          "koreanText": "당신이 가장 좋아하는 장소를 설명해 보세요."
+        },
+        {
+          "type": "NARRATION",
+          "englishText": "Convert the Korean answer into English.",
+          "koreanText": "한국어 답변을 영어로 바꿔보세요."
+        },
+        {
+          "type": "USER_INPUT_SLOT",
+          "koreanText": "저는 한강을 가장 좋아합니다. 친구들과 자주 가서 산책을 합니다."
+        },
+        {
+          "type": "AI_OUTPUT_SLOT"
+        }
+      ]
+    },
+    {
+      "title": "Model Answer & Speaking",
+      "koreanTitle": "모범 답안 & 따라 말하기",
+      "dialogues": [
+        {
+          "type": "HEADING",
+          "englishText": "Model Answer",
+          "koreanText": "모범 답안"
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Tutor Emma",
+          "charImageLabel": "happy",
+          "englishText": "Here is a natural example answer.",
+          "koreanText": "자연스러운 예시 답변입니다."
+        },
+        {
+          "type": "DIALOGUE",
+          "characterName": "Tutor Emma",
+          "charImageLabel": "default",
+          "englishText": "My favorite place is the Han River. I often go there with my friends and take walks.",
+          "koreanText": "제가 가장 좋아하는 장소는 한강입니다. 친구들과 자주 가서 산책을 합니다."
+        },
+        {
+          "type": "REPEAT_AFTER_ME",
+          "englishText": "My favorite place is the Han River."
+        },
+        {
+          "type": "SPEAKING_MISSION",
+          "englishText": "I often go there with my friends and take walks."
+        }
+      ]
+    }
+  ]
+}

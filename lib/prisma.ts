@@ -1,7 +1,15 @@
-import { PrismaClient } from "@/lib/generated/prisma/client";
+import { PrismaClient } from "@/src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
 });
-export const prisma = new PrismaClient({ adapter });
+
+export const prisma = new PrismaClient({
+  adapter,
+  log: [
+    { emit: "stdout", level: "query" },
+    { emit: "stdout", level: "error" },
+    { emit: "stdout", level: "warn" },
+  ],
+});

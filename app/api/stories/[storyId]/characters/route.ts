@@ -7,16 +7,14 @@ export async function GET(
 ) {
   const { storyId } = await params;
   const storyCharacters = await prisma.storyCharacter.findMany({
-    where: { storyId },
+    where: { storyId: parseInt(storyId) },
     include: {
-      character: true,
+      character: {
+        include: { images: true },
+      },
     },
   });
-  const data = storyCharacters.map((sc) => ({
-    ...sc,
-    name: sc.name || sc.character?.name,
-  }));
-  return NextResponse.json(data);
+  return NextResponse.json(storyCharacters);
 }
 
 export async function POST(
@@ -26,15 +24,48 @@ export async function POST(
   const { storyId } = await params;
   const body = await req.json();
 
-  // Support both: linking existing character OR creating story-specific character
+  // Link existing character to story
   const storyCharacter = await prisma.storyCharacter.create({
     data: {
-      storyId,
-      characterId: body.characterId || null,
-      name: body.name || null,
+      storyId: parseInt(storyId),
+      characterId: parseInt(body.characterId),
+      name: body.name,
     },
     include: {
-      character: true,
+      character: {
+        include: { images: true },
+      },
+    },
+  });
+
+  return NextResponse.json(storyCharacter);
+}
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ storyId: string }> }
+) {
+  const { storyId } = await params;
+  const body = await req.json();
+
+  const where = body.id
+    ? { id: parseInt(body.id) }
+    : {
+        storyId_characterId: {
+          storyId: parseInt(storyId),
+          characterId: parseInt(body.characterId),
+        },
+      };
+
+  const storyCharacter = await prisma.storyCharacter.update({
+    where,
+    data: {
+      name: body.name,
+    },
+    include: {
+      character: {
+        include: { images: true },
+      },
     },
   });
 
@@ -50,17 +81,16 @@ export async function DELETE(
   const id = searchParams.get("id");
   const characterId = searchParams.get("characterId");
 
-  // Support delete by storyCharacter id or by characterId
   if (id) {
     await prisma.storyCharacter.delete({
-      where: { id },
+      where: { id: parseInt(id) },
     });
   } else if (characterId) {
     await prisma.storyCharacter.delete({
       where: {
         storyId_characterId: {
-          storyId,
-          characterId,
+          storyId: parseInt(storyId),
+          characterId: parseInt(characterId),
         },
       },
     });
