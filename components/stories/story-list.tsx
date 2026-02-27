@@ -74,7 +74,7 @@ export function StoryList({ stories }: StoryListProps) {
           </thead>
           <tbody>
             {stories.map((story) => {
-              const difficultyLabel = getDifficultyLabel(story.difficulty);
+              const difficultyLabel = story.level;
 
               return (
                 <tr
@@ -142,10 +142,7 @@ export function StoryList({ stories }: StoryListProps) {
                           <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        align="end"
-                        className="rounded-xl"
-                      >
+                      <DropdownMenuContent align="end" className="rounded-xl">
                         <DropdownMenuItem className="rounded-lg">
                           <Pencil className="w-4 h-4 mr-2" />
                           Edit

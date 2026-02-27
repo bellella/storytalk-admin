@@ -21,7 +21,7 @@ export async function GET(
       | "MASTER" = "BEGINNER";
     if (episode) {
       const story = await prisma.story.findUnique({
-        where: { id: episode.storyId },
+        where: { id: episode.storyId! },
         select: { level: true },
       });
       if (story) storyLevel = story.level;
@@ -61,7 +61,7 @@ export async function POST(
       | "MASTER" = "BEGINNER";
     if (episodeRow) {
       const story = await prisma.story.findUnique({
-        where: { id: episodeRow.storyId },
+        where: { id: episodeRow.storyId! },
         select: { level: true },
       });
       if (story) storyLevel = story.level;

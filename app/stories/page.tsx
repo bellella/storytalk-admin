@@ -10,12 +10,6 @@ import { useStories } from "@/hooks/use-stories";
 import { StoryFilters } from "@/components/stories/story-filters";
 import { StoryList } from "@/components/stories/story-list";
 
-function getDifficultyLabel(level: number) {
-  if (level <= 1) return "Beginner";
-  if (level === 2) return "Intermediate";
-  return "Advanced";
-}
-
 export default function StoriesPage() {
   const { data: stories = [], isLoading, error } = useStories();
 
@@ -33,13 +27,12 @@ export default function StoriesPage() {
       const matchesCategory =
         categoryFilter === "All" || story.category === categoryFilter;
 
-      const difficultyLabel = getDifficultyLabel(story.difficulty);
       const matchesDifficulty =
-        difficultyFilter === "All" || difficultyLabel === difficultyFilter;
+        difficultyFilter === "All" ||
+        story.level === difficultyFilter.toUpperCase();
 
       const matchesStatus =
-        statusFilter === "All" ||
-        story.status === statusFilter.toUpperCase();
+        statusFilter === "All" || story.status === statusFilter.toUpperCase();
 
       return (
         matchesSearch && matchesCategory && matchesDifficulty && matchesStatus

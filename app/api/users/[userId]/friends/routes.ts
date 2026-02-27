@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { userId: string } }
 ) {
   const friends = await prisma.characterFriend.findMany({
-    where: { userId: params.userId },
+    where: { userId: parseInt(params.userId) },
     include: {
       character: true,
     },
@@ -21,7 +21,7 @@ export async function POST(
   const { characterId } = await req.json();
   const friend = await prisma.characterFriend.create({
     data: {
-      userId: params.userId,
+      userId: parseInt(params.userId),
       characterId,
     },
   });

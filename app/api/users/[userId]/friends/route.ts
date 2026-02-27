@@ -11,7 +11,7 @@ export async function GET(
     where: { userId: parseInt(userId) },
     include: {
       character: {
-        select: { id: true, name: true, profileImageUrl: true },
+        select: { id: true, name: true, avatarImage: true, mainImage: true },
       },
     },
     orderBy: { updatedAt: "desc" },

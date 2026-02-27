@@ -4,12 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AdminLayout } from "@/components/admin/admin-layout";
 import { PageHeader } from "@/components/admin/page-header";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -21,14 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Loader2,
-  Plus,
-  Save,
-  Trash2,
-  Sparkles,
-  Settings2,
-} from "lucide-react";
+import { Loader2, Plus, Save, Trash2, Sparkles, Settings2 } from "lucide-react";
 import {
   useXpLevels,
   useXpRules,
@@ -41,6 +29,7 @@ import {
   type XpLevelBasic,
   type XpRuleBasic,
 } from "@/hooks/use-xp";
+import { XpTriggerType } from "@/src/generated/prisma/enums";
 
 type XpLevelFormValues = {
   level: number;
@@ -176,7 +165,7 @@ export default function XpSettingsPage() {
   const handleSubmitRule = ruleForm.handleSubmit((values) => {
     const payload = {
       id: values.id,
-      triggerType: values.triggerType,
+      triggerType: values.triggerType as XpTriggerType,
       xpAmount: Number(values.xpAmount),
       startsAt: values.startsAt || null,
       endsAt: values.endsAt || null,
@@ -188,7 +177,7 @@ export default function XpSettingsPage() {
       if (!selectedRule.id) return;
       updateRule.mutate(
         {
-          ...(payload as Required<typeof payload>),
+          ...payload,
           id: selectedRule.id,
         },
         {
@@ -271,7 +260,9 @@ export default function XpSettingsPage() {
                   Default Episode XP
                 </p>
                 <p className="text-2xl font-semibold text-foreground">
-                  {defaultEpisodeRule ? `${defaultEpisodeRule.xpAmount} XP` : "-"}
+                  {defaultEpisodeRule
+                    ? `${defaultEpisodeRule.xpAmount} XP`
+                    : "-"}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   EPISODE_COMPLETE 최상위(priority) 룰 기준.
@@ -283,361 +274,354 @@ export default function XpSettingsPage() {
           <div className="grid grid-cols-12 gap-6 items-start">
             {/* XP Levels */}
             <Card className="col-span-7 rounded-2xl border-border/60 bg-card shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-4">
-              <CardTitle className="text-lg font-medium">
-                XP Levels
-              </CardTitle>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-xl"
-                onClick={() => setSelectedLevel(null)}
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                새 레벨
-              </Button>
-              <p className="mt-1 text-xs text-muted-foreground">
-                유저의 누적 XP에 따라 자동으로 레벨을 계산합니다.
-              </p>
-            </CardHeader>
-            <CardContent className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)] gap-4">
-              <div className="space-y-2 max-h-[480px] overflow-auto pr-1">
-                {levels.map((level) => (
-                  <button
-                    key={level.level}
-                    type="button"
-                    onClick={() => setSelectedLevel(level)}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left border ${
-                      selectedLevel?.level === level.level
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:bg-secondary/50"
-                    }`}
-                  >
-                    <div>
-                      <div className="text-sm font-semibold">
-                        Lv. {level.level}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {level.requiredTotalXp} XP 이상
-                      </div>
-                      {level.title && (
-                        <div className="text-xs text-primary mt-0.5">
-                          {level.title}
+              <CardHeader className="flex flex-row items-center justify-between pb-4">
+                <CardTitle className="text-lg font-medium">XP Levels</CardTitle>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-xl"
+                  onClick={() => setSelectedLevel(null)}
+                >
+                  <Plus className="w-4 h-4 mr-1" />새 레벨
+                </Button>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  유저의 누적 XP에 따라 자동으로 레벨을 계산합니다.
+                </p>
+              </CardHeader>
+              <CardContent className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)] gap-4">
+                <div className="space-y-2 max-h-[480px] overflow-auto pr-1">
+                  {levels.map((level) => (
+                    <button
+                      key={level.level}
+                      type="button"
+                      onClick={() => setSelectedLevel(level)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left border ${
+                        selectedLevel?.level === level.level
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:bg-secondary/50"
+                      }`}
+                    >
+                      <div>
+                        <div className="text-sm font-semibold">
+                          Lv. {level.level}
                         </div>
-                      )}
+                        <div className="text-xs text-muted-foreground">
+                          {level.requiredTotalXp} XP 이상
+                        </div>
+                        {level.title && (
+                          <div className="text-xs text-primary mt-0.5">
+                            {level.title}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full ${
+                            level.isActive
+                              ? "bg-emerald-500/10 text-emerald-600"
+                              : "bg-slate-500/10 text-slate-600"
+                          }`}
+                        >
+                          {level.isActive ? "Active" : "Inactive"}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 rounded-xl"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteLevel(level.level);
+                          }}
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                        </Button>
+                      </div>
+                    </button>
+                  ))}
+                  {levels.length === 0 && (
+                    <div className="text-sm text-muted-foreground py-6 text-center rounded-xl border border-dashed border-border/60">
+                      아직 XP 레벨이 없습니다. <br />
+                      오른쪽 폼에서 첫 레벨을 추가해 보세요.
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`text-xs px-2 py-0.5 rounded-full ${
-                          level.isActive
-                            ? "bg-emerald-500/10 text-emerald-600"
-                            : "bg-slate-500/10 text-slate-600"
-                        }`}
-                      >
-                        {level.isActive ? "Active" : "Inactive"}
-                      </span>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 rounded-xl"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteLevel(level.level);
-                        }}
-                      >
-                        <Trash2 className="w-3.5 h-3.5 text-destructive" />
-                      </Button>
-                    </div>
-                  </button>
-                ))}
-                {levels.length === 0 && (
-                  <div className="text-sm text-muted-foreground py-6 text-center rounded-xl border border-dashed border-border/60">
-                    아직 XP 레벨이 없습니다. <br />
-                    오른쪽 폼에서 첫 레벨을 추가해 보세요.
-                  </div>
-                )}
-              </div>
-
-              <form
-                onSubmit={handleSubmitLevel}
-                className="space-y-4 rounded-2xl bg-secondary/40 p-4 border border-border/40"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-sm font-medium">
-                    {selectedLevel ? "레벨 수정" : "레벨 추가"}
-                  </p>
-                  <Settings2 className="w-4 h-4 text-muted-foreground" />
+                  )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-xs font-medium">Level</Label>
-                    <Input
-                      type="number"
-                      min={1}
-                      {...levelForm.register("level", {
-                        valueAsNumber: true,
-                      })}
-                      className="mt-1 rounded-xl bg-background border-border/60"
-                    />
+                <form
+                  onSubmit={handleSubmitLevel}
+                  className="space-y-4 rounded-2xl bg-secondary/40 p-4 border border-border/40"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-sm font-medium">
+                      {selectedLevel ? "레벨 수정" : "레벨 추가"}
+                    </p>
+                    <Settings2 className="w-4 h-4 text-muted-foreground" />
                   </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs font-medium">Level</Label>
+                      <Input
+                        type="number"
+                        min={1}
+                        {...levelForm.register("level", {
+                          valueAsNumber: true,
+                        })}
+                        className="mt-1 rounded-xl bg-background border-border/60"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-medium">
+                        Required Total XP
+                      </Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        {...levelForm.register("requiredTotalXp", {
+                          valueAsNumber: true,
+                        })}
+                        className="mt-1 rounded-xl bg-background border-border/60"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <Label className="text-xs font-medium">
-                      Required Total XP
+                      Title (optional)
                     </Label>
                     <Input
-                      type="number"
-                      min={0}
-                      {...levelForm.register("requiredTotalXp", {
-                        valueAsNumber: true,
-                      })}
+                      placeholder="Beginner, Explorer 등"
+                      {...levelForm.register("title")}
                       className="mt-1 rounded-xl bg-background border-border/60"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <Label className="text-xs font-medium">
-                    Title (optional)
-                  </Label>
-                  <Input
-                    placeholder="Beginner, Explorer 등"
-                    {...levelForm.register("title")}
-                    className="mt-1 rounded-xl bg-background border-border/60"
-                  />
-                </div>
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        checked={levelForm.watch("isActive")}
+                        onCheckedChange={(checked) =>
+                          levelForm.setValue("isActive", checked)
+                        }
+                      />
+                      <span className="text-xs text-muted-foreground">
+                        Active
+                      </span>
+                    </div>
 
-                <div className="flex items-center justify-between pt-1">
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      checked={levelForm.watch("isActive")}
-                      onCheckedChange={(checked) =>
-                        levelForm.setValue("isActive", checked)
-                      }
-                    />
-                    <span className="text-xs text-muted-foreground">
-                      Active
-                    </span>
+                    <Button
+                      type="submit"
+                      size="sm"
+                      className="rounded-xl"
+                      disabled={createLevel.isPending || updateLevel.isPending}
+                    >
+                      {(createLevel.isPending || updateLevel.isPending) && (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      )}
+                      <Save className="w-4 h-4 mr-1" />
+                      {selectedLevel ? "Update" : "Create"}
+                    </Button>
                   </div>
-
-                  <Button
-                    type="submit"
-                    size="sm"
-                    className="rounded-xl"
-                    disabled={createLevel.isPending || updateLevel.isPending}
-                  >
-                    {(createLevel.isPending || updateLevel.isPending) && (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    )}
-                    <Save className="w-4 h-4 mr-1" />
-                    {selectedLevel ? "Update" : "Create"}
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
+                </form>
+              </CardContent>
             </Card>
 
             {/* XP Rules */}
             <Card className="col-span-5 rounded-2xl border-border/60 bg-card shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-4">
-              <CardTitle className="text-lg font-medium">
-                XP Rules
-              </CardTitle>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-xl"
-                onClick={() => setSelectedRule(null)}
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                새 룰
-              </Button>
-              <p className="mt-1 text-xs text-muted-foreground">
-                에피소드 완료, 데일리 퀴즈 등 상황별 XP 지급 룰입니다.
-              </p>
-            </CardHeader>
-            <CardContent className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)] gap-4">
-              <div className="space-y-2 max-h-[480px] overflow-auto pr-1">
-                {rules.map((rule) => (
-                  <button
-                    key={rule.id}
-                    type="button"
-                    onClick={() => setSelectedRule(rule)}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left border ${
-                      selectedRule?.id === rule.id
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:bg-secondary/50"
-                    }`}
-                  >
-                    <div>
-                      <div className="text-xs font-semibold">
-                        #{rule.id} · {rule.triggerType}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {rule.xpAmount} XP · priority {rule.priority}
-                      </div>
-                      {(rule.startsAt || rule.endsAt) && (
-                        <div className="text-[11px] text-slate-500 mt-0.5">
-                          {rule.startsAt
-                            ? new Date(rule.startsAt).toLocaleString()
-                            : "Always"}
-                          {" ~ "}
-                          {rule.endsAt
-                            ? new Date(rule.endsAt).toLocaleString()
-                            : "∞"}
+              <CardHeader className="flex flex-row items-center justify-between pb-4">
+                <CardTitle className="text-lg font-medium">XP Rules</CardTitle>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-xl"
+                  onClick={() => setSelectedRule(null)}
+                >
+                  <Plus className="w-4 h-4 mr-1" />새 룰
+                </Button>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  에피소드 완료, 데일리 퀴즈 등 상황별 XP 지급 룰입니다.
+                </p>
+              </CardHeader>
+              <CardContent className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)] gap-4">
+                <div className="space-y-2 max-h-[480px] overflow-auto pr-1">
+                  {rules.map((rule) => (
+                    <button
+                      key={rule.id}
+                      type="button"
+                      onClick={() => setSelectedRule(rule)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left border ${
+                        selectedRule?.id === rule.id
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:bg-secondary/50"
+                      }`}
+                    >
+                      <div>
+                        <div className="text-xs font-semibold">
+                          #{rule.id} · {rule.triggerType}
                         </div>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`text-xs px-2 py-0.5 rounded-full ${
-                          rule.isActive
-                            ? "bg-emerald-500/10 text-emerald-600"
-                            : "bg-slate-500/10 text-slate-600"
-                        }`}
-                      >
-                        {rule.isActive ? "Active" : "Inactive"}
-                      </span>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 rounded-xl"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteRule(rule.id);
-                        }}
-                      >
-                        <Trash2 className="w-3.5 h-3.5 text-destructive" />
-                      </Button>
-                    </div>
-                  </button>
-                ))}
-                {rules.length === 0 && (
-                  <div className="text-sm text-muted-foreground py-6 text-center rounded-xl border border-dashed border-border/60">
-                    아직 XP Rule이 없습니다. <br />
-                    오른쪽 폼에서 기본 XP 룰을 정의해 주세요.
-                  </div>
-                )}
-              </div>
-
-              <form
-                onSubmit={handleSubmitRule}
-                className="space-y-4 rounded-2xl bg-secondary/40 p-4 border border-border/40"
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-sm font-medium">
-                    {selectedRule ? "XP Rule 수정" : "XP Rule 추가"}
-                  </p>
-                  <Settings2 className="w-4 h-4 text-muted-foreground" />
-                </div>
-
-                <div>
-                  <Label className="text-xs font-medium">Trigger Type</Label>
-                  <Select
-                    value={ruleForm.watch("triggerType")}
-                    onValueChange={(val) =>
-                      ruleForm.setValue("triggerType", val)
-                    }
-                  >
-                    <SelectTrigger className="mt-1 rounded-xl bg-background border-border/60">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      {TRIGGER_OPTIONS.map((opt) => (
-                        <SelectItem
-                          key={opt.value}
-                          value={opt.value}
-                          className="rounded-lg"
+                        <div className="text-xs text-muted-foreground">
+                          {rule.xpAmount} XP · priority {rule.priority}
+                        </div>
+                        {(rule.startsAt || rule.endsAt) && (
+                          <div className="text-[11px] text-slate-500 mt-0.5">
+                            {rule.startsAt
+                              ? new Date(rule.startsAt).toLocaleString()
+                              : "Always"}
+                            {" ~ "}
+                            {rule.endsAt
+                              ? new Date(rule.endsAt).toLocaleString()
+                              : "∞"}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full ${
+                            rule.isActive
+                              ? "bg-emerald-500/10 text-emerald-600"
+                              : "bg-slate-500/10 text-slate-600"
+                          }`}
                         >
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                          {rule.isActive ? "Active" : "Inactive"}
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 rounded-xl"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteRule(rule.id);
+                          }}
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                        </Button>
+                      </div>
+                    </button>
+                  ))}
+                  {rules.length === 0 && (
+                    <div className="text-sm text-muted-foreground py-6 text-center rounded-xl border border-dashed border-border/60">
+                      아직 XP Rule이 없습니다. <br />
+                      오른쪽 폼에서 기본 XP 룰을 정의해 주세요.
+                    </div>
+                  )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-xs font-medium">XP Amount</Label>
-                    <Input
-                      type="number"
-                      min={0}
-                      {...ruleForm.register("xpAmount", {
-                        valueAsNumber: true,
-                      })}
-                      className="mt-1 rounded-xl bg-background border-border/60"
-                    />
+                <form
+                  onSubmit={handleSubmitRule}
+                  className="space-y-4 rounded-2xl bg-secondary/40 p-4 border border-border/40"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-sm font-medium">
+                      {selectedRule ? "XP Rule 수정" : "XP Rule 추가"}
+                    </p>
+                    <Settings2 className="w-4 h-4 text-muted-foreground" />
                   </div>
-                  <div>
-                    <Label className="text-xs font-medium">Priority</Label>
-                    <Input
-                      type="number"
-                      {...ruleForm.register("priority", {
-                        valueAsNumber: true,
-                      })}
-                      className="mt-1 rounded-xl bg-background border-border/60"
-                    />
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label className="text-xs font-medium">
-                      Starts At (optional)
-                    </Label>
-                    <Input
-                      type="datetime-local"
-                      {...ruleForm.register("startsAt")}
-                      className="mt-1 rounded-xl bg-background border-border/60"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-medium">
-                      Ends At (optional)
-                    </Label>
-                    <Input
-                      type="datetime-local"
-                      {...ruleForm.register("endsAt")}
-                      className="mt-1 rounded-xl bg-background border-border/60"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-1">
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      checked={ruleForm.watch("isActive")}
-                      onCheckedChange={(checked) =>
-                        ruleForm.setValue("isActive", checked)
+                    <Label className="text-xs font-medium">Trigger Type</Label>
+                    <Select
+                      value={ruleForm.watch("triggerType")}
+                      onValueChange={(val) =>
+                        ruleForm.setValue("triggerType", val)
                       }
-                    />
-                    <span className="text-xs text-muted-foreground">
-                      Active
-                    </span>
+                    >
+                      <SelectTrigger className="mt-1 rounded-xl bg-background border-border/60">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        {TRIGGER_OPTIONS.map((opt) => (
+                          <SelectItem
+                            key={opt.value}
+                            value={opt.value}
+                            className="rounded-lg"
+                          >
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  <Button
-                    type="submit"
-                    size="sm"
-                    className="rounded-xl"
-                    disabled={createRule.isPending || updateRule.isPending}
-                  >
-                    {(createRule.isPending || updateRule.isPending) && (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    )}
-                    <Save className="w-4 h-4 mr-1" />
-                    {selectedRule ? "Update" : "Create"}
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs font-medium">XP Amount</Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        {...ruleForm.register("xpAmount", {
+                          valueAsNumber: true,
+                        })}
+                        className="mt-1 rounded-xl bg-background border-border/60"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-medium">Priority</Label>
+                      <Input
+                        type="number"
+                        {...ruleForm.register("priority", {
+                          valueAsNumber: true,
+                        })}
+                        className="mt-1 rounded-xl bg-background border-border/60"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs font-medium">
+                        Starts At (optional)
+                      </Label>
+                      <Input
+                        type="datetime-local"
+                        {...ruleForm.register("startsAt")}
+                        className="mt-1 rounded-xl bg-background border-border/60"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-medium">
+                        Ends At (optional)
+                      </Label>
+                      <Input
+                        type="datetime-local"
+                        {...ruleForm.register("endsAt")}
+                        className="mt-1 rounded-xl bg-background border-border/60"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        checked={ruleForm.watch("isActive")}
+                        onCheckedChange={(checked) =>
+                          ruleForm.setValue("isActive", checked)
+                        }
+                      />
+                      <span className="text-xs text-muted-foreground">
+                        Active
+                      </span>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      size="sm"
+                      className="rounded-xl"
+                      disabled={createRule.isPending || updateRule.isPending}
+                    >
+                      {(createRule.isPending || updateRule.isPending) && (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      )}
+                      <Save className="w-4 h-4 mr-1" />
+                      {selectedRule ? "Update" : "Create"}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
       )}
     </AdminLayout>
   );
 }
-
