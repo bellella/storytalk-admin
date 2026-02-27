@@ -116,6 +116,7 @@ export const UserScalarFieldEnum = {
   XpLevel: 'XpLevel',
   xp: 'xp',
   streakDays: 'streakDays',
+  selectedCharacterId: 'selectedCharacterId',
   lastLoginAt: 'lastLoginAt',
   registeredAt: 'registeredAt',
   createdAt: 'createdAt',
@@ -186,6 +187,7 @@ export const EpisodeScalarFieldEnum = {
   order: 'order',
   description: 'description',
   koreanDescription: 'koreanDescription',
+  thumbnailUrl: 'thumbnailUrl',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -215,6 +217,7 @@ export const DialogueScalarFieldEnum = {
   sceneId: 'sceneId',
   order: 'order',
   type: 'type',
+  speakerRole: 'speakerRole',
   characterName: 'characterName',
   characterId: 'characterId',
   englishText: 'englishText',
@@ -320,10 +323,13 @@ export const CharacterScalarFieldEnum = {
   mainImage: 'mainImage',
   description: 'description',
   personality: 'personality',
+  greetingMessage: 'greetingMessage',
   aiPrompt: 'aiPrompt',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isUserSelectable: 'isUserSelectable',
+  minUserLevel: 'minUserLevel'
 } as const
 
 export type CharacterScalarFieldEnum = (typeof CharacterScalarFieldEnum)[keyof typeof CharacterScalarFieldEnum]
@@ -359,7 +365,8 @@ export const CharacterFriendScalarFieldEnum = {
   characterId: 'characterId',
   affinity: 'affinity',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  status: 'status'
 } as const
 
 export type CharacterFriendScalarFieldEnum = (typeof CharacterFriendScalarFieldEnum)[keyof typeof CharacterFriendScalarFieldEnum]
@@ -568,6 +575,7 @@ export const ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  thumbnailUrl: 'thumbnailUrl',
   type: 'type',
   currency: 'currency',
   price: 'price',

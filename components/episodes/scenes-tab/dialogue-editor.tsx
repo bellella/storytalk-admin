@@ -1,7 +1,7 @@
 "use client";
 
 import type { DialogueBasic, StoryCharacterWithCharacter } from "@/types";
-import { DialogueType } from "@/types";
+import { DialogueType, DialogueSpeakerRole } from "@/types";
 import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,7 @@ type DialogueFormData = {
   characterId?: number;
   characterName?: string;
   type: (typeof DialogueType)[keyof typeof DialogueType];
+  speakerRole: (typeof DialogueSpeakerRole)[keyof typeof DialogueSpeakerRole];
   englishText: string;
   koreanText: string;
   charImageLabel: string;
@@ -73,6 +74,7 @@ export function DialogueEditor({
       characterId: undefined,
       characterName: "",
       type: DialogueType.DIALOGUE,
+      speakerRole: DialogueSpeakerRole.SYSTEM,
       englishText: "",
       koreanText: "",
       charImageLabel: "default",
@@ -101,6 +103,7 @@ export function DialogueEditor({
         characterId: dialogue.character?.id ?? dialogue.characterId ?? undefined,
         characterName: dialogue.characterName || "",
         type: dialogue.type ?? DialogueType.DIALOGUE,
+        speakerRole: (dialogue.speakerRole as "SYSTEM" | "USER") ?? DialogueSpeakerRole.SYSTEM,
         englishText: dialogue.englishText,
         koreanText: dialogue.koreanText,
         charImageLabel: dialogue.charImageLabel || "default",
@@ -188,6 +191,29 @@ export function DialogueEditor({
                   </Select>
                 </div>
 
+                {/* Speaker Role */}
+                <div>
+                  <Label className="text-sm font-medium">Speaker Role</Label>
+                  <Select
+                    value={form.watch("speakerRole") ?? DialogueSpeakerRole.SYSTEM}
+                    onValueChange={(val: DialogueFormData["speakerRole"]) =>
+                      form.setValue("speakerRole", val)
+                    }
+                  >
+                    <SelectTrigger className="mt-2 rounded-xl bg-secondary border-0">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value={DialogueSpeakerRole.SYSTEM} className="rounded-lg">
+                        SYSTEM
+                      </SelectItem>
+                      <SelectItem value={DialogueSpeakerRole.USER} className="rounded-lg">
+                        USER
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 {/* Character - for dialogue, ai_input_slot, ai_slot */}
                 {(form.watch("type") === DialogueType.DIALOGUE ||
                   form.watch("type") === DialogueType.AI_INPUT_SLOT ||
@@ -218,7 +244,7 @@ export function DialogueEditor({
                             value={sc.character.id.toString()}
                             className="rounded-lg"
                           >
-                            {sc.character.name}
+                            {sc.character.name} (ID: {sc.character.id})
                           </SelectItem>
                         ))}
                       </SelectContent>

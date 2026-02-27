@@ -43,6 +43,7 @@ type Character = {
   description: string;
   personality: string | null;
   aiPrompt: string | null;
+  greetingMessage: string | null;
   images: CharacterImage[];
 };
 
@@ -51,8 +52,11 @@ type CharacterFormData = {
   description: string;
   personality: string;
   aiPrompt: string;
+  greetingMessage: string;
   avatarImage: string;
   mainImage: string;
+  isUserSelectable: boolean;
+  minUserLevel: number;
 };
 
 export default function CharacterEditPage() {
@@ -77,8 +81,11 @@ export default function CharacterEditPage() {
         description: "",
         personality: "",
         aiPrompt: "",
+        greetingMessage: "",
         avatarImage: "",
         mainImage: "",
+        isUserSelectable: false,
+        minUserLevel: 1,
       },
     });
 
@@ -102,8 +109,11 @@ export default function CharacterEditPage() {
           description: data.description,
           personality: data.personality || "",
           aiPrompt: data.aiPrompt || "",
+          greetingMessage: data.greetingMessage || "",
           avatarImage: data.avatarImage,
           mainImage: data.mainImage,
+          isUserSelectable: data.isUserSelectable ?? false,
+          minUserLevel: data.minUserLevel ?? 1,
         });
       } catch (error) {
         console.error("Fetch error:", error);
@@ -123,7 +133,10 @@ export default function CharacterEditPage() {
       description: data.description,
       personality: data.personality || null,
       aiPrompt: data.aiPrompt || null,
+      greetingMessage: data.greetingMessage || null,
       mainImage: data.mainImage ?? null,
+      isUserSelectable: data.isUserSelectable,
+      minUserLevel: data.isUserSelectable ? data.minUserLevel : 1,
     };
 
     try {
@@ -318,6 +331,46 @@ export default function CharacterEditPage() {
                     className="mt-2 rounded-xl bg-secondary border-0"
                     placeholder="Brave, Curious, Kind (comma separated)"
                   />
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium">
+                    Greeting Message
+                  </Label>
+                  <Textarea
+                    {...register("greetingMessage")}
+                    className="mt-2 rounded-xl bg-secondary border-0 min-h-[80px]"
+                    placeholder="First message when user starts a conversation with this character..."
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      {...register("isUserSelectable")}
+                      className="rounded"
+                    />
+                    <span className="text-sm font-medium">
+                      User Selectable
+                    </span>
+                  </label>
+                  {watch("isUserSelectable") && (
+                    <div>
+                      <Label className="text-sm font-medium">
+                        Min User Level
+                      </Label>
+                      <Input
+                        type="number"
+                        min={1}
+                        {...register("minUserLevel", {
+                          valueAsNumber: true,
+                          min: 1,
+                        })}
+                        className="mt-2 rounded-xl bg-secondary border-0 w-24"
+                      />
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

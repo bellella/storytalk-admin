@@ -2,7 +2,7 @@
 
 import type { SceneBasic, SceneType } from "@/types";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -23,6 +23,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -31,7 +32,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, GripVertical, ChevronRight, Settings2, Save, Loader2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Plus, GripVertical, ChevronRight, Settings2, Save, Loader2, Upload } from "lucide-react";
 import { ImageUploader } from "@/components/ui/image-uploader";
 import { cn } from "@/lib/utils";
 
@@ -50,6 +59,9 @@ interface ScenesPanelProps {
   onSaveScene: (data: SceneFormData) => void;
   onReorderScenes: (reorderedScenes: SceneBasic[]) => void;
   saving: boolean;
+  storyId: number;
+  episodeId: number;
+  onImportComplete?: (sceneId: number) => void;
 }
 
 function SortableSceneItem({
@@ -133,6 +145,9 @@ export function ScenesPanel({
   onSaveScene,
   onReorderScenes,
   saving,
+  storyId,
+  episodeId,
+  onImportComplete,
 }: ScenesPanelProps) {
   const sceneForm = useForm<SceneFormData>({
     defaultValues: { type: "VISUAL", title: "", koreanTitle: "", bgImageUrl: "" },
@@ -142,6 +157,11 @@ export function ScenesPanel({
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
+
+  const [importingScene, setImportingScene] = useState<SceneBasic | null>(null);
+  const [importJson, setImportJson] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
 
   useEffect(() => {
     if (selectedScene) {
@@ -164,6 +184,56 @@ export function ScenesPanel({
 
     const reordered = arrayMove(scenes, oldIndex, newIndex);
     onReorderScenes(reordered);
+  };
+
+  const closeImportDialog = () => {
+    setImportingScene(null);
+    setImportJson("");
+    setImportError(null);
+  };
+
+  const handleSceneImport = async () => {
+    if (!importingScene) return;
+    setImportError(null);
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(importJson);
+    } catch {
+      setImportError("유효하지 않은 JSON입니다.");
+      return;
+    }
+
+    const dialoguesArray = Array.isArray(parsed)
+      ? parsed
+      : (parsed as Record<string, unknown>).dialogues;
+
+    if (!Array.isArray(dialoguesArray)) {
+      setImportError('dialogues 배열을 찾을 수 없습니다. 배열이나 { "dialogues": [...] } 형태로 붙여넣으세요.');
+      return;
+    }
+
+    try {
+      setImporting(true);
+      const res = await fetch(
+        `/api/stories/${storyId}/episodes/${episodeId}/scenes/${importingScene.id}/dialogues`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ dialogues: dialoguesArray }),
+        }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({})) as Record<string, unknown>;
+        throw new Error((err.error as string) || "Import 실패");
+      }
+      closeImportDialog();
+      onImportComplete?.(importingScene.id);
+    } catch (e) {
+      setImportError(e instanceof Error ? e.message : "Import 실패");
+    } finally {
+      setImporting(false);
+    }
   };
 
   return (
@@ -211,9 +281,25 @@ export function ScenesPanel({
       {selectedScene && (
         <Card className="rounded-2xl border-border/50 shadow-sm flex-shrink-0">
           <CardHeader className="pb-3">
-            <div className="flex items-center gap-2">
-              <Settings2 className="w-4 h-4 text-primary" />
-              <CardTitle className="text-base font-medium">Scene Settings</CardTitle>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Settings2 className="w-4 h-4 text-primary" />
+                <CardTitle className="text-base font-medium">Scene Settings</CardTitle>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="rounded-xl h-8 gap-1.5 text-xs"
+                onClick={() => {
+                  setImportingScene(selectedScene);
+                  setImportJson("");
+                  setImportError(null);
+                }}
+              >
+                <Upload className="w-3.5 h-3.5" />
+                Import
+              </Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-3 p-3 pt-0">
@@ -281,6 +367,45 @@ export function ScenesPanel({
           </CardContent>
         </Card>
       )}
+
+      {/* Per-Scene Import Dialog */}
+      <Dialog
+        open={!!importingScene}
+        onOpenChange={(open) => { if (!open) closeImportDialog(); }}
+      >
+        <DialogContent className="max-w-lg rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>대화 Import</DialogTitle>
+            <DialogDescription>
+              &quot;{importingScene?.title}&quot; 씬의 대화를 교체합니다. 기존 대화가 모두 삭제됩니다.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Textarea
+              value={importJson}
+              onChange={(e) => setImportJson(e.target.value)}
+              placeholder={'dialogues 배열이나 { "dialogues": [...] } JSON을 붙여넣으세요'}
+              className="font-mono text-xs h-48 rounded-xl resize-none"
+            />
+            {importError && (
+              <p className="text-sm text-destructive">{importError}</p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" className="rounded-xl" onClick={closeImportDialog}>
+              취소
+            </Button>
+            <Button
+              className="rounded-xl"
+              onClick={handleSceneImport}
+              disabled={importing || !importJson.trim()}
+            >
+              {importing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              Import
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

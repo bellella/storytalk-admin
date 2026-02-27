@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { DialogueCreateInput } from "@/src/generated/prisma/models";
-import { DialogueType } from "@/types";
+import { DialogueType, DialogueSpeakerRole } from "@/types";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -34,6 +34,10 @@ function buildDialogueData(
     sceneId,
     order: orderNum,
     type: (type as DialogueType) || DialogueType.DIALOGUE,
+    speakerRole:
+      body.speakerRole === DialogueSpeakerRole.USER
+        ? DialogueSpeakerRole.USER
+        : DialogueSpeakerRole.SYSTEM,
     englishText: String(body.englishText ?? ""),
     koreanText: String(body.koreanText ?? ""),
   };
@@ -131,6 +135,40 @@ export async function POST(
     data: data as DialogueCreateInput,
   });
   return NextResponse.json(dialogue);
+}
+
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ sceneId: string }> }
+) {
+  const { sceneId: sceneIdStr } = await params;
+  const sceneId = parseInt(sceneIdStr);
+  const body = await req.json();
+  const dialoguesInput = body.dialogues;
+
+  if (!Array.isArray(dialoguesInput)) {
+    return NextResponse.json(
+      { error: "dialogues array required" },
+      { status: 400 }
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.dialogue.deleteMany({ where: { sceneId } });
+    for (let i = 0; i < dialoguesInput.length; i++) {
+      const d = dialoguesInput[i] as Record<string, unknown>;
+      const type = (d.type as string) || DialogueType.DIALOGUE;
+      const data = buildDialogueData(type, d, sceneId, i + 1);
+      await tx.dialogue.create({ data: data as unknown as DialogueCreateInput });
+    }
+  });
+
+  const dialogues = await prisma.dialogue.findMany({
+    where: { sceneId },
+    orderBy: { order: "asc" },
+    include: { character: true },
+  });
+  return NextResponse.json(dialogues);
 }
 
 export async function PATCH(

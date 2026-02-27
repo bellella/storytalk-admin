@@ -21,6 +21,9 @@ const ALLOWED_FIELDS = [
   "description",
   "personality",
   "aiPrompt",
+  "greetingMessage",
+  "isUserSelectable",
+  "minUserLevel",
 ] as const;
 
 export async function PATCH(
@@ -31,7 +34,14 @@ export async function PATCH(
   const data: Record<string, unknown> = {};
   for (const key of ALLOWED_FIELDS) {
     if (key in body) {
-      data[key] = body[key];
+      if (key === "minUserLevel" && body[key] != null) {
+        data[key] =
+          typeof body[key] === "number"
+            ? body[key]
+            : parseInt(String(body[key]), 10) || 1;
+      } else {
+        data[key] = body[key];
+      }
     }
   }
   const character = await prisma.character.update({

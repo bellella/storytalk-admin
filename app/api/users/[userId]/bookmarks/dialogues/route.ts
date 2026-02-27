@@ -3,31 +3,21 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   _: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
+  const { userId } = await params;
+
   const bookmarks = await prisma.dialogueBookmark.findMany({
-    where: { userId: params.userId },
+    where: { userId: parseInt(userId) },
     include: {
       dialogue: {
         include: {
-          character: true,
+          character: { select: { id: true, name: true } },
         },
       },
     },
+    orderBy: { createdAt: "desc" },
   });
-  return NextResponse.json(bookmarks);
-}
 
-export async function POST(
-  req: Request,
-  { params }: { params: { userId: string } }
-) {
-  const { dialogueId } = await req.json();
-  const bookmark = await prisma.dialogueBookmark.create({
-    data: {
-      userId: params.userId,
-      dialogueId,
-    },
-  });
-  return NextResponse.json(bookmark);
+  return NextResponse.json(bookmarks);
 }

@@ -24,6 +24,7 @@ export {
   RewardType,
   EpisodeStage,
   DialogueType,
+  DialogueSpeakerRole,
 } from "@/src/generated/prisma/enums";
 
 export type {
@@ -83,6 +84,7 @@ export type EpisodeBasic = {
   order: number;
   description: string | null;
   koreanDescription: string | null;
+  thumbnailUrl: string | null;
   status: "DRAFT" | "PUBLISHED" | "HIDDEN" | "ARCHIVED" | "DELETED";
   createdAt: string;
   updatedAt: string;
@@ -114,6 +116,7 @@ export type DialogueBasic = {
   sceneId: number;
   order: number;
   type: DialogueTypeEnum;
+  speakerRole: "SYSTEM" | "USER" | null;
   characterName: string | null;
   characterId: number | null;
   englishText: string;
@@ -236,9 +239,83 @@ export type ReviewItemBasic = {
 export type EpisodeRewardBasic = {
   id: number;
   episodeId: number;
-  type: "EXP" | "CHARACTER_UNLOCK" | "ITEM";
+  type: "CHARACTER_INVITE" | "ITEM";
   payload: Record<string, unknown>;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+};
+
+// ─────────────────────────────────────────────
+// PRODUCT & COLLECTION
+// ─────────────────────────────────────────────
+
+export type ProductType = "PLAY_EPISODE" | "COIN_PACK" | "SUBSCRIPTION";
+export type CurrencyType = "COIN" | "KRW" | "USD";
+
+export type ProductBasic = {
+  id: number;
+  name: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+  type: ProductType;
+  currency: CurrencyType;
+  price: number;
+  storeSku: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type EpisodeForProduct = {
+  id: number;
+  title: string;
+  koreanTitle: string | null;
+  order: number;
+  status: string;
+  storyId: number | null;
+  story: { id: number; title: string } | null;
+};
+
+export type EpisodeProductBasic = {
+  id: number;
+  episodeId: number;
+  productId: number;
+  episode: EpisodeForProduct;
+};
+
+export type ProductWithEpisodes = ProductBasic & {
+  episodes: EpisodeProductBasic[];
+  _count?: { purchases: number };
+};
+
+export type EpisodeWithProduct = EpisodeBasic & {
+  episodeProducts: { product: ProductBasic }[];
+  story?: { id: number; title: string } | null;
+};
+
+export type CollectionBasic = {
+  id: number;
+  title: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+  order: number;
+  isActive: boolean;
+  startsAt: string | null;
+  endsAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CollectionProductBasic = {
+  id: number;
+  collectionId: number;
+  productId: number;
+  order: number;
+  product: ProductBasic;
+};
+
+export type CollectionWithProducts = CollectionBasic & {
+  products: CollectionProductBasic[];
+  _count?: { products: number };
 };

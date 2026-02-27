@@ -19,6 +19,8 @@ import {
   Search,
   Layers,
   Sparkles,
+  ShoppingBag,
+  LayoutGrid,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -29,6 +31,8 @@ const navItems = [
   { icon: BookOpen, label: "Stories", href: "/stories" },
   { icon: Layers, label: "Units", href: "/units" },
   { icon: UserCircle, label: "Characters", href: "/characters" },
+  { icon: ShoppingBag, label: "Products", href: "/products" },
+  { icon: LayoutGrid, label: "Collections", href: "/collections" },
   { icon: Users, label: "Users", href: "/users" },
   { icon: Sparkles, label: "XP", href: "/xp" },
   { icon: BarChart3, label: "Analytics", href: "/analytics" },

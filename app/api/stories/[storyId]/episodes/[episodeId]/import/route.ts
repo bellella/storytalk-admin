@@ -23,17 +23,24 @@ type ImportData = {
   description?: string;
   koreanDescription?: string;
   characterMap?: Record<string, number>;
+  // appendMode: true면 기존 씬 삭제 없이 뒤에 추가
+  appendMode?: boolean;
+  // sceneIndices: 특정 씬만 import (없으면 전체)
+  sceneIndices?: number[];
   scenes?: Array<{
     type?: "VISUAL" | "CHAT";
     title: string;
     koreanTitle?: string;
+    bgImageUrl?: string;
     dialogues: Array<{
-      type: "dialogue" | "narration" | "image" | "heading";
+      type: string;
       characterName?: string;
       charImageLabel?: string;
       englishText?: string;
       koreanText?: string;
       imageUrl?: string;
+      audioUrl?: string;
+      aiPromptName?: string;
       data?: Record<string, unknown>;
     }>;
   }>;
@@ -93,6 +100,14 @@ export async function POST(
 
     // Handle scenes import (only if scenes array is provided)
     if (importData.scenes && importData.scenes.length > 0) {
+      const appendMode = importData.appendMode ?? false;
+      const sceneIndices = importData.sceneIndices; // undefined = 전체
+
+      // 선택된 씬만 필터링 (sceneIndices 없으면 전체)
+      const scenesToImport = sceneIndices !== undefined
+        ? importData.scenes.filter((_, i) => sceneIndices.includes(i))
+        : importData.scenes;
+
       // Build characterMap from database if not provided
       let characterMap: Record<string, number> = importData.characterMap || {};
 
@@ -116,28 +131,41 @@ export async function POST(
         }, {} as Record<string, number>);
       }
 
-      // Delete existing scenes and dialogues
-      await prisma.dialogue.deleteMany({
-        where: { scene: { episodeId: episodeIdNum } },
-      });
-      await prisma.scene.deleteMany({
-        where: { episodeId: episodeIdNum },
-      });
+      // appendMode가 아니면 기존 씬 삭제
+      if (!appendMode) {
+        await prisma.dialogue.deleteMany({
+          where: { scene: { episodeId: episodeIdNum } },
+        });
+        await prisma.scene.deleteMany({
+          where: { episodeId: episodeIdNum },
+        });
+      }
+
+      // 시작 order: appendMode면 기존 최대 order + 1
+      let startOrder = 1;
+      if (appendMode) {
+        const maxScene = await prisma.scene.aggregate({
+          where: { episodeId: episodeIdNum },
+          _max: { order: true },
+        });
+        startOrder = (maxScene._max.order ?? 0) + 1;
+      }
 
       // Create scenes and dialogues
       for (
-        let sceneIndex = 0;
-        sceneIndex < importData.scenes.length;
-        sceneIndex++
+        let i = 0;
+        i < scenesToImport.length;
+        i++
       ) {
-        const sceneData = importData.scenes[sceneIndex];
+        const sceneData = scenesToImport[i];
         const scene = await prisma.scene.create({
           data: {
             episodeId: episodeIdNum,
             type: sceneData.type === "CHAT" ? "CHAT" : "VISUAL",
             title: sceneData.title,
             koreanTitle: sceneData.koreanTitle || null,
-            order: sceneIndex + 1,
+            bgImageUrl: sceneData.bgImageUrl || null,
+            order: startOrder + i,
           },
         });
 
@@ -181,9 +209,11 @@ export async function POST(
               koreanText: dialogueData.koreanText ?? "",
               charImageLabel: isHeading
                 ? null
-                : dialogueData.charImageLabel || null,
+                : dialogueData.charImageLabel || "default",
               imageUrl: isHeading ? null : dialogueData.imageUrl || null,
-              data: dialogueData.data ?? JSON.parse("{}"),
+              audioUrl: dialogueData.audioUrl || null,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ...(dialogueData.data != null && { data: dialogueData.data as any }),
             },
           });
           totalDialogues++;

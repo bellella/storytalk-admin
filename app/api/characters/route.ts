@@ -26,6 +26,14 @@ export async function POST(req: Request) {
       description: body.description,
       personality: body.personality,
       aiPrompt: body.aiPrompt,
+      greetingMessage: body.greetingMessage ?? null,
+      isUserSelectable: body.isUserSelectable ?? false,
+      minUserLevel:
+        body.isUserSelectable && body.minUserLevel != null
+          ? typeof body.minUserLevel === "number"
+            ? body.minUserLevel
+            : parseInt(String(body.minUserLevel), 10) || 1
+          : 1,
     },
   });
   return NextResponse.json(character);

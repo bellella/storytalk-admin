@@ -79,6 +79,14 @@ export const DialogueType = {
 export type DialogueType = (typeof DialogueType)[keyof typeof DialogueType]
 
 
+export const DialogueSpeakerRole = {
+  SYSTEM: 'SYSTEM',
+  USER: 'USER'
+} as const
+
+export type DialogueSpeakerRole = (typeof DialogueSpeakerRole)[keyof typeof DialogueSpeakerRole]
+
+
 export const QuizType = {
   SENTENCE_BUILD: 'SENTENCE_BUILD',
   SENTENCE_CLOZE_BUILD: 'SENTENCE_CLOZE_BUILD',
@@ -114,6 +122,16 @@ export const CharacterScope = {
 export type CharacterScope = (typeof CharacterScope)[keyof typeof CharacterScope]
 
 
+export const CharacterRelationStatus = {
+  LOCKED: 'LOCKED',
+  INVITABLE: 'INVITABLE',
+  FRIEND: 'FRIEND',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type CharacterRelationStatus = (typeof CharacterRelationStatus)[keyof typeof CharacterRelationStatus]
+
+
 export const MessageType = {
   TEXT: 'TEXT',
   SYSTEM: 'SYSTEM',
@@ -124,7 +142,7 @@ export type MessageType = (typeof MessageType)[keyof typeof MessageType]
 
 
 export const RewardType = {
-  CHARACTER_UNLOCK: 'CHARACTER_UNLOCK',
+  CHARACTER_INVITE: 'CHARACTER_INVITE',
   ITEM: 'ITEM'
 } as const
 

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { DialogueType } from "@/types";
+import { DialogueType, DialogueSpeakerRole } from "@/types";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -23,6 +23,10 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
       (type as DialogueType) ||
       (body.type as DialogueType) ||
       DialogueType.DIALOGUE,
+    speakerRole:
+      body.speakerRole === DialogueSpeakerRole.USER
+        ? DialogueSpeakerRole.USER
+        : DialogueSpeakerRole.SYSTEM,
   };
   if (body.order !== undefined)
     base.order =

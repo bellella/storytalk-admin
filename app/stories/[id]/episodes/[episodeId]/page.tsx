@@ -27,6 +27,7 @@ import { ReviewTab } from "@/components/episodes/review-tab";
 import { QuizTab } from "@/components/episodes/quiz-tab";
 import { RewardsTab } from "@/components/episodes/rewards-tab";
 import { ImportExportDialogs } from "@/components/episodes/import-export-dialogs";
+import { ImageUploader } from "@/components/ui/image-uploader";
 import type { SceneBasic, DialogueBasic, EpisodeWithScenes } from "@/types";
 import { DialogueType } from "@/types";
 
@@ -43,6 +44,7 @@ type DialogueFormData = {
   characterId?: number;
   characterName?: string;
   type: (typeof DialogueType)[keyof typeof DialogueType];
+  speakerRole: "SYSTEM" | "USER";
   englishText: string;
   koreanText: string;
   charImageLabel: string;
@@ -141,6 +143,7 @@ export default function EpisodeDetailPage() {
         id: episodeId,
         title: episode.title,
         description: episode.description,
+        thumbnailUrl: episode.thumbnailUrl ?? null,
         status: episode.status,
       },
       {
@@ -242,6 +245,7 @@ export default function EpisodeDetailPage() {
             characterId: data.characterId,
             characterName: data.characterName,
             type: data.type,
+            speakerRole: data.speakerRole,
             englishText: data.englishText,
             koreanText: data.koreanText,
             charImageLabel: data.charImageLabel,
@@ -366,6 +370,22 @@ export default function EpisodeDetailPage() {
     await refetch();
   }, [refetch]);
 
+  const handleSceneImportComplete = useCallback(async (sceneId: number) => {
+    if (selectedScene?.id !== sceneId) return;
+    try {
+      const res = await fetch(
+        `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setDialogues(data);
+        setSelectedDialogue(data[0] ?? null);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [selectedScene, storyId, episodeId]);
+
   const handleDeleteDialogue = async (dialogue: DialogueBasic) => {
     if (!selectedScene) return;
     try {
@@ -419,61 +439,81 @@ export default function EpisodeDetailPage() {
           <ArrowLeft className="w-4 h-4" />
           Back to Story
         </Link>
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xl">
-              {episode.order}
+        <div className="flex items-start justify-between gap-6">
+          <div className="flex-1 min-w-0 space-y-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-sm text-muted-foreground font-medium">
+                Episode {episode.order}
+              </span>
+              <StatusBadge status={episode.status} />
             </div>
             <div>
-              <div className="flex items-center gap-3">
-                <Input
-                  value={episode.title}
-                  onChange={(e) =>
-                    setEpisode({ ...episode, title: e.target.value })
-                  }
-                  className="text-2xl font-semibold bg-transparent border-0 p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-                <StatusBadge status={episode.status} />
-              </div>
-              <div className="flex items-center gap-2">
-                <Input
-                  value={episode.description ?? ""}
-                  onChange={(e) =>
-                    setEpisode({ ...episode, description: e.target.value })
-                  }
-                  className="mt-2 text-2xl font-semibold bg-transparent border-0 p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-              </div>
-              <p className="text-muted-foreground mt-1">
-                Episode {episode.order} · {episode.scenes.length} scenes ·{" "}
-                {dialogues.length} dialogs
-              </p>
+              <label className="text-xs text-muted-foreground font-medium block mb-1">
+                Title
+              </label>
+              <Input
+                value={episode.title}
+                onChange={(e) =>
+                  setEpisode({ ...episode, title: e.target.value })
+                }
+                placeholder="Episode title"
+                className="text-xl font-semibold bg-secondary/50 border-0 rounded-xl h-11"
+              />
             </div>
+            <div>
+              <label className="text-xs text-muted-foreground font-medium block mb-1">
+                Description
+              </label>
+              <Input
+                value={episode.description ?? ""}
+                onChange={(e) =>
+                  setEpisode({ ...episode, description: e.target.value })
+                }
+                placeholder="Brief description"
+                className="text-base bg-secondary/50 border-0 rounded-xl h-10"
+              />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {episode.scenes.length} scenes · {dialogues.length} dialogs
+            </p>
           </div>
-          <div className="flex items-center gap-2">
-            <ImportExportDialogs
-              storyId={storyId}
-              episodeId={episodeId}
-              episodeOrder={episode.order}
-              scenes={episode.scenes}
-              isImportOpen={isImportDialogOpen}
-              isExportOpen={isExportDialogOpen}
-              onImportOpenChange={setIsImportDialogOpen}
-              onExportOpenChange={setIsExportDialogOpen}
-              onImportComplete={handleImportComplete}
-            />
-            <Button
-              className="rounded-xl shadow-lg shadow-primary/25"
-              onClick={handleSaveEpisode}
-              disabled={updateEpisode.isPending}
-            >
-              {updateEpisode.isPending ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Save className="w-4 h-4 mr-2" />
-              )}
-              Save Episode
-            </Button>
+          <div className="flex flex-col items-end gap-3 flex-shrink-0">
+            <div className="w-36">
+              <ImageUploader
+                value={episode.thumbnailUrl ?? ""}
+                onChange={(url) =>
+                  setEpisode({ ...episode, thumbnailUrl: url || null })
+                }
+                label="Thumbnail"
+                aspectRatio="video"
+                maxSizeMB={5}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <ImportExportDialogs
+                storyId={storyId}
+                episodeId={episodeId}
+                episodeOrder={episode.order}
+                scenes={episode.scenes}
+                isImportOpen={isImportDialogOpen}
+                isExportOpen={isExportDialogOpen}
+                onImportOpenChange={setIsImportDialogOpen}
+                onExportOpenChange={setIsExportDialogOpen}
+                onImportComplete={handleImportComplete}
+              />
+              <Button
+                className="rounded-xl shadow-lg shadow-primary/25"
+                onClick={handleSaveEpisode}
+                disabled={updateEpisode.isPending}
+              >
+                {updateEpisode.isPending ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4 mr-2" />
+                )}
+                Save Episode
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -526,6 +566,9 @@ export default function EpisodeDetailPage() {
             onSaveScene={handleSaveScene}
             onReorderScenes={handleReorderScenes}
             saving={saving}
+            storyId={storyId}
+            episodeId={episodeId}
+            onImportComplete={handleSceneImportComplete}
           />
           <DialogueTimeline
             dialogues={dialogues}
@@ -558,7 +601,7 @@ export default function EpisodeDetailPage() {
       {activeTab === "quiz" && <QuizTab episodeId={episodeId} />}
 
       {/* Rewards Tab */}
-      {activeTab === "rewards" && <RewardsTab rewards={episode.rewards} />}
+      {activeTab === "rewards" && <RewardsTab storyId={storyId} episodeId={episodeId} />}
     </AdminLayout>
   );
 }
