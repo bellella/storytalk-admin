@@ -1,6 +1,6 @@
 "use client";
 
-import type { SceneBasic, SceneType } from "@/types";
+import type { SceneBasic, SceneType, SceneFlowTypeValue } from "@/types";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import {
@@ -23,7 +23,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -35,21 +34,162 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, GripVertical, ChevronRight, Settings2, Save, Loader2, Upload } from "lucide-react";
+import { Plus, GripVertical, ChevronRight, Settings2, Save, Loader2, X } from "lucide-react";
 import { ImageUploader } from "@/components/ui/image-uploader";
 import { cn } from "@/lib/utils";
 
 type SceneFormData = {
   type: SceneType;
+  flowType: SceneFlowTypeValue;
   title: string;
   koreanTitle: string;
   bgImageUrl: string;
+  data: string;
 };
+
+// ── Branch Trigger Editor (Scene level) ──────────────────────────────────────
+
+function safeParseJson(v: string): Record<string, unknown> {
+  try { return JSON.parse(v) as Record<string, unknown>; } catch { return {}; }
+}
+
+function SceneBranchTriggerEditor({
+  value,
+  onChange,
+  scenes = [],
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  scenes?: SceneBasic[];
+}) {
+  const parsed = safeParseJson(value);
+  const threshold = typeof parsed.threshold === "number" ? parsed.threshold : 70;
+  const selectionMode = parsed.selectionMode === "RANDOM" ? "RANDOM" : "TOP";
+  const candidates: { sceneId: number }[] = Array.isArray(parsed.candidates)
+    ? (parsed.candidates as { sceneId: number }[])
+    : [];
+  const fallbackSceneIds: number[] = Array.isArray(parsed.fallbackSceneIds)
+    ? (parsed.fallbackSceneIds as number[])
+    : [];
+
+  const emit = (patch: object) =>
+    onChange(JSON.stringify({ threshold, selectionMode, candidates, fallbackSceneIds, ...patch }));
+
+  return (
+    <div className="space-y-3 p-3 rounded-xl bg-rose-500/5 border border-rose-500/10">
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <Label className="text-xs text-muted-foreground">Threshold (%)</Label>
+          <Input
+            type="number" min={0} max={100} value={threshold}
+            onChange={(e) => emit({ threshold: parseInt(e.target.value) || 0 })}
+            className="mt-1 rounded-xl bg-secondary border-0 h-8"
+          />
+        </div>
+        <div>
+          <Label className="text-xs text-muted-foreground">Selection Mode</Label>
+          <Select value={selectionMode} onValueChange={(v) => emit({ selectionMode: v })}>
+            <SelectTrigger className="mt-1 rounded-xl bg-secondary border-0 h-8">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="TOP">TOP (최고점)</SelectItem>
+              <SelectItem value="RANDOM">RANDOM (랜덤)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Candidates */}
+      <div>
+        <div className="flex items-center justify-between mb-1.5">
+          <Label className="text-xs text-muted-foreground">Candidates (씬 IDs)</Label>
+          <Button type="button" variant="ghost" size="sm" className="h-6 text-xs rounded-lg px-2"
+            onClick={() => emit({ candidates: [...candidates, { sceneId: 0 }] })}>
+            <Plus className="w-3 h-3 mr-1" /> Add
+          </Button>
+        </div>
+        <div className="space-y-1.5">
+          {candidates.map((c, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground w-5 text-right">{i + 1}.</span>
+              <Select
+                value={String(c.sceneId || "")}
+                onValueChange={(v) => {
+                  const next = [...candidates];
+                  next[i] = { sceneId: parseInt(v) || 0 };
+                  emit({ candidates: next });
+                }}
+              >
+                <SelectTrigger className="rounded-xl bg-secondary border-0 h-8 flex-1 text-xs">
+                  <SelectValue placeholder="Scene" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  {scenes.map((s) => (
+                    <SelectItem key={s.id} value={String(s.id)} className="rounded-lg text-xs">
+                      #{s.id} {s.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button type="button" variant="ghost" size="icon"
+                className="h-8 w-8 rounded-xl text-destructive hover:bg-destructive/10 flex-shrink-0"
+                onClick={() => emit({ candidates: candidates.filter((_, j) => j !== i) })}>
+                <X className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          ))}
+          {candidates.length === 0 && <p className="text-xs text-muted-foreground">No candidates</p>}
+        </div>
+      </div>
+
+      {/* Fallback Scene IDs */}
+      <div>
+        <div className="flex items-center justify-between mb-1.5">
+          <Label className="text-xs text-muted-foreground">Fallback Scene IDs</Label>
+          <Button type="button" variant="ghost" size="sm" className="h-6 text-xs rounded-lg px-2"
+            onClick={() => emit({ fallbackSceneIds: [...fallbackSceneIds, 0] })}>
+            <Plus className="w-3 h-3 mr-1" /> Add
+          </Button>
+        </div>
+        <div className="space-y-1.5">
+          {fallbackSceneIds.map((id, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground w-5 text-right">{i + 1}.</span>
+              <Select
+                value={String(id || "")}
+                onValueChange={(v) => {
+                  const next = [...fallbackSceneIds];
+                  next[i] = parseInt(v) || 0;
+                  emit({ fallbackSceneIds: next });
+                }}
+              >
+                <SelectTrigger className="rounded-xl bg-secondary border-0 h-8 flex-1 text-xs">
+                  <SelectValue placeholder="Scene" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  {scenes.map((s) => (
+                    <SelectItem key={s.id} value={String(s.id)} className="rounded-lg text-xs">
+                      #{s.id} {s.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button type="button" variant="ghost" size="icon"
+                className="h-8 w-8 rounded-xl text-destructive hover:bg-destructive/10 flex-shrink-0"
+                onClick={() => emit({ fallbackSceneIds: fallbackSceneIds.filter((_, j) => j !== i) })}>
+                <X className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface ScenesPanelProps {
   scenes: SceneBasic[];
@@ -61,17 +201,18 @@ interface ScenesPanelProps {
   saving: boolean;
   storyId: number;
   episodeId: number;
-  onImportComplete?: (sceneId: number) => void;
 }
 
 function SortableSceneItem({
   scene,
   isSelected,
   onSelect,
+  onOpenSettings,
 }: {
   scene: SceneBasic;
   isSelected: boolean;
   onSelect: () => void;
+  onOpenSettings: () => void;
 }) {
   const {
     attributes,
@@ -89,50 +230,89 @@ function SortableSceneItem({
 
   return (
     <div ref={setNodeRef} style={style}>
-      <button
-        onClick={onSelect}
-        className={cn(
-          "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200",
-          isSelected ? "bg-primary text-primary-foreground" : "hover:bg-secondary",
-          isDragging && "opacity-50 shadow-lg"
-        )}
-      >
-        <div
-          {...attributes}
-          {...listeners}
-          className="touch-none cursor-grab active:cursor-grabbing"
-          onClick={(e) => e.stopPropagation()}
+      <div className="group flex items-center gap-1">
+        <button
+          onClick={onSelect}
+          className={cn(
+            "flex-1 flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200 min-w-0",
+            isSelected ? "bg-primary text-primary-foreground" : "hover:bg-secondary",
+            isDragging && "opacity-50 shadow-lg"
+          )}
         >
-          <GripVertical
+          <div
+            {...attributes}
+            {...listeners}
+            className="touch-none cursor-grab active:cursor-grabbing flex-shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <GripVertical
+              className={cn(
+                "w-4 h-4",
+                isSelected ? "text-primary-foreground/50" : "text-muted-foreground/50"
+              )}
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <p className="font-medium text-sm truncate">{scene.title}</p>
+              <span className={cn(
+                "text-xs font-mono flex-shrink-0",
+                isSelected ? "text-primary-foreground/50" : "text-muted-foreground/50"
+              )}>
+                #{scene.id}
+              </span>
+            </div>
+            <p className={cn(
+              "text-xs flex items-center gap-1.5 mt-0.5",
+              isSelected ? "text-primary-foreground/70" : "text-muted-foreground"
+            )}>
+              <span>{scene.order}</span>
+              {scene.type && (
+                <span className={cn(
+                  "px-1.5 py-0.5 rounded text-[10px]",
+                  isSelected ? "bg-primary-foreground/20" : "bg-secondary/80"
+                )}>
+                  {scene.type}
+                </span>
+              )}
+              {scene.flowType === "BRANCH" && (
+                <span className={cn(
+                  "px-1.5 py-0.5 rounded text-[10px] font-medium",
+                  isSelected ? "bg-primary-foreground/20 text-primary-foreground" : "bg-rose-500/10 text-rose-600"
+                )}>
+                  BRANCH
+                </span>
+              )}
+              {scene.flowType === "BRANCH_TRIGGER" && (
+                <span className={cn(
+                  "px-1.5 py-0.5 rounded text-[10px] font-medium",
+                  isSelected ? "bg-primary-foreground/20 text-primary-foreground" : "bg-orange-500/10 text-orange-600"
+                )}>
+                  TRIGGER
+                </span>
+              )}
+            </p>
+          </div>
+          <ChevronRight
             className={cn(
               "w-4 h-4 flex-shrink-0",
-              isSelected ? "text-primary-foreground/50" : "text-muted-foreground/50"
+              isSelected ? "text-primary-foreground/50" : "text-muted-foreground/30"
             )}
           />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-medium text-sm truncate">{scene.title}</p>
-          <p
-            className={cn(
-              "text-xs flex items-center gap-1.5",
-              isSelected ? "text-primary-foreground/70" : "text-muted-foreground"
-            )}
-          >
-            <span>{scene.order}</span>
-            {scene.type && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] bg-secondary/80">
-                {scene.type}
-              </span>
-            )}
-          </p>
-        </div>
-        <ChevronRight
+        </button>
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onOpenSettings(); }}
           className={cn(
-            "w-4 h-4",
-            isSelected ? "text-primary-foreground/50" : "text-muted-foreground/30"
+            "p-2 rounded-xl transition-all flex-shrink-0",
+            "text-muted-foreground hover:text-foreground hover:bg-secondary",
+            "opacity-0 group-hover:opacity-100",
+            isSelected && "opacity-60 hover:opacity-100 hover:bg-primary-foreground/10 text-primary-foreground"
           )}
-        />
-      </button>
+        >
+          <Settings2 className="w-3.5 h-3.5" />
+        </button>
+      </div>
     </div>
   );
 }
@@ -145,12 +325,9 @@ export function ScenesPanel({
   onSaveScene,
   onReorderScenes,
   saving,
-  storyId,
-  episodeId,
-  onImportComplete,
 }: ScenesPanelProps) {
   const sceneForm = useForm<SceneFormData>({
-    defaultValues: { type: "VISUAL", title: "", koreanTitle: "", bgImageUrl: "" },
+    defaultValues: { type: "VISUAL", flowType: "NORMAL", title: "", koreanTitle: "", bgImageUrl: "", data: "{}" },
   });
 
   const sensors = useSensors(
@@ -158,18 +335,17 @@ export function ScenesPanel({
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const [importingScene, setImportingScene] = useState<SceneBasic | null>(null);
-  const [importJson, setImportJson] = useState("");
-  const [importing, setImporting] = useState(false);
-  const [importError, setImportError] = useState<string | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     if (selectedScene) {
       sceneForm.reset({
         type: selectedScene.type || "VISUAL",
+        flowType: selectedScene.flowType ?? "NORMAL",
         title: selectedScene.title,
         koreanTitle: selectedScene.koreanTitle || "",
         bgImageUrl: selectedScene.bgImageUrl || "",
+        data: selectedScene.data ? JSON.stringify(selectedScene.data) : "{}",
       });
     }
   }, [selectedScene, sceneForm]);
@@ -177,69 +353,17 @@ export function ScenesPanel({
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-
     const oldIndex = scenes.findIndex((s) => s.id === active.id);
     const newIndex = scenes.findIndex((s) => s.id === over.id);
     if (oldIndex === -1 || newIndex === -1) return;
-
     const reordered = arrayMove(scenes, oldIndex, newIndex);
     onReorderScenes(reordered);
   };
 
-  const closeImportDialog = () => {
-    setImportingScene(null);
-    setImportJson("");
-    setImportError(null);
-  };
-
-  const handleSceneImport = async () => {
-    if (!importingScene) return;
-    setImportError(null);
-
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(importJson);
-    } catch {
-      setImportError("유효하지 않은 JSON입니다.");
-      return;
-    }
-
-    const dialoguesArray = Array.isArray(parsed)
-      ? parsed
-      : (parsed as Record<string, unknown>).dialogues;
-
-    if (!Array.isArray(dialoguesArray)) {
-      setImportError('dialogues 배열을 찾을 수 없습니다. 배열이나 { "dialogues": [...] } 형태로 붙여넣으세요.');
-      return;
-    }
-
-    try {
-      setImporting(true);
-      const res = await fetch(
-        `/api/stories/${storyId}/episodes/${episodeId}/scenes/${importingScene.id}/dialogues`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ dialogues: dialoguesArray }),
-        }
-      );
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({})) as Record<string, unknown>;
-        throw new Error((err.error as string) || "Import 실패");
-      }
-      closeImportDialog();
-      onImportComplete?.(importingScene.id);
-    } catch (e) {
-      setImportError(e instanceof Error ? e.message : "Import 실패");
-    } finally {
-      setImporting(false);
-    }
-  };
-
   return (
-    <div className="col-span-3 flex flex-col gap-4 h-full">
-      {/* Scenes List */}
-      <Card className="rounded-2xl border-border/50 shadow-sm flex-1 flex flex-col min-h-0">
+    <div className="col-span-3 h-full">
+      {/* Scenes List — full height */}
+      <Card className="rounded-2xl border-border/50 shadow-sm h-full flex flex-col">
         <CardHeader className="pb-3 flex-shrink-0">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-medium">Scenes</CardTitle>
@@ -249,7 +373,7 @@ export function ScenesPanel({
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 overflow-auto space-y-2 p-3 pt-0">
+        <CardContent className="flex-1 overflow-auto space-y-1 p-3 pt-0">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -265,6 +389,10 @@ export function ScenesPanel({
                   scene={scene}
                   isSelected={selectedScene?.id === scene.id}
                   onSelect={() => onSelectScene(scene)}
+                  onOpenSettings={() => {
+                    onSelectScene(scene);
+                    setIsSettingsOpen(true);
+                  }}
                 />
               ))}
             </SortableContext>
@@ -277,34 +405,29 @@ export function ScenesPanel({
         </CardContent>
       </Card>
 
-      {/* Scene Settings */}
-      {selectedScene && (
-        <Card className="rounded-2xl border-border/50 shadow-sm flex-shrink-0">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Settings2 className="w-4 h-4 text-primary" />
-                <CardTitle className="text-base font-medium">Scene Settings</CardTitle>
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="rounded-xl h-8 gap-1.5 text-xs"
-                onClick={() => {
-                  setImportingScene(selectedScene);
-                  setImportJson("");
-                  setImportError(null);
-                }}
-              >
-                <Upload className="w-3.5 h-3.5" />
-                Import
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3 p-3 pt-0">
-            <form onSubmit={sceneForm.handleSubmit(onSaveScene)}>
-              <div className="space-y-3">
+      {/* Scene Settings Dialog */}
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+        <DialogContent className="max-w-sm rounded-2xl max-h-[85vh] flex flex-col overflow-hidden">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-base">
+              <Settings2 className="w-4 h-4 text-primary" />
+              Scene Settings
+              {selectedScene && (
+                <span className="text-xs font-normal text-muted-foreground font-mono">
+                  #{selectedScene.id}
+                </span>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          <form
+            className="flex-1 overflow-y-auto min-h-0"
+            onSubmit={sceneForm.handleSubmit((data) => {
+              onSaveScene(data);
+              setIsSettingsOpen(false);
+            })}
+          >
+            <div className="space-y-3 mt-1 pb-1">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
                   <Label className="text-xs font-medium">Type</Label>
                   <Select
@@ -315,95 +438,85 @@ export function ScenesPanel({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="rounded-xl">
-                      <SelectItem value="VISUAL" className="rounded-lg">
-                        VISUAL
-                      </SelectItem>
-                      <SelectItem value="CHAT" className="rounded-lg">
-                        CHAT
-                      </SelectItem>
+                      <SelectItem value="VISUAL" className="rounded-lg">VISUAL</SelectItem>
+                      <SelectItem value="CHAT" className="rounded-lg">CHAT</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-xs font-medium">Title</Label>
-                  <Input
-                    {...sceneForm.register("title")}
-                    className="mt-1 rounded-xl bg-secondary border-0 h-9 text-sm"
-                    placeholder="Scene title"
-                  />
+                  <Label className="text-xs font-medium">Flow Type</Label>
+                  <Select
+                    value={sceneForm.watch("flowType")}
+                    onValueChange={(v: SceneFlowTypeValue) => sceneForm.setValue("flowType", v)}
+                  >
+                    <SelectTrigger className="mt-1 rounded-xl bg-secondary border-0 h-9 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="NORMAL" className="rounded-lg">NORMAL</SelectItem>
+                      <SelectItem value="BRANCH" className="rounded-lg">BRANCH</SelectItem>
+                      <SelectItem value="BRANCH_TRIGGER" className="rounded-lg">BRANCH_TRIGGER</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div>
-                  <Label className="text-xs font-medium">Korean Title</Label>
-                  <Input
-                    {...sceneForm.register("koreanTitle")}
-                    className="mt-1 rounded-xl bg-secondary border-0 h-9 text-sm"
-                    placeholder="한글 제목"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-medium">Background Image</Label>
-                  <ImageUploader
-                    value={sceneForm.watch("bgImageUrl")}
-                    onChange={(url) => sceneForm.setValue("bgImageUrl", url)}
-                    aspectRatio="video"
-                    maxSizeMB={10}
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="sm"
-                  className="w-full rounded-xl h-8"
-                  disabled={saving}
-                >
-                  {saving ? (
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                  ) : (
-                    <Save className="w-3 h-3 mr-1" />
-                  )}
-                  Save Scene
-                </Button>
               </div>
-            </form>
-          </CardContent>
-        </Card>
-      )}
 
-      {/* Per-Scene Import Dialog */}
-      <Dialog
-        open={!!importingScene}
-        onOpenChange={(open) => { if (!open) closeImportDialog(); }}
-      >
-        <DialogContent className="max-w-lg rounded-2xl">
-          <DialogHeader>
-            <DialogTitle>대화 Import</DialogTitle>
-            <DialogDescription>
-              &quot;{importingScene?.title}&quot; 씬의 대화를 교체합니다. 기존 대화가 모두 삭제됩니다.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3">
-            <Textarea
-              value={importJson}
-              onChange={(e) => setImportJson(e.target.value)}
-              placeholder={'dialogues 배열이나 { "dialogues": [...] } JSON을 붙여넣으세요'}
-              className="font-mono text-xs h-48 rounded-xl resize-none"
-            />
-            {importError && (
-              <p className="text-sm text-destructive">{importError}</p>
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" className="rounded-xl" onClick={closeImportDialog}>
-              취소
-            </Button>
-            <Button
-              className="rounded-xl"
-              onClick={handleSceneImport}
-              disabled={importing || !importJson.trim()}
-            >
-              {importing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Import
-            </Button>
-          </DialogFooter>
+              <div>
+                <Label className="text-xs font-medium">Title</Label>
+                <Input
+                  {...sceneForm.register("title")}
+                  className="mt-1 rounded-xl bg-secondary border-0 h-9 text-sm"
+                  placeholder="Scene title"
+                />
+              </div>
+
+              <div>
+                <Label className="text-xs font-medium">Korean Title</Label>
+                <Input
+                  {...sceneForm.register("koreanTitle")}
+                  className="mt-1 rounded-xl bg-secondary border-0 h-9 text-sm"
+                  placeholder="한글 제목"
+                />
+              </div>
+
+              {sceneForm.watch("flowType") === "BRANCH_TRIGGER" && (
+                <div>
+                  <Label className="text-xs font-medium">Branch Trigger 설정</Label>
+                  <div className="mt-1">
+                    <SceneBranchTriggerEditor
+                      value={sceneForm.watch("data")}
+                      onChange={(v) => sceneForm.setValue("data", v)}
+                      scenes={scenes}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <Label className="text-xs font-medium">Background Image</Label>
+                <ImageUploader
+                  value={sceneForm.watch("bgImageUrl")}
+                  onChange={(url) => sceneForm.setValue("bgImageUrl", url)}
+                  aspectRatio="video"
+                  maxSizeMB={10}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                size="sm"
+                className="w-full rounded-xl h-9"
+                disabled={saving}
+              >
+                {saving ? (
+                  <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                ) : (
+                  <Save className="w-3 h-3 mr-1.5" />
+                )}
+                Save Scene
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

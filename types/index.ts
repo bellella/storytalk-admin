@@ -25,6 +25,9 @@ export {
   EpisodeStage,
   DialogueType,
   DialogueSpeakerRole,
+  SceneFlowType,
+  DialogueFlowType,
+  PlayEpisodeMode,
 } from "@/src/generated/prisma/enums";
 
 export type {
@@ -34,11 +37,14 @@ export type {
   CharacterScope as CharacterScopeValue,
   RewardType as RewardTypeValue,
   DialogueType as DialogueTypeValue,
+  SceneFlowType as SceneFlowTypeValue,
+  DialogueFlowType as DialogueFlowTypeValue,
+  PlayEpisodeMode as PlayEpisodeModeValue,
 } from "@/src/generated/prisma/enums";
 
 // Composite types used across pages and hooks
 
-export type StoryType = "UNIT" | "NOVEL";
+export type StoryType = "UNIT" | "NOVEL" | "PLAY";
 
 export type TagBasic = {
   id: number;
@@ -76,15 +82,20 @@ export type StoryWithRelations = {
   _count?: { episodes: number; units: number };
 };
 
+export type EpisodeType = "NOVEL" | "PLAY";
+
 export type EpisodeBasic = {
   id: number;
   storyId: number;
   title: string;
   KoreanTitle: string | null;
   order: number;
+  type: EpisodeType | null;
+  playMode: "ROLEPLAY" | "ROLEPLAY_WITH_EVAL" | null;
   description: string | null;
   koreanDescription: string | null;
   thumbnailUrl: string | null;
+  totalScenes: number | null;
   status: "DRAFT" | "PUBLISHED" | "HIDDEN" | "ARCHIVED" | "DELETED";
   createdAt: string;
   updatedAt: string;
@@ -101,11 +112,13 @@ export type SceneBasic = {
   id: number;
   episodeId: number;
   type: SceneType;
+  flowType: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER";
   title: string;
   koreanTitle: string | null;
   order: number;
   bgImageUrl: string | null;
   audioUrl: string | null;
+  data: Record<string, unknown> | null;
   createdAt: string;
   updatedAt: string;
   dialogues?: DialogueBasic[];
@@ -115,6 +128,7 @@ export type DialogueBasic = {
   id: number;
   sceneId: number;
   order: number;
+  flowType: "NORMAL" | "BRANCH";
   type: DialogueTypeEnum;
   speakerRole: "SYSTEM" | "USER" | null;
   characterName: string | null;

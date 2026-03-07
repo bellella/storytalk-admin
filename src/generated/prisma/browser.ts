@@ -68,6 +68,11 @@ export type StoryProgress = Prisma.StoryProgressModel
  */
 export type ReviewItem = Prisma.ReviewItemModel
 /**
+ * Model UserReviewItem
+ * 
+ */
+export type UserReviewItem = Prisma.UserReviewItemModel
+/**
  * Model Quiz
  * 
  */
@@ -117,6 +122,11 @@ export type CharacterChat = Prisma.CharacterChatModel
  * 
  */
 export type Message = Prisma.MessageModel
+/**
+ * Model Sticker
+ * 
+ */
+export type Sticker = Prisma.StickerModel
 /**
  * Model dialogueBookmark
  * 
@@ -197,3 +207,8 @@ export type CoinTransaction = Prisma.CoinTransactionModel
  * 
  */
 export type UserSubscription = Prisma.UserSubscriptionModel
+/**
+ * Model PromptTemplate
+ * 
+ */
+export type PromptTemplate = Prisma.PromptTemplateModel

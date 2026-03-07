@@ -19,15 +19,21 @@ export async function POST(
 ) {
   const body = await req.json();
   const episodeId = parseInt((await params).episodeId);
+  const flowType =
+    body.flowType === "BRANCH" ? "BRANCH" :
+    body.flowType === "BRANCH_TRIGGER" ? "BRANCH_TRIGGER" : "NORMAL";
+
   const scene = await prisma.scene.create({
     data: {
       episodeId,
       type: body.type === "CHAT" ? "CHAT" : "VISUAL",
+      flowType,
       title: body.title ?? "Scene",
       koreanTitle: body.koreanTitle ?? null,
       order: typeof body.order === "number" ? body.order : 1,
       bgImageUrl: body.bgImageUrl ?? null,
       audioUrl: body.audioUrl ?? null,
+      ...(body.data != null && typeof body.data === "object" && { data: body.data }),
     },
   });
   return NextResponse.json(scene);

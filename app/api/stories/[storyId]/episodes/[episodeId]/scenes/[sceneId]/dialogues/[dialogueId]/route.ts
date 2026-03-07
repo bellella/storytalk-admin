@@ -23,6 +23,7 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
       (type as DialogueType) ||
       (body.type as DialogueType) ||
       DialogueType.DIALOGUE,
+    flowType: body.flowType === "BRANCH" ? "BRANCH" : "NORMAL",
     speakerRole:
       body.speakerRole === DialogueSpeakerRole.USER
         ? DialogueSpeakerRole.USER
@@ -56,7 +57,7 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
     }
   }
   if (
-    (type === DialogueType.CHOICE ||
+    (type === DialogueType.CHOICE_SLOT ||
       type === DialogueType.AI_INPUT_SLOT ||
       type === DialogueType.AI_SLOT) &&
     body.data !== undefined
@@ -94,7 +95,7 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
     }
   }
 
-  const textOnlyTypes = [DialogueType.HEADING, DialogueType.CHOICE, "heading"];
+  const textOnlyTypes = [DialogueType.HEADING, DialogueType.CHOICE_SLOT, "heading"];
   if (textOnlyTypes.includes(type)) {
     return {
       ...base,
@@ -103,6 +104,22 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
       charImageLabel: null,
       imageUrl: null,
       audioUrl: null,
+    };
+  }
+
+  const speakerRole =
+    body.speakerRole === DialogueSpeakerRole.USER
+      ? DialogueSpeakerRole.USER
+      : DialogueSpeakerRole.SYSTEM;
+
+  if (speakerRole === DialogueSpeakerRole.USER) {
+    return {
+      ...base,
+      characterName: null,
+      characterId: null,
+      charImageLabel: body.charImageLabel ?? null,
+      imageUrl: body.imageUrl ?? null,
+      audioUrl: body.audioUrl ?? null,
     };
   }
 

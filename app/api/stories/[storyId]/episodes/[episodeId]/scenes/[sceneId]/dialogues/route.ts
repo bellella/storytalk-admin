@@ -34,6 +34,7 @@ function buildDialogueData(
     sceneId,
     order: orderNum,
     type: (type as DialogueType) || DialogueType.DIALOGUE,
+    flowType: body.flowType === "BRANCH" ? "BRANCH" : "NORMAL",
     speakerRole:
       body.speakerRole === DialogueSpeakerRole.USER
         ? DialogueSpeakerRole.USER
@@ -51,7 +52,7 @@ function buildDialogueData(
   }
 
   if (
-    (type === DialogueType.CHOICE ||
+    (type === DialogueType.CHOICE_SLOT ||
       type === DialogueType.AI_INPUT_SLOT ||
       type === DialogueType.AI_SLOT) &&
     body.data !== undefined
@@ -90,7 +91,7 @@ function buildDialogueData(
   }
 
   // Text-only types (no character/image)
-  const textOnlyTypes = [DialogueType.HEADING, DialogueType.CHOICE, "heading"];
+  const textOnlyTypes = [DialogueType.HEADING, DialogueType.CHOICE_SLOT, "heading"];
   if (textOnlyTypes.includes(type)) {
     return {
       ...base,
@@ -99,6 +100,23 @@ function buildDialogueData(
       charImageLabel: null,
       imageUrl: null,
       audioUrl: null,
+    };
+  }
+
+  const speakerRole =
+    body.speakerRole === DialogueSpeakerRole.USER
+      ? DialogueSpeakerRole.USER
+      : DialogueSpeakerRole.SYSTEM;
+
+  if (speakerRole === DialogueSpeakerRole.USER) {
+    return {
+      ...base,
+      characterName: null,
+      characterId: null,
+      charImageLabel:
+        typeof body.charImageLabel === "string" ? body.charImageLabel : null,
+      imageUrl: typeof body.imageUrl === "string" ? body.imageUrl : null,
+      audioUrl: typeof body.audioUrl === "string" ? body.audioUrl : null,
     };
   }
 
@@ -121,6 +139,15 @@ export async function POST(
   const body = await req.json();
   const sceneId = parseInt((await params).sceneId);
   const type = (body.type as string) || DialogueType.DIALOGUE;
+
+  // order가 없으면 max + 1 자동 계산
+  if (body.order === undefined) {
+    const agg = await prisma.dialogue.aggregate({
+      where: { sceneId },
+      _max: { order: true },
+    });
+    body.order = (agg._max.order ?? 0) + 1;
+  }
 
   let data: Record<string, unknown>;
   try {

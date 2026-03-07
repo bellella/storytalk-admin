@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import React from "react"
+import React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   BookOpen,
   Users,
@@ -21,10 +21,12 @@ import {
   Sparkles,
   ShoppingBag,
   LayoutGrid,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+  BrainCircuit,
+  Smile,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/" },
@@ -35,13 +37,15 @@ const navItems = [
   { icon: LayoutGrid, label: "Collections", href: "/collections" },
   { icon: Users, label: "Users", href: "/users" },
   { icon: Sparkles, label: "XP", href: "/xp" },
+  { icon: Smile, label: "Stickers", href: "/stickers" },
+  { icon: BrainCircuit, label: "Prompts", href: "/prompts" },
   { icon: BarChart3, label: "Analytics", href: "/analytics" },
   { icon: Settings, label: "Settings", href: "/settings" },
-]
+];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false)
-  const pathname = usePathname()
+  const [collapsed, setCollapsed] = useState(false);
+  const pathname = usePathname();
 
   return (
     <div className="flex h-screen bg-background">
@@ -59,7 +63,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
               <BookOpen className="w-5 h-5 text-primary-foreground" />
             </div>
             {!collapsed && (
-              <span className="font-semibold text-foreground text-lg">StoryLang</span>
+              <span className="font-semibold text-foreground text-lg">
+                Story Talk
+              </span>
             )}
           </div>
         </div>
@@ -67,8 +73,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-2">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || 
-              (item.href !== "/" && pathname.startsWith(item.href))
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.href}
@@ -83,7 +90,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                 <item.icon className="w-5 h-5 flex-shrink-0" />
                 {!collapsed && <span>{item.label}</span>}
               </Link>
-            )
+            );
           })}
         </nav>
 
@@ -130,7 +137,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block">
-                <p className="text-sm font-medium text-foreground">Admin User</p>
+                <p className="text-sm font-medium text-foreground">
+                  Admin User
+                </p>
                 <p className="text-xs text-muted-foreground">Content Manager</p>
               </div>
             </div>
@@ -138,10 +147,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-6">
-          {children}
-        </main>
+        <main className="flex-1 overflow-auto p-6">{children}</main>
       </div>
     </div>
-  )
+  );
 }

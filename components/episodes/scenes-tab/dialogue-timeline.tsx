@@ -1,10 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import type { DialogueBasic } from "@/types";
 import { DialogueType } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Plus,
   GripVertical,
@@ -15,6 +25,9 @@ import {
   MessageSquare,
   Bot,
   Target,
+  Upload,
+  Trash2,
+  Loader2,
 } from "lucide-react";
 import {
   DndContext,
@@ -43,7 +56,7 @@ const DIALOGUE_TYPE_CONFIG: Record<
   [DialogueType.NARRATION]: { label: "Narration", icon: FileText, badgeClass: "bg-amber-500/10 text-amber-600" },
   [DialogueType.IMAGE]: { label: "Image", icon: ImageIcon, badgeClass: "bg-violet-500/10 text-violet-600" },
   [DialogueType.HEADING]: { label: "Heading", icon: HeadingIcon, badgeClass: "bg-sky-500/10 text-sky-600" },
-  [DialogueType.CHOICE]: { label: "Choice", icon: ListChecks, badgeClass: "bg-emerald-500/10 text-emerald-600" },
+  [DialogueType.CHOICE_SLOT]: { label: "Choice Slot", icon: ListChecks, badgeClass: "bg-emerald-500/10 text-emerald-600" },
   [DialogueType.AI_INPUT_SLOT]: { label: "AI Input", icon: MessageSquare, badgeClass: "bg-orange-500/10 text-orange-600" },
   [DialogueType.AI_SLOT]: { label: "AI Slot", icon: Bot, badgeClass: "bg-indigo-500/10 text-indigo-600" },
   [DialogueType.SPEAKING_MISSION]: { label: "Speaking Mission", icon: Target, badgeClass: "bg-pink-500/10 text-pink-600" },
@@ -63,6 +76,10 @@ interface DialogueTimelineProps {
   onSelectDialogue: (dialogue: DialogueBasic) => void;
   onCreateDialogue: () => void;
   onReorderDialogues: (reorderedDialogues: DialogueBasic[]) => void;
+  storyId: number;
+  episodeId: number;
+  sceneId: number | undefined;
+  onDialoguesChanged: (dialogues: DialogueBasic[]) => void;
 }
 
 function SortableDialogueItem({
@@ -123,13 +140,16 @@ function SortableDialogueItem({
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="font-medium text-sm text-foreground">
               {dialogue.type === DialogueType.DIALOGUE ||
               dialogue.type === DialogueType.AI_INPUT_SLOT ||
               dialogue.type === DialogueType.AI_SLOT
                 ? dialogue.characterName ?? getDialogueTypeConfig(dialogue.type).label
                 : getDialogueTypeConfig(dialogue.type).label}
+            </span>
+            <span className="text-xs text-muted-foreground/60 font-mono">
+              #{dialogue.id}
             </span>
             <span
               className={cn(
@@ -139,6 +159,11 @@ function SortableDialogueItem({
             >
               {getDialogueTypeConfig(dialogue.type).label}
             </span>
+            {dialogue.flowType === "BRANCH" && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 font-medium">
+                BRANCH
+              </span>
+            )}
             {(dialogue.type === DialogueType.DIALOGUE ||
               dialogue.type === DialogueType.AI_INPUT_SLOT ||
               dialogue.type === DialogueType.AI_SLOT) &&
@@ -163,11 +188,25 @@ export function DialogueTimeline({
   onSelectDialogue,
   onCreateDialogue,
   onReorderDialogues,
+  storyId,
+  episodeId,
+  sceneId,
+  onDialoguesChanged,
 }: DialogueTimelineProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
+
+  // Import state
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [importJson, setImportJson] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
+
+  // Delete all state
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -181,22 +220,121 @@ export function DialogueTimeline({
     onReorderDialogues(reordered);
   };
 
+  const handleImport = async () => {
+    if (!sceneId) return;
+    setImportError(null);
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(importJson);
+    } catch {
+      setImportError("유효하지 않은 JSON입니다.");
+      return;
+    }
+
+    const dialoguesArray = Array.isArray(parsed)
+      ? parsed
+      : (parsed as Record<string, unknown>).dialogues;
+
+    if (!Array.isArray(dialoguesArray) || dialoguesArray.length === 0) {
+      setImportError('dialogues 배열을 찾을 수 없습니다. 배열이나 { "dialogues": [...] } 형태로 붙여넣으세요.');
+      return;
+    }
+
+    try {
+      setImporting(true);
+      for (const d of dialoguesArray) {
+        await fetch(
+          `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(d),
+          }
+        );
+      }
+      const res = await fetch(
+        `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`
+      );
+      if (res.ok) {
+        const updated = await res.json();
+        onDialoguesChanged(updated);
+      }
+      setIsImportOpen(false);
+      setImportJson("");
+    } catch (e) {
+      setImportError(e instanceof Error ? e.message : "Import 실패");
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    if (!sceneId) return;
+    try {
+      setDeletingAll(true);
+      const res = await fetch(
+        `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ dialogues: [] }),
+        }
+      );
+      if (res.ok) {
+        onDialoguesChanged([]);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setDeletingAll(false);
+      setIsDeleteConfirmOpen(false);
+    }
+  };
+
   return (
     <div className="col-span-5">
       <Card className="rounded-2xl border-border/50 shadow-sm h-full flex flex-col">
         <CardHeader className="pb-3 flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-medium">
-              Dialog Timeline
-            </CardTitle>
-            <Button
-              size="sm"
-              className="rounded-xl h-8"
-              onClick={onCreateDialogue}
-            >
-              <Plus className="w-3 h-3 mr-1" />
-              Add Dialog
-            </Button>
+          <div className="flex items-center justify-between gap-2">
+            <CardTitle className="text-base font-medium">Dialog Timeline</CardTitle>
+            <div className="flex items-center gap-1.5">
+              {sceneId && (
+                <>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-xl h-8 gap-1.5 text-xs"
+                    onClick={() => {
+                      setImportJson("");
+                      setImportError(null);
+                      setIsImportOpen(true);
+                    }}
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    Import
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-xl h-8 gap-1.5 text-xs text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20"
+                    onClick={() => setIsDeleteConfirmOpen(true)}
+                    disabled={dialogues.length === 0}
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    전체 삭제
+                  </Button>
+                </>
+              )}
+              <Button
+                size="sm"
+                className="rounded-xl h-8"
+                onClick={onCreateDialogue}
+              >
+                <Plus className="w-3 h-3 mr-1" />
+                Add Dialog
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="flex-1 overflow-auto space-y-3 p-3 pt-0">
@@ -226,6 +364,78 @@ export function DialogueTimeline({
           )}
         </CardContent>
       </Card>
+
+      {/* Import Dialog */}
+      <Dialog open={isImportOpen} onOpenChange={(open) => { if (!open) { setIsImportOpen(false); setImportJson(""); setImportError(null); } }}>
+        <DialogContent className="max-w-lg rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>대화 Import (추가)</DialogTitle>
+            <DialogDescription>
+              기존 대화를 유지하고, JSON의 대화를 뒤에 추가합니다.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Textarea
+              value={importJson}
+              onChange={(e) => { setImportJson(e.target.value); setImportError(null); }}
+              placeholder={'배열이나 { "dialogues": [...] } 형태의 JSON을 붙여넣으세요'}
+              className="font-mono text-xs h-52 rounded-xl resize-none"
+            />
+            {importError && (
+              <p className="text-sm text-destructive">{importError}</p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              className="rounded-xl"
+              onClick={() => { setIsImportOpen(false); setImportJson(""); setImportError(null); }}
+              disabled={importing}
+            >
+              취소
+            </Button>
+            <Button
+              className="rounded-xl"
+              onClick={handleImport}
+              disabled={importing || !importJson.trim()}
+            >
+              {importing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              {importing ? "추가 중..." : "추가"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete All Confirm Dialog */}
+      <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>전체 대화 삭제</DialogTitle>
+            <DialogDescription>
+              이 씬의 대화 {dialogues.length}개를 모두 삭제합니다. 되돌릴 수 없습니다.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              className="rounded-xl"
+              onClick={() => setIsDeleteConfirmOpen(false)}
+              disabled={deletingAll}
+            >
+              취소
+            </Button>
+            <Button
+              variant="destructive"
+              className="rounded-xl"
+              onClick={handleDeleteAll}
+              disabled={deletingAll}
+            >
+              {deletingAll && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              전체 삭제
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

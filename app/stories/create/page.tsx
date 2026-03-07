@@ -34,6 +34,7 @@ export default function CreateStoryPage() {
   const [form, setForm] = useState({
     title: "",
     koreanTitle: "",
+    type: "NOVEL" as "UNIT" | "NOVEL" | "PLAY",
     category: "",
     icon: "📖",
     level: "BEGINNER",
@@ -69,6 +70,7 @@ export default function CreateStoryPage() {
         body: JSON.stringify({
           title: form.title.trim(),
           koreanTitle: form.koreanTitle.trim(),
+          type: form.type,
           category: form.category,
           icon: form.icon || "📖",
           level: form.level,
@@ -136,6 +138,32 @@ export default function CreateStoryPage() {
                 onChange={handleChange}
                 className="rounded-xl"
               />
+            </div>
+
+            {/* Type */}
+            <div className="space-y-2">
+              <Label>Type</Label>
+              <Select
+                value={form.type}
+                onValueChange={(value: "UNIT" | "NOVEL" | "PLAY") =>
+                  setForm((prev) => ({ ...prev, type: value }))
+                }
+              >
+                <SelectTrigger className="rounded-xl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  <SelectItem value="UNIT" className="rounded-lg">
+                    Unit (Learning-focused)
+                  </SelectItem>
+                  <SelectItem value="NOVEL" className="rounded-lg">
+                    Novel (Story-driven)
+                  </SelectItem>
+                  <SelectItem value="PLAY" className="rounded-lg">
+                    Play (Premium)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Category */}

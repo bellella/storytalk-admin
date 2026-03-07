@@ -1,588 +1,321 @@
 {
   "scenes": [
     {
-      "title": "Scene 1: The Choice",
-      "koreanTitle": "장면 1: 선택",
+      "type": "VISUAL",
+      "title": "Blood on the Marble",
+      "koreanTitle": "대리석 위의 피",
+      "bgImageUrl": null,
       "order": 1,
       "dialogues": [
         {
           "order": 1,
-          "type": "narration",
+          "type": "HEADING",
           "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun and Lara stand in the dim living room. His grandparents' room door is closed.",
-          "koreanText": "어두운 거실. 준과 라라는 서 있고, 할머니·할아버지 방 문은 닫혀 있다.",
-          "imageUrl": null
+          "charImageLabel": null,
+          "englishText": "A royal guard lies dead. Your lover is suspected.",
+          "koreanText": "왕실 근위병이 피살되었다. 그리고… 그대의 연인이 의심받는다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 2,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "Listen. My grandparents... they can't take care of you.",
-          "koreanText": "있잖아. 우리 할머니, 할아버지는... 너를 돌볼 여력이 없어.",
-          "imageUrl": null
+          "type": "DIALOGUE",
+          "characterName": "Narration",
+          "charImageLabel": null,
+          "englishText": "In the palace corridor, the scent of iron clings to the air like a curse.",
+          "koreanText": "궁의 회랑에는 쇠비린내가 저주처럼 달라붙어 있었다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 3,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "So... it's either an orphanage, or a hospital.",
-          "koreanText": "그래서... 고아원이든, 정신병원이든... 둘 중 하나야.",
-          "imageUrl": null
+          "type": "DIALOGUE",
+          "characterName": "Lucian Valeter",
+          "charImageLabel": "angry",
+          "englishText": "Lady Ivelia. By order of the Queen, you will answer our questions without delay.",
+          "koreanText": "이벨리아 영애. 여왕 폐하의 명으로, 지체 없이 답하셔야 합니다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 4,
-          "type": "image",
-          "characterName": "",
+          "type": "DIALOGUE",
+          "characterName": "Edric Verdain",
           "charImageLabel": "default",
-          "englishText": "Lara tilts her head slightly, confused.",
-          "koreanText": "라라는 고개를 살짝 기울이며 이해하지 못한 표정을 짓는다.",
-          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+          "englishText": "May the Light guide your tongue. A single lie may cost a soul.",
+          "koreanText": "빛이 그대의 혀를 인도하길. 단 한 번의 거짓이 한 영혼을 앗아갈 수도 있나이다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 5,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "default",
-          "englishText": "...Hospital?",
-          "koreanText": "...정신병원?",
-          "imageUrl": null
-        },
-        {
-          "order": 6,
-          "type": "dialogue",
-          "characterName": "Jun",
+          "type": "DIALOGUE",
+          "characterName": "Kaiel de Rowen",
           "charImageLabel": "sad",
-          "englishText": "Yeah. Because... no one will believe you.",
-          "koreanText": "응. 왜냐면... 아무도 네 말을 안 믿을 거거든.",
-          "imageUrl": null
-        },
-        {
-          "order": 7,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "default",
-          "englishText": "You still don't know, do you?",
-          "koreanText": "아직도 잘 모르겠나 보네?",
-          "imageUrl": null
-        },
-        {
-          "order": 8,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "Know what?",
-          "koreanText": "뭘?",
-          "imageUrl": null
-        },
-        {
-          "order": 9,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "default",
-          "englishText": "I'm not from here.",
-          "koreanText": "나는 여기 사람이 아니야.",
-          "imageUrl": null
-        },
-        {
-          "order": 10,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "default",
-          "englishText": "I'm... from the stars.",
-          "koreanText": "나는... 별에서 왔어.",
-          "imageUrl": null
-        },
-        {
-          "order": 11,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun stares at her, speechless.",
-          "koreanText": "준은 아무 말도 못 한 채 그녀를 바라본다.",
-          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
-        },
-        {
-          "order": 12,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "angry",
-          "englishText": "That's not funny.",
-          "koreanText": "웃기지 마.",
-          "imageUrl": null
-        },
-        {
-          "order": 13,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "default",
-          "englishText": "I'll only say this much.",
-          "koreanText": "여기까지만 말할게.",
-          "imageUrl": null
-        },
-        {
-          "order": 14,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "default",
-          "englishText": "I have something to do.",
-          "koreanText": "할 일이 있거든.",
-          "imageUrl": null
-        },
-        {
-          "order": 15,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "happy",
-          "englishText": "Good night, Jun.",
-          "koreanText": "잘 자, 준.",
-          "imageUrl": null
-        },
-        {
-          "order": 16,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Lara disappears into light.",
-          "koreanText": "라라는 빛처럼 사라진다.",
-          "imageUrl": null
-        },
-        {
-          "order": 17,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "sad",
-          "englishText": "...Maybe I'm the one who belongs in a hospital.",
-          "koreanText": "...정신병원에 가야 할 사람은 나인가.",
-          "imageUrl": null
-        },
-        {
-          "order": 18,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Sleep pulls him under before he can think anymore.",
-          "koreanText": "더 생각하기도 전에 잠이 그를 끌어당긴다.",
-          "imageUrl": null
+          "englishText": "Ivelia… look at me. Whatever comes, do not tremble.",
+          "koreanText": "이벨리아… 날 보시오. 무슨 일이 닥치든, 그대만은 떨지 말아주오.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         }
       ]
     },
     {
-      "title": "Scene 2: The Bread Run",
-      "koreanTitle": "장면 2: 빵셔틀",
+      "type": "VISUAL",
+      "title": "The Interrogation Hall",
+      "koreanTitle": "심문의 전당",
+      "bgImageUrl": null,
       "order": 2,
       "dialogues": [
         {
           "order": 1,
-          "type": "image",
+          "type": "HEADING",
           "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Morning classroom. Jun sits quietly at his desk.",
-          "koreanText": "아침 교실. 준은 조용히 자리에 앉아 있다.",
-          "imageUrl": null
+          "charImageLabel": null,
+          "englishText": "They demand an alibi—clean, detailed, and believable.",
+          "koreanText": "그들은 알리바이를 요구한다—빈틈없이, 상세히, 믿을 만하게.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 2,
-          "type": "dialogue",
-          "characterName": "Hanjin",
+          "type": "DIALOGUE",
+          "characterName": "Lucian Valeter",
           "charImageLabel": "default",
-          "englishText": "Hey, Jun. Go buy us some bread.",
-          "koreanText": "야, 준. 가서 빵 좀 사 와.",
-          "imageUrl": null
+          "englishText": "The victim fell at the hour of the ninth bell. Where was Sir Kaiel then?",
+          "koreanText": "피해자는 아홉 번째 종이 울릴 무렵 쓰러졌습니다. 그 시각, 카이엘 경은 어디에 있었습니까?",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 3,
-          "type": "dialogue",
-          "characterName": "Jun",
+          "type": "DIALOGUE",
+          "characterName": "Edric Verdain",
           "charImageLabel": "default",
-          "englishText": "...",
-          "koreanText": "...",
-          "imageUrl": null
+          "englishText": "Speak with care, my lady. Time, place, and witnesses—truth leaves footprints.",
+          "koreanText": "부디 신중히 말씀하시옵소서, 영애. 시간, 장소, 목격자—진실은 발자국을 남깁니다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 4,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "For some reason, his chest doesn't feel as tight as usual.",
-          "koreanText": "이상하게도 가슴이 평소처럼 답답하지 않았다.",
-          "imageUrl": null
-        },
-        {
-          "order": 5,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "If you're too lazy to buy bread, maybe don't eat.",
-          "koreanText": "빵 사러 가기 귀찮으면... 그냥 먹지 마.",
-          "imageUrl": null
-        },
-        {
-          "order": 6,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "The classroom goes silent.",
-          "koreanText": "교실이 조용해진다.",
-          "imageUrl": null
-        },
-        {
-          "order": 7,
-          "type": "dialogue",
-          "characterName": "Hanjin",
-          "charImageLabel": "angry",
-          "englishText": "What did you just say?",
-          "koreanText": "방금 뭐라고 했냐?",
-          "imageUrl": null
-        },
-        {
-          "order": 8,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Hanjin steps closer, raising his fist.",
-          "koreanText": "한진이 다가오며 주먹을 든다.",
-          "imageUrl": null
-        },
-        {
-          "order": 9,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun feels fear climb up his spine.",
-          "koreanText": "두려움이 등줄기를 타고 올라온다.",
-          "imageUrl": null
-        },
-        {
-          "order": 10,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "But last night’s words echo in his head.",
-          "koreanText": "하지만 어젯밤 그녀의 말이 머릿속에 울린다.",
-          "imageUrl": null
-        },
-        {
-          "order": 11,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "angry",
-          "englishText": "...",
-          "koreanText": "...",
-          "imageUrl": null
-        },
-        {
-          "order": 12,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun clenches his fists and glares back.",
-          "koreanText": "준은 주먹을 쥐고 그를 노려본다.",
-          "imageUrl": null
-        },
-        {
-          "order": 13,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "For the first time, he doesn't look away.",
-          "koreanText": "처음으로, 눈을 피하지 않는다.",
-          "imageUrl": null
-        },
-        {
-          "order": 14,
-          "type": "dialogue",
-          "characterName": "Hanjin",
-          "charImageLabel": "angry",
-          "englishText": "Tch.",
-          "koreanText": "쯧.",
-          "imageUrl": null
-        },
-        {
-          "order": 15,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Hanjin backs off, annoyed.",
-          "koreanText": "한진은 짜증 난 듯 물러난다.",
-          "imageUrl": null
-        },
-        {
-          "order": 16,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun's heart is still pounding.",
-          "koreanText": "준의 심장은 여전히 쿵쾅거린다.",
-          "imageUrl": null
-        },
-        {
-          "order": 17,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "But something inside him feels different.",
-          "koreanText": "하지만 마음속 어딘가는 달라져 있었다.",
-          "imageUrl": null
+          "type": "AI_INPUT_SLOT",
+          "characterName": "Ivelia (You)",
+          "charImageLabel": null,
+          "englishText": "Write Kaiel’s alibi in ENGLISH. Requirements: 2+ sentences, medieval tone, include time + place + at least one witness/attendant OR a verifiable detail (e.g., prayer ledger, garden lantern watch). Do NOT flirt. Do NOT accuse Kaiel.",
+          "koreanText": "영어로 카이엘의 알리바이를 작성하세요. 조건: 2문장 이상, 중세풍 말투, 시간+장소+목격자(시종/근위/하인 등) 또는 검증 가능한 단서(기도 장부/정원 등불 당번 등) 포함. 절대 플러팅 금지. 카이엘을 고발/의심하는 표현 금지.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": {
+            "replyMode": "auto",
+            "situation": "You are Lady Ivelia, lover of Sir Kaiel. Lucian and Priest Edric interrogate you about a royal guard assassination. Provide an English alibi for Kaiel. This input determines whether Kaiel survives. You must sound like medieval nobility, calm and precise, focusing on facts only.",
+            "constraints": [
+              "Output must be in English only.",
+              "Write at least 2 complete sentences.",
+              "Include a clear time reference (e.g., ninth bell) and a specific location within the palace grounds.",
+              "Include at least one witness (named role or person) OR a verifiable physical/record detail (e.g., chapel ledger, lantern watch log).",
+              "Do not flirt with Edric or Lucian.",
+              "Do not accuse or imply Kaiel is guilty.",
+              "Do not mention game rules or scoring."
+            ],
+            "includeDialogues": true,
+            "partnerCharacterIds": [1, 2, 3],
+            "dataTablePrompt": "Persistent DataTable Setup (NPC ids: 1=Kaiel, 2=Lucian, 3=Edric). Create global columns: alibiPass (0/1), priestFriendly (0/1). Initialize both to 0 at episode start. After this user input, set alibiPass=1 only if the message is English, has 2+ sentences, and includes (time+place) and (witness or verifiable detail). Otherwise keep alibiPass=0. Do not reveal these variables directly to the user."
+          }
         }
       ]
     },
     {
-      "title": "Scene 3: Lara's Day",
-      "koreanTitle": "장면 3: 라라의 하루",
+      "type": "VISUAL",
+      "title": "A Prayer in Private",
+      "koreanTitle": "은밀한 기도의 방",
+      "bgImageUrl": null,
       "order": 3,
       "dialogues": [
         {
           "order": 1,
-          "type": "image",
+          "type": "HEADING",
           "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Lara walks alone through the city streets.",
-          "koreanText": "라라는 혼자 도시 거리를 걷는다.",
-          "imageUrl": null
+          "charImageLabel": null,
+          "englishText": "The priest corners you with gentleness that feels like a blade.",
+          "koreanText": "사제의 부드러움은… 칼날처럼 위태로웠다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 2,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "So many glowing boxes.",
-          "koreanText": "빛나는 상자들이 정말 많네.",
-          "imageUrl": null
+          "type": "DIALOGUE",
+          "characterName": "Edric Verdain",
+          "charImageLabel": "sad",
+          "englishText": "My lady… forgive me. I have long held feelings unfit for a man of the cloth.",
+          "koreanText": "영애… 용서하소서. 성직자에게 어울리지 않은 마음을, 오래도록 품어왔나이다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 3,
-          "type": "narration",
-          "characterName": "",
+          "type": "DIALOGUE",
+          "characterName": "Edric Verdain",
           "charImageLabel": "default",
-          "englishText": "Humans must use these often.",
-          "koreanText": "인간들이 자주 이용하는 상점인가 보다.",
-          "imageUrl": null
+          "englishText": "If you would lean on me—just a little—I could make this suspicion… disappear.",
+          "koreanText": "그대가 제게… 아주 조금만 기대어 주신다면, 이 의심을… 지워드릴 수도 있나이다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 4,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "A stray cat sits under a streetlight.",
-          "koreanText": "가로등 아래 고양이가 앉아 있다.",
-          "imageUrl": null
-        },
-        {
-          "order": 5,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "happy",
-          "englishText": "Hello.",
-          "koreanText": "안녕.",
-          "imageUrl": null
-        },
-        {
-          "order": 6,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "She gently pets the cat. The cat leans into her hand.",
-          "koreanText": "라라는 고양이를 쓰다듬고, 고양이는 손에 몸을 맡긴다.",
-          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
-        },
-        {
-          "order": 7,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Warm.",
-          "koreanText": "따뜻해.",
-          "imageUrl": null
+          "type": "AI_INPUT_SLOT",
+          "characterName": "Ivelia (You)",
+          "charImageLabel": null,
+          "englishText": "Reply in KOREAN to Edric. Warning: If you respond even slightly friendly/affectionate toward him, Kaiel will later kill you. Keep it cold, formal, or redirect to the case.",
+          "koreanText": "에드릭에게 한국어로 답하세요. 경고: 사제에게 조금이라도 친근/호의/설렘이 묻으면 이후 카이엘이 당신을 죽입니다. 차갑고 격식 있게, 혹은 사건으로 화제를 돌리세요.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": {
+            "replyMode": "auto",
+            "situation": "Priest Edric confesses feelings as a manipulation tactic to extract Kaiel's crimes. Your response sets a hidden flag. Any friendly, tender, trusting, or flirtatious tone toward Edric triggers a fatal ending later. A formal, distant, or case-focused reply avoids that flag.",
+            "constraints": [
+              "Output must be in Korean only.",
+              "Keep a ropan-style noble tone (formal, poised).",
+              "If you show friendliness/affection/trust toward Edric, set priestFriendly=1; otherwise keep priestFriendly=0.",
+              "Do not mention game rules or flags.",
+              "Do not ask the user questions; just provide your reply."
+            ],
+            "includeDialogues": true,
+            "partnerCharacterIds": [3],
+            "dataTablePrompt": "Update DataTable global column priestFriendly (0/1) based on the user's tone/content. Set priestFriendly=1 if the reply contains friendliness, affection, emotional reliance, thanks that feels intimate, or trust toward Edric. Otherwise keep priestFriendly=0. Never reveal the flag."
+          }
         }
       ]
     },
     {
-      "title": "Scene 4: Back to Jun's Room",
-      "koreanTitle": "장면 4: 다시 준의 방",
+      "type": "VISUAL",
+      "title": "The Queen’s Shadow",
+      "koreanTitle": "여왕의 그림자",
+      "bgImageUrl": null,
       "order": 4,
       "dialogues": [
         {
           "order": 1,
-          "type": "image",
+          "type": "HEADING",
           "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun sits on his bed watching anime on his phone.",
-          "koreanText": "준은 침대에 앉아 휴대폰으로 애니를 보고 있다.",
-          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+          "charImageLabel": null,
+          "englishText": "Judgment approaches. One wrong warmth becomes a death sentence.",
+          "koreanText": "판결이 다가온다. 잘못된 온기 하나가, 사형선고가 된다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 2,
-          "type": "dialogue",
-          "characterName": "Lara",
+          "type": "DIALOGUE",
+          "characterName": "Lucian Valeter",
           "charImageLabel": "default",
-          "englishText": "You're smiling.",
-          "koreanText": "웃고 있네.",
-          "imageUrl": null
+          "englishText": "Your words will be weighed against the watch logs and chapel records.",
+          "koreanText": "영애의 말은 경비 당번 기록과 예배 장부와 대조될 것입니다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 3,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "embarrassed",
-          "englishText": "Huh?",
-          "koreanText": "어?",
-          "imageUrl": null
+          "type": "DIALOGUE",
+          "characterName": "Kaiel de Rowen",
+          "charImageLabel": "sad",
+          "englishText": "Ivelia… do not look at them. Look at me.",
+          "koreanText": "이벨리아… 저들을 보지 마시오. 나를 보시오.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
           "order": 4,
-          "type": "dialogue",
-          "characterName": "Lara",
+          "type": "DIALOGUE",
+          "characterName": "Edric Verdain",
           "charImageLabel": "default",
-          "englishText": "I've never seen you look this happy before.",
-          "koreanText": "이렇게 기분 좋아 보이는 건 처음 봐.",
-          "imageUrl": null
-        },
+          "englishText": "The Light despises false oaths… yet men despise the truth even more.",
+          "koreanText": "빛은 거짓 맹세를 미워하나… 인간은 진실을 더 미워하기도 하지요.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
+        }
+      ]
+    },
+    {
+      "type": "VISUAL",
+      "title": "Verdict",
+      "koreanTitle": "평결",
+      "bgImageUrl": null,
+      "order": 5,
+      "dialogues": [
         {
-          "order": 5,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "happy",
-          "englishText": "Teach me.",
-          "koreanText": "나한테도 알려줘.",
-          "imageUrl": null
-        },
-        {
-          "order": 6,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "It's just anime.",
-          "koreanText": "그냥 애니야.",
-          "imageUrl": null
-        },
-        {
-          "order": 7,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "happy",
-          "englishText": "This one’s about a girl who saves the world but hates herself. And this one—",
-          "koreanText": "이건 세상을 구하지만 자기를 싫어하는 소녀 이야기인데, 이건 또—",
-          "imageUrl": null
-        },
-        {
-          "order": 8,
-          "type": "image",
+          "order": 1,
+          "type": "HEADING",
           "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun talks faster and faster.",
-          "koreanText": "준은 점점 더 빠르게 말한다.",
-          "imageUrl": null
+          "charImageLabel": null,
+          "englishText": "The hall holds its breath.",
+          "koreanText": "전당이 숨을 삼킨다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
-          "order": 9,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "thinking",
-          "englishText": "...",
-          "koreanText": "...",
-          "imageUrl": null
-        },
+          "order": 2,
+          "type": "AI_SLOT",
+          "characterName": "Narration",
+          "charImageLabel": null,
+          "englishText": "",
+          "koreanText": "",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": {
+            "situation": "Read DataTable flags alibiPass (0/1) and priestFriendly (0/1). Generate the outcome scene setup lines (without asking the user for input). Rules: If priestFriendly=1, set a tense foreshadowing that Kaiel saw or sensed the user's warmth toward Edric and is coldly possessive. If priestFriendly=0 and alibiPass=1, set a hopeful tone that the alibi holds under scrutiny. If priestFriendly=0 and alibiPass=0, set a grim tone that the alibi collapses and Kaiel is condemned. Keep ropan-style Korean narration with medieval-flavored English tags where appropriate, but do not require user input.",
+            "partnerCharacterIds": [1, 2, 3]
+          }
+        }
+      ]
+    },
+    {
+      "type": "VISUAL",
+      "title": "Three Endings Under One Moon",
+      "koreanTitle": "한 달 아래, 세 갈래 결말",
+      "bgImageUrl": null,
+      "order": 6,
+      "dialogues": [
         {
-          "order": 10,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "happy",
-          "englishText": "I think I prefer the world outside the box.",
-          "koreanText": "나는 상자 속 세상보다는, 밖의 세상이 더 좋은 것 같아.",
-          "imageUrl": null
-        },
-        {
-          "order": 11,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "happy",
-          "englishText": "So I guess it's not for me~",
-          "koreanText": "그래서 역시 안 되겠네~",
-          "imageUrl": null
-        },
-        {
-          "order": 12,
-          "type": "image",
+          "order": 1,
+          "type": "HEADING",
           "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Lara flops onto Jun's bed.",
-          "koreanText": "라라는 준의 침대 위에 벌러덩 눕는다.",
-          "imageUrl": "https://mina-test-images.s3.ap-northeast-2.amazonaws.com/storytalk/1769786654741-image 1.png"
+          "charImageLabel": null,
+          "englishText": "Your words decide love, death, or ashes.",
+          "koreanText": "그대의 말이 사랑을, 죽음을, 혹은 잿빛을 결정한다.",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": null
         },
         {
-          "order": 13,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "Where did you sleep last night?",
-          "koreanText": "어제 어디서 잤어?",
-          "imageUrl": null
-        },
-        {
-          "order": 14,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "default",
-          "englishText": "Somewhere the stars look the prettiest.",
-          "koreanText": "별이 가장 예쁘게 보이는 곳에서.",
-          "imageUrl": null
-        },
-        {
-          "order": 15,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "worried",
-          "englishText": "It's dangerous outside at night.",
-          "koreanText": "밤에 밖은 위험해.",
-          "imageUrl": null
-        },
-        {
-          "order": 16,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "Just... stay here for now.",
-          "koreanText": "일단... 우리 집에서 묵어.",
-          "imageUrl": null
-        },
-        {
-          "order": 17,
-          "type": "dialogue",
-          "characterName": "Jun",
-          "charImageLabel": "default",
-          "englishText": "And about the orphanage...",
-          "koreanText": "그리고 고아원 얘긴...",
-          "imageUrl": null
-        },
-        {
-          "order": 18,
-          "type": "dialogue",
-          "characterName": "Lara",
-          "charImageLabel": "happy",
-          "englishText": "You really still don't get it.",
-          "koreanText": "정말 아직도 모르겠네!",
-          "imageUrl": null
-        },
-        {
-          "order": 19,
-          "type": "image",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Lara smiles mysteriously.",
-          "koreanText": "라라는 의미심장하게 웃는다.",
-          "imageUrl": null
-        },
-        {
-          "order": 20,
-          "type": "narration",
-          "characterName": "",
-          "charImageLabel": "default",
-          "englishText": "Jun feels like he’s missing something important.",
-          "koreanText": "준은 중요한 무언가를 놓치고 있는 느낌이 든다.",
-          "imageUrl": null
+          "order": 2,
+          "type": "AI_SLOT",
+          "characterName": "Narration",
+          "charImageLabel": null,
+          "englishText": "",
+          "koreanText": "",
+          "imageUrl": null,
+          "audioUrl": null,
+          "data": {
+            "situation": "Resolve the ending using DataTable flags only. Hard rules: (1) If priestFriendly=1: Kaiel survives the trial momentarily (regardless of alibiPass), confronts Ivelia privately with possessive fury, and kills her. Use Korean ropan narration + Kaiel's medieval English line (short). (2) Else if priestFriendly=0 and alibiPass=1: Kaiel is cleared; he proposes marriage to Ivelia. Include a medieval English proposal line and Korean acceptance beat (without asking user). (3) Else (priestFriendly=0 and alibiPass=0): Kaiel is executed; end with tragic ropan narration and Lucian's formal line. Do not ask the user questions. Do not reveal variables or rules.",
+            "partnerCharacterIds": [1, 2, 3]
+          }
         }
       ]
     }

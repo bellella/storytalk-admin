@@ -30,24 +30,28 @@ export type EpisodeAvgAggregateOutputType = {
   id: number | null
   storyId: number | null
   order: number | null
+  totalScenes: number | null
 }
 
 export type EpisodeSumAggregateOutputType = {
   id: number | null
   storyId: number | null
   order: number | null
+  totalScenes: number | null
 }
 
 export type EpisodeMinAggregateOutputType = {
   id: number | null
   storyId: number | null
   type: $Enums.EpisodeType | null
+  playMode: $Enums.PlayEpisodeMode | null
   title: string | null
   koreanTitle: string | null
   order: number | null
   description: string | null
   koreanDescription: string | null
   thumbnailUrl: string | null
+  totalScenes: number | null
   status: $Enums.PublishStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,12 +61,14 @@ export type EpisodeMaxAggregateOutputType = {
   id: number | null
   storyId: number | null
   type: $Enums.EpisodeType | null
+  playMode: $Enums.PlayEpisodeMode | null
   title: string | null
   koreanTitle: string | null
   order: number | null
   description: string | null
   koreanDescription: string | null
   thumbnailUrl: string | null
+  totalScenes: number | null
   status: $Enums.PublishStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -72,12 +78,14 @@ export type EpisodeCountAggregateOutputType = {
   id: number
   storyId: number
   type: number
+  playMode: number
   title: number
   koreanTitle: number
   order: number
   description: number
   koreanDescription: number
   thumbnailUrl: number
+  totalScenes: number
   status: number
   createdAt: number
   updatedAt: number
@@ -89,24 +97,28 @@ export type EpisodeAvgAggregateInputType = {
   id?: true
   storyId?: true
   order?: true
+  totalScenes?: true
 }
 
 export type EpisodeSumAggregateInputType = {
   id?: true
   storyId?: true
   order?: true
+  totalScenes?: true
 }
 
 export type EpisodeMinAggregateInputType = {
   id?: true
   storyId?: true
   type?: true
+  playMode?: true
   title?: true
   koreanTitle?: true
   order?: true
   description?: true
   koreanDescription?: true
   thumbnailUrl?: true
+  totalScenes?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -116,12 +128,14 @@ export type EpisodeMaxAggregateInputType = {
   id?: true
   storyId?: true
   type?: true
+  playMode?: true
   title?: true
   koreanTitle?: true
   order?: true
   description?: true
   koreanDescription?: true
   thumbnailUrl?: true
+  totalScenes?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -131,12 +145,14 @@ export type EpisodeCountAggregateInputType = {
   id?: true
   storyId?: true
   type?: true
+  playMode?: true
   title?: true
   koreanTitle?: true
   order?: true
   description?: true
   koreanDescription?: true
   thumbnailUrl?: true
+  totalScenes?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -233,12 +249,14 @@ export type EpisodeGroupByOutputType = {
   id: number
   storyId: number | null
   type: $Enums.EpisodeType
+  playMode: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle: string | null
   order: number
   description: string | null
   koreanDescription: string | null
   thumbnailUrl: string | null
+  totalScenes: number | null
   status: $Enums.PublishStatus
   createdAt: Date
   updatedAt: Date
@@ -271,12 +289,14 @@ export type EpisodeWhereInput = {
   id?: Prisma.IntFilter<"Episode"> | number
   storyId?: Prisma.IntNullableFilter<"Episode"> | number | null
   type?: Prisma.EnumEpisodeTypeFilter<"Episode"> | $Enums.EpisodeType
+  playMode?: Prisma.EnumPlayEpisodeModeNullableFilter<"Episode"> | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFilter<"Episode"> | string
   koreanTitle?: Prisma.StringNullableFilter<"Episode"> | string | null
   order?: Prisma.IntFilter<"Episode"> | number
   description?: Prisma.StringNullableFilter<"Episode"> | string | null
   koreanDescription?: Prisma.StringNullableFilter<"Episode"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Episode"> | string | null
+  totalScenes?: Prisma.IntNullableFilter<"Episode"> | number | null
   status?: Prisma.EnumPublishStatusFilter<"Episode"> | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFilter<"Episode"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Episode"> | Date | string
@@ -292,12 +312,14 @@ export type EpisodeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   storyId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
+  playMode?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   koreanTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   koreanDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalScenes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -317,12 +339,14 @@ export type EpisodeWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.EpisodeWhereInput | Prisma.EpisodeWhereInput[]
   storyId?: Prisma.IntNullableFilter<"Episode"> | number | null
   type?: Prisma.EnumEpisodeTypeFilter<"Episode"> | $Enums.EpisodeType
+  playMode?: Prisma.EnumPlayEpisodeModeNullableFilter<"Episode"> | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFilter<"Episode"> | string
   koreanTitle?: Prisma.StringNullableFilter<"Episode"> | string | null
   order?: Prisma.IntFilter<"Episode"> | number
   description?: Prisma.StringNullableFilter<"Episode"> | string | null
   koreanDescription?: Prisma.StringNullableFilter<"Episode"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Episode"> | string | null
+  totalScenes?: Prisma.IntNullableFilter<"Episode"> | number | null
   status?: Prisma.EnumPublishStatusFilter<"Episode"> | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFilter<"Episode"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Episode"> | Date | string
@@ -338,12 +362,14 @@ export type EpisodeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   storyId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
+  playMode?: Prisma.SortOrderInput | Prisma.SortOrder
   title?: Prisma.SortOrder
   koreanTitle?: Prisma.SortOrderInput | Prisma.SortOrder
   order?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   koreanDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  totalScenes?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -361,12 +387,14 @@ export type EpisodeScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Episode"> | number
   storyId?: Prisma.IntNullableWithAggregatesFilter<"Episode"> | number | null
   type?: Prisma.EnumEpisodeTypeWithAggregatesFilter<"Episode"> | $Enums.EpisodeType
+  playMode?: Prisma.EnumPlayEpisodeModeNullableWithAggregatesFilter<"Episode"> | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringWithAggregatesFilter<"Episode"> | string
   koreanTitle?: Prisma.StringNullableWithAggregatesFilter<"Episode"> | string | null
   order?: Prisma.IntWithAggregatesFilter<"Episode"> | number
   description?: Prisma.StringNullableWithAggregatesFilter<"Episode"> | string | null
   koreanDescription?: Prisma.StringNullableWithAggregatesFilter<"Episode"> | string | null
   thumbnailUrl?: Prisma.StringNullableWithAggregatesFilter<"Episode"> | string | null
+  totalScenes?: Prisma.IntNullableWithAggregatesFilter<"Episode"> | number | null
   status?: Prisma.EnumPublishStatusWithAggregatesFilter<"Episode"> | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Episode"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Episode"> | Date | string
@@ -374,12 +402,14 @@ export type EpisodeScalarWhereWithAggregatesInput = {
 
 export type EpisodeCreateInput = {
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -395,12 +425,14 @@ export type EpisodeUncheckedCreateInput = {
   id?: number
   storyId?: number | null
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -413,12 +445,14 @@ export type EpisodeUncheckedCreateInput = {
 
 export type EpisodeUpdateInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,12 +468,14 @@ export type EpisodeUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   storyId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -454,12 +490,14 @@ export type EpisodeCreateManyInput = {
   id?: number
   storyId?: number | null
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -467,12 +505,14 @@ export type EpisodeCreateManyInput = {
 
 export type EpisodeUpdateManyMutationInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -482,12 +522,14 @@ export type EpisodeUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   storyId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -512,12 +554,14 @@ export type EpisodeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   storyId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  playMode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   koreanTitle?: Prisma.SortOrder
   order?: Prisma.SortOrder
   description?: Prisma.SortOrder
   koreanDescription?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
+  totalScenes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -527,18 +571,21 @@ export type EpisodeAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   storyId?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  totalScenes?: Prisma.SortOrder
 }
 
 export type EpisodeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   storyId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  playMode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   koreanTitle?: Prisma.SortOrder
   order?: Prisma.SortOrder
   description?: Prisma.SortOrder
   koreanDescription?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
+  totalScenes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -548,12 +595,14 @@ export type EpisodeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   storyId?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  playMode?: Prisma.SortOrder
   title?: Prisma.SortOrder
   koreanTitle?: Prisma.SortOrder
   order?: Prisma.SortOrder
   description?: Prisma.SortOrder
   koreanDescription?: Prisma.SortOrder
   thumbnailUrl?: Prisma.SortOrder
+  totalScenes?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -563,6 +612,7 @@ export type EpisodeSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   storyId?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  totalScenes?: Prisma.SortOrder
 }
 
 export type EpisodeScalarRelationFilter = {
@@ -614,6 +664,10 @@ export type EpisodeUncheckedUpdateManyWithoutStoryNestedInput = {
 
 export type EnumEpisodeTypeFieldUpdateOperationsInput = {
   set?: $Enums.EpisodeType
+}
+
+export type NullableEnumPlayEpisodeModeFieldUpdateOperationsInput = {
+  set?: $Enums.PlayEpisodeMode | null
 }
 
 export type EpisodeCreateNestedOneWithoutScenesInput = {
@@ -688,12 +742,14 @@ export type EpisodeUpdateOneRequiredWithoutEpisodeProductsNestedInput = {
 
 export type EpisodeCreateWithoutStoryInput = {
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -707,12 +763,14 @@ export type EpisodeCreateWithoutStoryInput = {
 export type EpisodeUncheckedCreateWithoutStoryInput = {
   id?: number
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -756,12 +814,14 @@ export type EpisodeScalarWhereInput = {
   id?: Prisma.IntFilter<"Episode"> | number
   storyId?: Prisma.IntNullableFilter<"Episode"> | number | null
   type?: Prisma.EnumEpisodeTypeFilter<"Episode"> | $Enums.EpisodeType
+  playMode?: Prisma.EnumPlayEpisodeModeNullableFilter<"Episode"> | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFilter<"Episode"> | string
   koreanTitle?: Prisma.StringNullableFilter<"Episode"> | string | null
   order?: Prisma.IntFilter<"Episode"> | number
   description?: Prisma.StringNullableFilter<"Episode"> | string | null
   koreanDescription?: Prisma.StringNullableFilter<"Episode"> | string | null
   thumbnailUrl?: Prisma.StringNullableFilter<"Episode"> | string | null
+  totalScenes?: Prisma.IntNullableFilter<"Episode"> | number | null
   status?: Prisma.EnumPublishStatusFilter<"Episode"> | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFilter<"Episode"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Episode"> | Date | string
@@ -769,12 +829,14 @@ export type EpisodeScalarWhereInput = {
 
 export type EpisodeCreateWithoutScenesInput = {
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -789,12 +851,14 @@ export type EpisodeUncheckedCreateWithoutScenesInput = {
   id?: number
   storyId?: number | null
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -822,12 +886,14 @@ export type EpisodeUpdateToOneWithWhereWithoutScenesInput = {
 
 export type EpisodeUpdateWithoutScenesInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -842,12 +908,14 @@ export type EpisodeUncheckedUpdateWithoutScenesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   storyId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -859,12 +927,14 @@ export type EpisodeUncheckedUpdateWithoutScenesInput = {
 
 export type EpisodeCreateWithoutRewardsInput = {
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -879,12 +949,14 @@ export type EpisodeUncheckedCreateWithoutRewardsInput = {
   id?: number
   storyId?: number | null
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -912,12 +984,14 @@ export type EpisodeUpdateToOneWithWhereWithoutRewardsInput = {
 
 export type EpisodeUpdateWithoutRewardsInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -932,12 +1006,14 @@ export type EpisodeUncheckedUpdateWithoutRewardsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   storyId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -949,12 +1025,14 @@ export type EpisodeUncheckedUpdateWithoutRewardsInput = {
 
 export type EpisodeCreateWithoutUserEpisodesInput = {
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -969,12 +1047,14 @@ export type EpisodeUncheckedCreateWithoutUserEpisodesInput = {
   id?: number
   storyId?: number | null
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1002,12 +1082,14 @@ export type EpisodeUpdateToOneWithWhereWithoutUserEpisodesInput = {
 
 export type EpisodeUpdateWithoutUserEpisodesInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1022,12 +1104,14 @@ export type EpisodeUncheckedUpdateWithoutUserEpisodesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   storyId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1039,12 +1123,14 @@ export type EpisodeUncheckedUpdateWithoutUserEpisodesInput = {
 
 export type EpisodeCreateWithoutUserPlayEpisodesInput = {
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1059,12 +1145,14 @@ export type EpisodeUncheckedCreateWithoutUserPlayEpisodesInput = {
   id?: number
   storyId?: number | null
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1092,12 +1180,14 @@ export type EpisodeUpdateToOneWithWhereWithoutUserPlayEpisodesInput = {
 
 export type EpisodeUpdateWithoutUserPlayEpisodesInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1112,12 +1202,14 @@ export type EpisodeUncheckedUpdateWithoutUserPlayEpisodesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   storyId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1129,12 +1221,14 @@ export type EpisodeUncheckedUpdateWithoutUserPlayEpisodesInput = {
 
 export type EpisodeCreateWithoutEpisodeProductsInput = {
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1149,12 +1243,14 @@ export type EpisodeUncheckedCreateWithoutEpisodeProductsInput = {
   id?: number
   storyId?: number | null
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1182,12 +1278,14 @@ export type EpisodeUpdateToOneWithWhereWithoutEpisodeProductsInput = {
 
 export type EpisodeUpdateWithoutEpisodeProductsInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1202,12 +1300,14 @@ export type EpisodeUncheckedUpdateWithoutEpisodeProductsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   storyId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1220,12 +1320,14 @@ export type EpisodeUncheckedUpdateWithoutEpisodeProductsInput = {
 export type EpisodeCreateManyStoryInput = {
   id?: number
   type?: $Enums.EpisodeType
+  playMode?: $Enums.PlayEpisodeMode | null
   title: string
   koreanTitle?: string | null
   order: number
   description?: string | null
   koreanDescription?: string | null
   thumbnailUrl?: string | null
+  totalScenes?: number | null
   status?: $Enums.PublishStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1233,12 +1335,14 @@ export type EpisodeCreateManyStoryInput = {
 
 export type EpisodeUpdateWithoutStoryInput = {
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1252,12 +1356,14 @@ export type EpisodeUpdateWithoutStoryInput = {
 export type EpisodeUncheckedUpdateWithoutStoryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1271,12 +1377,14 @@ export type EpisodeUncheckedUpdateWithoutStoryInput = {
 export type EpisodeUncheckedUpdateManyWithoutStoryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   type?: Prisma.EnumEpisodeTypeFieldUpdateOperationsInput | $Enums.EpisodeType
+  playMode?: Prisma.NullableEnumPlayEpisodeModeFieldUpdateOperationsInput | $Enums.PlayEpisodeMode | null
   title?: Prisma.StringFieldUpdateOperationsInput | string
   koreanTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   koreanDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totalScenes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   status?: Prisma.EnumPublishStatusFieldUpdateOperationsInput | $Enums.PublishStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1353,12 +1461,14 @@ export type EpisodeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   storyId?: boolean
   type?: boolean
+  playMode?: boolean
   title?: boolean
   koreanTitle?: boolean
   order?: boolean
   description?: boolean
   koreanDescription?: boolean
   thumbnailUrl?: boolean
+  totalScenes?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1375,12 +1485,14 @@ export type EpisodeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   storyId?: boolean
   type?: boolean
+  playMode?: boolean
   title?: boolean
   koreanTitle?: boolean
   order?: boolean
   description?: boolean
   koreanDescription?: boolean
   thumbnailUrl?: boolean
+  totalScenes?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1391,12 +1503,14 @@ export type EpisodeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   storyId?: boolean
   type?: boolean
+  playMode?: boolean
   title?: boolean
   koreanTitle?: boolean
   order?: boolean
   description?: boolean
   koreanDescription?: boolean
   thumbnailUrl?: boolean
+  totalScenes?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1407,18 +1521,20 @@ export type EpisodeSelectScalar = {
   id?: boolean
   storyId?: boolean
   type?: boolean
+  playMode?: boolean
   title?: boolean
   koreanTitle?: boolean
   order?: boolean
   description?: boolean
   koreanDescription?: boolean
   thumbnailUrl?: boolean
+  totalScenes?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EpisodeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storyId" | "type" | "title" | "koreanTitle" | "order" | "description" | "koreanDescription" | "thumbnailUrl" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["episode"]>
+export type EpisodeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "storyId" | "type" | "playMode" | "title" | "koreanTitle" | "order" | "description" | "koreanDescription" | "thumbnailUrl" | "totalScenes" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["episode"]>
 export type EpisodeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   story?: boolean | Prisma.Episode$storyArgs<ExtArgs>
   scenes?: boolean | Prisma.Episode$scenesArgs<ExtArgs>
@@ -1449,12 +1565,14 @@ export type $EpisodePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: number
     storyId: number | null
     type: $Enums.EpisodeType
+    playMode: $Enums.PlayEpisodeMode | null
     title: string
     koreanTitle: string | null
     order: number
     description: string | null
     koreanDescription: string | null
     thumbnailUrl: string | null
+    totalScenes: number | null
     status: $Enums.PublishStatus
     createdAt: Date
     updatedAt: Date
@@ -1890,12 +2008,14 @@ export interface EpisodeFieldRefs {
   readonly id: Prisma.FieldRef<"Episode", 'Int'>
   readonly storyId: Prisma.FieldRef<"Episode", 'Int'>
   readonly type: Prisma.FieldRef<"Episode", 'EpisodeType'>
+  readonly playMode: Prisma.FieldRef<"Episode", 'PlayEpisodeMode'>
   readonly title: Prisma.FieldRef<"Episode", 'String'>
   readonly koreanTitle: Prisma.FieldRef<"Episode", 'String'>
   readonly order: Prisma.FieldRef<"Episode", 'Int'>
   readonly description: Prisma.FieldRef<"Episode", 'String'>
   readonly koreanDescription: Prisma.FieldRef<"Episode", 'String'>
   readonly thumbnailUrl: Prisma.FieldRef<"Episode", 'String'>
+  readonly totalScenes: Prisma.FieldRef<"Episode", 'Int'>
   readonly status: Prisma.FieldRef<"Episode", 'PublishStatus'>
   readonly createdAt: Prisma.FieldRef<"Episode", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Episode", 'DateTime'>

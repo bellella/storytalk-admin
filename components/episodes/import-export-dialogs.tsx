@@ -219,13 +219,16 @@ export function ImportExportDialogs({
           const dialogues = res.ok ? await res.json() : [];
           return {
             type: scene.type || "VISUAL",
+            flowType: scene.flowType ?? "NORMAL",
             title: scene.title,
             koreanTitle: scene.koreanTitle,
             bgImageUrl: scene.bgImageUrl ?? null,
+            data: scene.data ?? null,
             order: scene.order,
             dialogues: dialogues.map((d: DialogueBasic) => ({
               order: d.order,
               type: d.type,
+              speakerRole: d.speakerRole ?? "SYSTEM",
               characterName: d.characterName || "",
               charImageLabel: d.charImageLabel,
               englishText: d.englishText,

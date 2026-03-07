@@ -1,59 +1,94 @@
 {
-  "scenes": [
+  "dialogues": [
     {
-      "title": "",
-      "koreanTitle": "",
-      "dialogues": [
-        {
-          "type": "NARRATION | DIALOGUE | IMAGE | HEADING | SPEAKING_MISSION | REPEAT_AFTER_ME | CHOICE | CHOICE_RESULT | USER_INPUT_SLOT | USER_VOICE_SLOT | AI_OUTPUT_SLOT",
-          "characterName": "",
-          "charImageLabel": "default | happy | sad | angry",
-          "englishText": "",
-          "koreanText": "",
-          "imageUrl": ""
-        }
-      ]
-    }
-  ],
-  "reviewItems": [
-    {
-      "sceneIndex": 0,
-      "dialogueIndex": 0,
-      "description": ""
-    }
-  ],
-  "quizzes": [
-    {
-      "type": "SENTENCE_BUILD | SENTENCE_CLOZE_BUILD",
-      "questionEnglish": "",
-      "questionKorean": "",
-      "answerIndex": 0,
-      "description": "",
-      "options": [],
-      "data": {}
+      "order": 1,
+      "type": "HEADING",
+      "characterName": "",
+      "charImageLabel": null,
+      "englishText": "스피드 데이트",
+      "koreanText": "스피드 데이트",
+      "imageUrl": null,
+      "audioUrl": null,
+      "data": null
     },
     {
-      "type": "SPEAK_REPEAT",
-      "dialogueId": 1,
-      "questionEnglish": "I’d like a latte, please.",
-      "questionKorean": "라떼 하나 주세요.",
-      "description": "문장을 듣고 그대로 따라 말해보세요. (핵심 단어가 모두 포함되면 통과)",
-      "options": [],
+      "order": 2,
+      "type": "DIALOGUE",
+      "characterName": "Jinha",
+      "charImageLabel": "default",
+      "englishText": "Hello, my name is Jinha. I am 23 years old. Nice to meet you",
+      "koreanText": "안녕하세요 진하라고 합니다. 나이는 23살이구요. 만나서 반가워요 ",
+      "imageUrl": null,
+      "audioUrl": null,
+      "data": null
+    },
+    {
+      "order": 3,
+      "type": "AI_INPUT_SLOT",
+      "characterName": "Jenny",
+      "charImageLabel": "default",
+      "englishText": "How should I introduce myself? Should I just say hello...?",
+      "koreanText": "나를 뭐라고 소개할까? 그냥 인사만 할까..?",
+      "imageUrl": null,
+      "audioUrl": null,
       "data": {
-        "tts": {
-          "text": "I’d like a latte, please.",
-          "locale": "en-US",
-          "rate": 0.95,
-          "pitch": 1.0,
-          "autoPlay": true
-        },
-        "check": {
-          "required": [
-            { "id": "k1", "t": "i'd like" },
-            { "id": "k2", "t": "latte" },
-            { "id": "k3", "t": "please" }
-          ]
-        }
+        "replyMode": "auto",
+        "situation": "The other guy greets you on a speed date. he is kind but doesn't like rude or weired girls",
+        "constraints": [],
+        "includeDialogues": true,
+        "partnerCharacterIds": [10]
+      }
+    },
+    {
+      "order": 4,
+      "type": "AI_INPUT_SLOT",
+      "characterName": "Jenny",
+      "charImageLabel": "default",
+      "englishText": "",
+      "koreanText": "",
+      "imageUrl": null,
+      "audioUrl": null,
+      "data": {
+        "replyMode": "auto",
+        "situation": "They are doing speed dating",
+        "constraints": [],
+        "includeDialogues": true,
+        "partnerCharacterIds": [10]
+      }
+    },
+    {
+      "order": 5,
+      "type": "AI_INPUT_SLOT",
+      "characterName": "Jenny",
+      "charImageLabel": "default",
+      "englishText": "",
+      "koreanText": "",
+      "imageUrl": null,
+      "audioUrl": null,
+      "data": {
+        "replyMode": "auto",
+        "situation": "They are doing speed dating",
+        "constraints": [],
+        "includeDialogues": true,
+        "partnerCharacterIds": [10]
+      }
+    },
+    {
+      "order": 6,
+      "type": "AI_INPUT_SLOT",
+      "characterName": "Jenny",
+      "charImageLabel": "default",
+      "englishText": "",
+      "koreanText": "",
+      "imageUrl": null,
+      "audioUrl": null,
+      "data": {
+        "replyMode": "auto",
+        "situation": "They are doing speed dating",
+        "constraints": ["Reply and say it's finishing time"],
+        "dataTablePrompt": "Store each NPC's affinity score in the 'affinity' column (0–100),based on message interactions, emotional bonding, and the NPC’s level of affection toward the user.",
+        "includeDialogues": true,
+        "partnerCharacterIds": [10]
       }
     }
   ]

@@ -7,7 +7,8 @@ const importTypeToDialogueType: Record<string, DialogueType> = {
   narration: DialogueType.NARRATION,
   image: DialogueType.IMAGE,
   heading: DialogueType.HEADING,
-  choice: DialogueType.CHOICE,
+  choice: DialogueType.CHOICE_SLOT,
+  choice_slot: DialogueType.CHOICE_SLOT,
   choice_result: DialogueType.DIALOGUE,
   user_input_slot: DialogueType.AI_INPUT_SLOT,
   ai_input_slot: DialogueType.AI_INPUT_SLOT,
@@ -29,11 +30,14 @@ type ImportData = {
   sceneIndices?: number[];
   scenes?: Array<{
     type?: "VISUAL" | "CHAT";
+    flowType?: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER";
     title: string;
     koreanTitle?: string;
     bgImageUrl?: string;
+    data?: Record<string, unknown>;
     dialogues: Array<{
       type: string;
+      speakerRole?: string;
       characterName?: string;
       charImageLabel?: string;
       englishText?: string;
@@ -158,14 +162,20 @@ export async function POST(
         i++
       ) {
         const sceneData = scenesToImport[i];
+        const sceneFlowType =
+          sceneData.flowType === "BRANCH_TRIGGER" ? "BRANCH_TRIGGER" :
+          sceneData.flowType === "BRANCH" ? "BRANCH" : "NORMAL";
         const scene = await prisma.scene.create({
           data: {
             episodeId: episodeIdNum,
             type: sceneData.type === "CHAT" ? "CHAT" : "VISUAL",
+            flowType: sceneFlowType,
             title: sceneData.title,
             koreanTitle: sceneData.koreanTitle || null,
             bgImageUrl: sceneData.bgImageUrl || null,
             order: startOrder + i,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ...(sceneData.data != null && { data: sceneData.data as any }),
           },
         });
 
@@ -201,6 +211,7 @@ export async function POST(
               sceneId: scene.id,
               order: dialogueIndex + 1,
               type: dialogueType,
+              speakerRole: dialogueData.speakerRole === "USER" ? "USER" : "SYSTEM",
               characterId: isHeading ? null : characterId,
               characterName: isHeading
                 ? null

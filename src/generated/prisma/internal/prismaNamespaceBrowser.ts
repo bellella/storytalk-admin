@@ -61,6 +61,7 @@ export const ModelName = {
   Dialogue: 'Dialogue',
   StoryProgress: 'StoryProgress',
   ReviewItem: 'ReviewItem',
+  UserReviewItem: 'UserReviewItem',
   Quiz: 'Quiz',
   UserQuizSession: 'UserQuizSession',
   QuizSessionItem: 'QuizSessionItem',
@@ -71,6 +72,7 @@ export const ModelName = {
   CharacterFriend: 'CharacterFriend',
   CharacterChat: 'CharacterChat',
   Message: 'Message',
+  Sticker: 'Sticker',
   dialogueBookmark: 'dialogueBookmark',
   EpisodeReward: 'EpisodeReward',
   XpLevel: 'XpLevel',
@@ -86,7 +88,8 @@ export const ModelName = {
   EpisodeProduct: 'EpisodeProduct',
   UserPurchase: 'UserPurchase',
   CoinTransaction: 'CoinTransaction',
-  UserSubscription: 'UserSubscription'
+  UserSubscription: 'UserSubscription',
+  PromptTemplate: 'PromptTemplate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -182,12 +185,14 @@ export const EpisodeScalarFieldEnum = {
   id: 'id',
   storyId: 'storyId',
   type: 'type',
+  playMode: 'playMode',
   title: 'title',
   koreanTitle: 'koreanTitle',
   order: 'order',
   description: 'description',
   koreanDescription: 'koreanDescription',
   thumbnailUrl: 'thumbnailUrl',
+  totalScenes: 'totalScenes',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -200,11 +205,13 @@ export const SceneScalarFieldEnum = {
   id: 'id',
   episodeId: 'episodeId',
   type: 'type',
+  flowType: 'flowType',
   title: 'title',
   koreanTitle: 'koreanTitle',
   order: 'order',
   bgImageUrl: 'bgImageUrl',
   audioUrl: 'audioUrl',
+  data: 'data',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -216,6 +223,7 @@ export const DialogueScalarFieldEnum = {
   id: 'id',
   sceneId: 'sceneId',
   order: 'order',
+  flowType: 'flowType',
   type: 'type',
   speakerRole: 'speakerRole',
   characterName: 'characterName',
@@ -254,6 +262,16 @@ export const ReviewItemScalarFieldEnum = {
 } as const
 
 export type ReviewItemScalarFieldEnum = (typeof ReviewItemScalarFieldEnum)[keyof typeof ReviewItemScalarFieldEnum]
+
+
+export const UserReviewItemScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  reviewItemId: 'reviewItemId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserReviewItemScalarFieldEnum = (typeof UserReviewItemScalarFieldEnum)[keyof typeof UserReviewItemScalarFieldEnum]
 
 
 export const QuizScalarFieldEnum = {
@@ -405,6 +423,19 @@ export const MessageScalarFieldEnum = {
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
+export const StickerScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  imageUrl: 'imageUrl',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StickerScalarFieldEnum = (typeof StickerScalarFieldEnum)[keyof typeof StickerScalarFieldEnum]
+
+
 export const DialogueBookmarkScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -515,6 +546,7 @@ export type UserPlayEpisodeScalarFieldEnum = (typeof UserPlayEpisodeScalarFieldE
 export const PlayEpisodeSlotScalarFieldEnum = {
   id: 'id',
   playEpisodeId: 'playEpisodeId',
+  type: 'type',
   dialogueId: 'dialogueId',
   order: 'order',
   status: 'status',
@@ -641,6 +673,23 @@ export const UserSubscriptionScalarFieldEnum = {
 } as const
 
 export type UserSubscriptionScalarFieldEnum = (typeof UserSubscriptionScalarFieldEnum)[keyof typeof UserSubscriptionScalarFieldEnum]
+
+
+export const PromptTemplateScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  type: 'type',
+  description: 'description',
+  content: 'content',
+  variables: 'variables',
+  version: 'version',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromptTemplateScalarFieldEnum = (typeof PromptTemplateScalarFieldEnum)[keyof typeof PromptTemplateScalarFieldEnum]
 
 
 export const SortOrder = {

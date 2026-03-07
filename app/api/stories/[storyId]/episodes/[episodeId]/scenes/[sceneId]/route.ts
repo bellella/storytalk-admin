@@ -18,11 +18,13 @@ export async function GET(
 
 const SCENE_UPDATE_FIELDS = [
   "type",
+  "flowType",
   "title",
   "koreanTitle",
   "bgImageUrl",
   "audioUrl",
   "order",
+  "data",
 ] as const;
 
 export async function PATCH(

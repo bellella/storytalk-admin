@@ -54,8 +54,9 @@ const statusOptions = [
 ];
 
 const storyTypes: { value: StoryType; label: string }[] = [
-  { value: "NOVEL", label: "Novel (Story-driven)" },
   { value: "UNIT", label: "Unit (Learning-focused)" },
+  { value: "NOVEL", label: "Novel (Story-driven)" },
+  { value: "PLAY", label: "Play (Premium)" },
 ];
 
 export function StoryOverviewTab({

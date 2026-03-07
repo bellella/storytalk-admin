@@ -17,6 +17,13 @@ import {
   Loader2,
   X,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useEpisode, useUpdateEpisode } from "@/hooks/use-episodes";
 import { useStoryCharacters } from "@/hooks/use-story-characters";
@@ -29,7 +36,7 @@ import { RewardsTab } from "@/components/episodes/rewards-tab";
 import { ImportExportDialogs } from "@/components/episodes/import-export-dialogs";
 import { ImageUploader } from "@/components/ui/image-uploader";
 import type { SceneBasic, DialogueBasic, EpisodeWithScenes } from "@/types";
-import { DialogueType } from "@/types";
+import { DialogueType, EpisodeType, PlayEpisodeMode } from "@/types";
 
 const tabs = [
   { id: "scenes", label: "Scenes", icon: FileText },
@@ -44,6 +51,7 @@ type DialogueFormData = {
   characterId?: number;
   characterName?: string;
   type: (typeof DialogueType)[keyof typeof DialogueType];
+  flowType: "NORMAL" | "BRANCH";
   speakerRole: "SYSTEM" | "USER";
   englishText: string;
   koreanText: string;
@@ -55,9 +63,11 @@ type DialogueFormData = {
 
 type SceneFormData = {
   type: "VISUAL" | "CHAT";
+  flowType: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER";
   title: string;
   koreanTitle: string;
   bgImageUrl: string;
+  data: string;
 };
 
 export default function EpisodeDetailPage() {
@@ -142,8 +152,11 @@ export default function EpisodeDetailPage() {
         storyId,
         id: episodeId,
         title: episode.title,
+        type: episode.type,
+        playMode: episode.playMode ?? null,
         description: episode.description,
         thumbnailUrl: episode.thumbnailUrl ?? null,
+        totalScenes: episode.totalScenes ?? null,
         status: episode.status,
       },
       {
@@ -188,9 +201,15 @@ export default function EpisodeDetailPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             type: data.type,
+            flowType: data.flowType,
             title: data.title,
             koreanTitle: data.koreanTitle || null,
             bgImageUrl: data.bgImageUrl || null,
+            ...(data.flowType === "BRANCH_TRIGGER" && data.data?.trim()
+              ? (() => {
+                  try { return { data: JSON.parse(data.data) }; } catch { return {}; }
+                })()
+              : { data: null }),
           }),
         }
       );
@@ -215,7 +234,7 @@ export default function EpisodeDetailPage() {
 
     let parsedData: Record<string, unknown> | null = null;
     if (
-      (data.type === DialogueType.CHOICE ||
+      (data.type === DialogueType.CHOICE_SLOT ||
         data.type === DialogueType.AI_INPUT_SLOT ||
         data.type === DialogueType.AI_SLOT) &&
       data.data?.trim()
@@ -242,9 +261,12 @@ export default function EpisodeDetailPage() {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            characterId: data.characterId,
-            characterName: data.characterName,
+            characterId:
+              data.speakerRole === "USER" ? null : data.characterId,
+            characterName:
+              data.speakerRole === "USER" ? null : data.characterName,
             type: data.type,
+            flowType: data.flowType,
             speakerRole: data.speakerRole,
             englishText: data.englishText,
             koreanText: data.koreanText,
@@ -252,7 +274,7 @@ export default function EpisodeDetailPage() {
             imageUrl: data.type === DialogueType.IMAGE ? data.imageUrl : null,
             aiPromptName: data.aiPromptName || null,
             data:
-              data.type === DialogueType.CHOICE ||
+              data.type === DialogueType.CHOICE_SLOT ||
               data.type === DialogueType.AI_INPUT_SLOT ||
               data.type === DialogueType.AI_SLOT
                 ? parsedData
@@ -370,21 +392,12 @@ export default function EpisodeDetailPage() {
     await refetch();
   }, [refetch]);
 
-  const handleSceneImportComplete = useCallback(async (sceneId: number) => {
-    if (selectedScene?.id !== sceneId) return;
-    try {
-      const res = await fetch(
-        `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setDialogues(data);
-        setSelectedDialogue(data[0] ?? null);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, [selectedScene, storyId, episodeId]);
+  const handleDialoguesChanged = useCallback((newDialogues: DialogueBasic[]) => {
+    setDialogues(newDialogues);
+    setSelectedDialogue((prev) =>
+      prev && newDialogues.find((d) => d.id === prev.id) ? prev : (newDialogues[0] ?? null)
+    );
+  }, []);
 
   const handleDeleteDialogue = async (dialogue: DialogueBasic) => {
     if (!selectedScene) return;
@@ -470,6 +483,74 @@ export default function EpisodeDetailPage() {
                   setEpisode({ ...episode, description: e.target.value })
                 }
                 placeholder="Brief description"
+                className="text-base bg-secondary/50 border-0 rounded-xl h-10"
+              />
+            </div>
+            <div className="flex items-end gap-3 flex-wrap">
+              <div className="w-40">
+                <label className="text-xs text-muted-foreground font-medium block mb-1">
+                  Type
+                </label>
+                <Select
+                  value={episode.type ?? "NOVEL"}
+                  onValueChange={(value: EpisodeType) =>
+                    setEpisode({ ...episode, type: value, playMode: value === "PLAY" ? (episode.playMode ?? PlayEpisodeMode.ROLEPLAY) : null })
+                  }
+                >
+                  <SelectTrigger className="rounded-xl bg-secondary/50 border-0 h-10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="NOVEL" className="rounded-lg">
+                      Novel
+                    </SelectItem>
+                    <SelectItem value="PLAY" className="rounded-lg">
+                      Play
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {episode.type === "PLAY" && (
+                <div className="w-52">
+                  <label className="text-xs text-muted-foreground font-medium block mb-1">
+                    Play Mode
+                  </label>
+                  <Select
+                    value={episode.playMode ?? PlayEpisodeMode.ROLEPLAY}
+                    onValueChange={(value: PlayEpisodeMode) =>
+                      setEpisode({ ...episode, playMode: value })
+                    }
+                  >
+                    <SelectTrigger className="rounded-xl bg-secondary/50 border-0 h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value={PlayEpisodeMode.ROLEPLAY} className="rounded-lg">
+                        Roleplay (평가 없음)
+                      </SelectItem>
+                      <SelectItem value={PlayEpisodeMode.ROLEPLAY_WITH_EVAL} className="rounded-lg">
+                        Roleplay + Evaluation
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
+            <div className="w-40">
+              <label className="text-xs text-muted-foreground font-medium block mb-1">
+                Total Scenes
+              </label>
+              <Input
+                type="number"
+                min={0}
+                value={episode.totalScenes ?? ""}
+                onChange={(e) =>
+                  setEpisode({
+                    ...episode,
+                    totalScenes: e.target.value === "" ? null : parseInt(e.target.value),
+                  })
+                }
+                placeholder="e.g. 12"
                 className="text-base bg-secondary/50 border-0 rounded-xl h-10"
               />
             </div>
@@ -568,7 +649,6 @@ export default function EpisodeDetailPage() {
             saving={saving}
             storyId={storyId}
             episodeId={episodeId}
-            onImportComplete={handleSceneImportComplete}
           />
           <DialogueTimeline
             dialogues={dialogues}
@@ -576,14 +656,23 @@ export default function EpisodeDetailPage() {
             onSelectDialogue={setSelectedDialogue}
             onCreateDialogue={handleCreateDialogueInScene}
             onReorderDialogues={handleReorderDialogues}
+            storyId={storyId}
+            episodeId={episodeId}
+            sceneId={selectedScene?.id}
+            onDialoguesChanged={handleDialoguesChanged}
           />
           <DialogueEditor
             dialogue={selectedDialogue}
             characters={storyCharacters}
+            scenes={episode.scenes}
             saving={saving}
+            storyId={storyId}
+            episodeId={episodeId}
+            sceneId={selectedScene?.id}
             onSave={handleSaveDialogue}
             onDelete={handleDeleteDialogue}
             onClose={() => setSelectedDialogue(null)}
+            onDialogueCreated={(d) => setDialogues((prev) => [...prev, d])}
           />
         </div>
       )}

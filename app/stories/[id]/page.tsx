@@ -230,7 +230,11 @@ export default function StoryDetailPage() {
                 <StatusBadge status={story.status} />
               </div>
               <p className="text-muted-foreground mt-1">
-                {story.type === "UNIT" ? "Unit" : "Novel"}
+                {story.type === "UNIT"
+                  ? "Unit"
+                  : story.type === "PLAY"
+                    ? "Play"
+                    : "Novel"}
                 {story.category ? ` · ${story.category}` : ""} · {story.level} ·{" "}
                 {story.episodes?.length ?? 0} episodes
               </p>

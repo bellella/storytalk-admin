@@ -42,16 +42,15 @@ export type AuthProvider = (typeof AuthProvider)[keyof typeof AuthProvider]
 export const StoryType = {
   UNIT: 'UNIT',
   NOVEL: 'NOVEL',
-  PREMIUM: 'PREMIUM'
+  PLAY: 'PLAY'
 } as const
 
 export type StoryType = (typeof StoryType)[keyof typeof StoryType]
 
 
 export const EpisodeType = {
-  STORY: 'STORY',
-  PREMIUM: 'PREMIUM',
-  EVENT: 'EVENT'
+  NOVEL: 'NOVEL',
+  PLAY: 'PLAY'
 } as const
 
 export type EpisodeType = (typeof EpisodeType)[keyof typeof EpisodeType]
@@ -65,12 +64,21 @@ export const SceneType = {
 export type SceneType = (typeof SceneType)[keyof typeof SceneType]
 
 
+export const SceneFlowType = {
+  NORMAL: 'NORMAL',
+  BRANCH: 'BRANCH',
+  BRANCH_TRIGGER: 'BRANCH_TRIGGER'
+} as const
+
+export type SceneFlowType = (typeof SceneFlowType)[keyof typeof SceneFlowType]
+
+
 export const DialogueType = {
   NARRATION: 'NARRATION',
   DIALOGUE: 'DIALOGUE',
   IMAGE: 'IMAGE',
   HEADING: 'HEADING',
-  CHOICE: 'CHOICE',
+  CHOICE_SLOT: 'CHOICE_SLOT',
   AI_INPUT_SLOT: 'AI_INPUT_SLOT',
   AI_SLOT: 'AI_SLOT',
   SPEAKING_MISSION: 'SPEAKING_MISSION'
@@ -85,6 +93,14 @@ export const DialogueSpeakerRole = {
 } as const
 
 export type DialogueSpeakerRole = (typeof DialogueSpeakerRole)[keyof typeof DialogueSpeakerRole]
+
+
+export const DialogueFlowType = {
+  NORMAL: 'NORMAL',
+  BRANCH: 'BRANCH'
+} as const
+
+export type DialogueFlowType = (typeof DialogueFlowType)[keyof typeof DialogueFlowType]
 
 
 export const QuizType = {
@@ -177,9 +193,8 @@ export type EpisodeStage = (typeof EpisodeStage)[keyof typeof EpisodeStage]
 
 
 export const PlayEpisodeMode = {
-  FREE_CHAT: 'FREE_CHAT',
-  CHAT_WITH_EVAL: 'CHAT_WITH_EVAL',
-  CHAT_WITH_QUIZ: 'CHAT_WITH_QUIZ'
+  ROLEPLAY: 'ROLEPLAY',
+  ROLEPLAY_WITH_EVAL: 'ROLEPLAY_WITH_EVAL'
 } as const
 
 export type PlayEpisodeMode = (typeof PlayEpisodeMode)[keyof typeof PlayEpisodeMode]
@@ -211,6 +226,15 @@ export const PlayEpisodeStatus = {
 } as const
 
 export type PlayEpisodeStatus = (typeof PlayEpisodeStatus)[keyof typeof PlayEpisodeStatus]
+
+
+export const PlayEpisodeSlotType = {
+  AI_INPUT: 'AI_INPUT',
+  AI_CALL: 'AI_CALL',
+  CHOICE: 'CHOICE'
+} as const
+
+export type PlayEpisodeSlotType = (typeof PlayEpisodeSlotType)[keyof typeof PlayEpisodeSlotType]
 
 
 export const SlotMessageType = {
@@ -277,3 +301,15 @@ export const SubscriptionStatus = {
 } as const
 
 export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const PromptType = {
+  EVALUATION: 'EVALUATION',
+  QUIZ: 'QUIZ',
+  AI_SLOT: 'AI_SLOT',
+  AI_INPUT_SLOT: 'AI_INPUT_SLOT',
+  CHAT: 'CHAT',
+  OTHER: 'OTHER'
+} as const
+
+export type PromptType = (typeof PromptType)[keyof typeof PromptType]
