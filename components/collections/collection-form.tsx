@@ -7,9 +7,22 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import type { CollectionBasic } from "@/types"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import type { CollectionBasic, CollectionKey } from "@/types"
+
+const COLLECTION_KEYS: { value: CollectionKey; label: string }[] = [
+  { value: "TOP", label: "상단 (TOP)" },
+  { value: "OTHER", label: "기타 (OTHER)" },
+]
 
 const schema = z.object({
+  key: z.enum(["TOP", "OTHER"]),
   title: z.string().min(1, "제목을 입력해주세요."),
   description: z.string().optional(),
   thumbnailUrl: z.string().url("유효한 URL을 입력해주세요.").optional().or(z.literal("")),
@@ -47,6 +60,7 @@ export function CollectionForm({
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
+      key: (defaultValues?.key ?? "OTHER") as CollectionKey,
       title: defaultValues?.title ?? "",
       description: defaultValues?.description ?? "",
       thumbnailUrl: defaultValues?.thumbnailUrl ?? "",
@@ -57,6 +71,7 @@ export function CollectionForm({
   })
 
   const isActive = watch("isActive")
+  const keyValue = watch("key")
 
   const handleSubmitWrapper = (data: FormValues) => {
     onSubmit({
@@ -68,6 +83,29 @@ export function CollectionForm({
 
   return (
     <form onSubmit={handleSubmit(handleSubmitWrapper)} className="space-y-6">
+      {/* 위치 (key) */}
+      <div className="space-y-2">
+        <Label>위치</Label>
+        <Select
+          value={keyValue}
+          onValueChange={(v) => setValue("key", v as CollectionKey)}
+        >
+          <SelectTrigger className="rounded-xl">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {COLLECTION_KEYS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value} className="rounded-lg">
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-muted-foreground">
+          TOP: 상단 노출, OTHER: 기타 (안정화 전)
+        </p>
+      </div>
+
       {/* 제목 */}
       <div className="space-y-2">
         <Label>

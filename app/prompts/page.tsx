@@ -112,12 +112,17 @@ function PromptFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="w-[90vw] max-w-5xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0 overflow-hidden">
+        <DialogHeader className="flex-shrink-0 px-6 pt-6 pb-2">
           <DialogTitle>{initial.id ? "Edit Prompt" : "New Prompt"}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-2">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col flex-1 min-h-0 overflow-hidden"
+        >
+          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-6">
+            <div className="space-y-4 py-2 pb-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label>Key (unique)</Label>
@@ -278,8 +283,10 @@ function PromptFormDialog({
             />
             <Label>Active</Label>
           </div>
+          </div>
+          </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex-shrink-0 px-6 pb-6 pt-2">
             <Button
               type="button"
               variant="outline"

@@ -308,8 +308,11 @@ export type EpisodeWithProduct = EpisodeBasic & {
   story?: { id: number; title: string } | null;
 };
 
+export type CollectionKey = "TOP" | "OTHER";
+
 export type CollectionBasic = {
   id: number;
+  key: CollectionKey;
   title: string;
   description: string | null;
   thumbnailUrl: string | null;

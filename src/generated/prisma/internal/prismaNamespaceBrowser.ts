@@ -579,6 +579,7 @@ export type SlotDialogueScalarFieldEnum = (typeof SlotDialogueScalarFieldEnum)[k
 
 export const CollectionScalarFieldEnum = {
   id: 'id',
+  key: 'key',
   title: 'title',
   description: 'description',
   thumbnailUrl: 'thumbnailUrl',

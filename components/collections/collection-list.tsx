@@ -63,6 +63,14 @@ function SortableRow({
           <GripVertical className="w-4 h-4" />
         </button>
       </td>
+      <td className="px-4 py-3">
+        <Badge
+          variant={collection.key === "TOP" ? "default" : "secondary"}
+          className="rounded-lg text-xs"
+        >
+          {collection.key}
+        </Badge>
+      </td>
       <td className="px-4 py-3 font-medium text-sm">
         <Link
           href={`/collections/${collection.id}`}
@@ -168,6 +176,7 @@ export function CollectionList({ collections: initialCollections }: CollectionLi
             <thead>
               <tr className="border-b border-border bg-secondary/50">
                 <th className="px-4 py-3 w-8" />
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">위치</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">컬렉션명</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">상품수</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">노출기간</th>

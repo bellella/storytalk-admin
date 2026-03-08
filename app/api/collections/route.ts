@@ -10,7 +10,7 @@ export async function GET() {
         include: { product: true },
       },
     },
-    orderBy: { order: "asc" },
+    orderBy: [{ key: "asc" }, { order: "asc" }],
   });
   return NextResponse.json(collections);
 }
