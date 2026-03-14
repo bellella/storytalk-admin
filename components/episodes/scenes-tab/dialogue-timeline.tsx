@@ -293,8 +293,8 @@ export function DialogueTimeline({
   };
 
   return (
-    <div className="col-span-5">
-      <Card className="rounded-2xl border-border/50 shadow-sm h-full flex flex-col">
+    <div className="col-span-5 min-w-0">
+      <Card className="rounded-2xl border-border/50 shadow-sm flex flex-col overflow-hidden">
         <CardHeader className="pb-3 flex-shrink-0">
           <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-base font-medium">Dialog Timeline</CardTitle>
@@ -337,7 +337,7 @@ export function DialogueTimeline({
             </div>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 overflow-auto space-y-3 p-3 pt-0">
+        <CardContent className="space-y-3 p-3 pt-0">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

@@ -406,6 +406,7 @@ export const ModelName = {
   CharacterChat: 'CharacterChat',
   Message: 'Message',
   Sticker: 'Sticker',
+  FaceTalkSession: 'FaceTalkSession',
   dialogueBookmark: 'dialogueBookmark',
   EpisodeReward: 'EpisodeReward',
   XpLevel: 'XpLevel',
@@ -422,7 +423,8 @@ export const ModelName = {
   UserPurchase: 'UserPurchase',
   CoinTransaction: 'CoinTransaction',
   UserSubscription: 'UserSubscription',
-  PromptTemplate: 'PromptTemplate'
+  PromptTemplate: 'PromptTemplate',
+  Image: 'Image'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -438,7 +440,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "story" | "tag" | "storyTag" | "unit" | "episode" | "scene" | "dialogue" | "storyProgress" | "reviewItem" | "userReviewItem" | "quiz" | "userQuizSession" | "quizSessionItem" | "userQuizAnswer" | "character" | "storyCharacter" | "characterImage" | "characterFriend" | "characterChat" | "message" | "sticker" | "dialogueBookmark" | "episodeReward" | "xpLevel" | "xpRule" | "userXpHistory" | "userEpisode" | "userPlayEpisode" | "playEpisodeSlot" | "slotDialogue" | "collection" | "collectionProduct" | "product" | "episodeProduct" | "userPurchase" | "coinTransaction" | "userSubscription" | "promptTemplate"
+    modelProps: "user" | "story" | "tag" | "storyTag" | "unit" | "episode" | "scene" | "dialogue" | "storyProgress" | "reviewItem" | "userReviewItem" | "quiz" | "userQuizSession" | "quizSessionItem" | "userQuizAnswer" | "character" | "storyCharacter" | "characterImage" | "characterFriend" | "characterChat" | "message" | "sticker" | "faceTalkSession" | "dialogueBookmark" | "episodeReward" | "xpLevel" | "xpRule" | "userXpHistory" | "userEpisode" | "userPlayEpisode" | "playEpisodeSlot" | "slotDialogue" | "collection" | "collectionProduct" | "product" | "episodeProduct" | "userPurchase" | "coinTransaction" | "userSubscription" | "promptTemplate" | "image"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2070,6 +2072,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FaceTalkSession: {
+      payload: Prisma.$FaceTalkSessionPayload<ExtArgs>
+      fields: Prisma.FaceTalkSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FaceTalkSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FaceTalkSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.FaceTalkSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FaceTalkSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>
+        }
+        findMany: {
+          args: Prisma.FaceTalkSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>[]
+        }
+        create: {
+          args: Prisma.FaceTalkSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>
+        }
+        createMany: {
+          args: Prisma.FaceTalkSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FaceTalkSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.FaceTalkSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>
+        }
+        update: {
+          args: Prisma.FaceTalkSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.FaceTalkSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FaceTalkSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FaceTalkSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.FaceTalkSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FaceTalkSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.FaceTalkSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFaceTalkSession>
+        }
+        groupBy: {
+          args: Prisma.FaceTalkSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FaceTalkSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FaceTalkSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FaceTalkSessionCountAggregateOutputType> | number
+        }
+      }
+    }
     dialogueBookmark: {
       payload: Prisma.$dialogueBookmarkPayload<ExtArgs>
       fields: Prisma.dialogueBookmarkFieldRefs
@@ -3328,6 +3404,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Image: {
+      payload: Prisma.$ImagePayload<ExtArgs>
+      fields: Prisma.ImageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ImageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ImageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>
+        }
+        findFirst: {
+          args: Prisma.ImageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ImageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>
+        }
+        findMany: {
+          args: Prisma.ImageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>[]
+        }
+        create: {
+          args: Prisma.ImageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>
+        }
+        createMany: {
+          args: Prisma.ImageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ImageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>[]
+        }
+        delete: {
+          args: Prisma.ImageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>
+        }
+        update: {
+          args: Prisma.ImageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ImageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ImageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ImageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>[]
+        }
+        upsert: {
+          args: Prisma.ImageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImagePayload>
+        }
+        aggregate: {
+          args: Prisma.ImageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateImage>
+        }
+        groupBy: {
+          args: Prisma.ImageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ImageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3658,6 +3808,9 @@ export const CharacterChatScalarFieldEnum = {
   unreadCount: 'unreadCount',
   lastReadMessageId: 'lastReadMessageId',
   lastReadAt: 'lastReadAt',
+  summary: 'summary',
+  lastSummarizedMessageId: 'lastSummarizedMessageId',
+  lastSummarizedAt: 'lastSummarizedAt',
   isPinned: 'isPinned',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -3673,6 +3826,7 @@ export const MessageScalarFieldEnum = {
   characterId: 'characterId',
   isFromUser: 'isFromUser',
   type: 'type',
+  senderType: 'senderType',
   content: 'content',
   payload: 'payload',
   createdAt: 'createdAt',
@@ -3693,6 +3847,25 @@ export const StickerScalarFieldEnum = {
 } as const
 
 export type StickerScalarFieldEnum = (typeof StickerScalarFieldEnum)[keyof typeof StickerScalarFieldEnum]
+
+
+export const FaceTalkSessionScalarFieldEnum = {
+  id: 'id',
+  chatId: 'chatId',
+  userId: 'userId',
+  characterId: 'characterId',
+  status: 'status',
+  sessionMessages: 'sessionMessages',
+  startedAt: 'startedAt',
+  connectedAt: 'connectedAt',
+  endedAt: 'endedAt',
+  durationSeconds: 'durationSeconds',
+  totalTurns: 'totalTurns',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FaceTalkSessionScalarFieldEnum = (typeof FaceTalkSessionScalarFieldEnum)[keyof typeof FaceTalkSessionScalarFieldEnum]
 
 
 export const DialogueBookmarkScalarFieldEnum = {
@@ -3950,6 +4123,18 @@ export const PromptTemplateScalarFieldEnum = {
 } as const
 
 export type PromptTemplateScalarFieldEnum = (typeof PromptTemplateScalarFieldEnum)[keyof typeof PromptTemplateScalarFieldEnum]
+
+
+export const ImageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -4322,6 +4507,34 @@ export type ListEnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'MessageSenderType'
+ */
+export type EnumMessageSenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageSenderType'>
+    
+
+
+/**
+ * Reference to a field of type 'MessageSenderType[]'
+ */
+export type ListEnumMessageSenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageSenderType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'FaceTalkStatus'
+ */
+export type EnumFaceTalkStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FaceTalkStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'FaceTalkStatus[]'
+ */
+export type ListEnumFaceTalkStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FaceTalkStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'RewardType'
  */
 export type EnumRewardTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardType'>
@@ -4675,6 +4888,7 @@ export type GlobalOmitConfig = {
   characterChat?: Prisma.CharacterChatOmit
   message?: Prisma.MessageOmit
   sticker?: Prisma.StickerOmit
+  faceTalkSession?: Prisma.FaceTalkSessionOmit
   dialogueBookmark?: Prisma.dialogueBookmarkOmit
   episodeReward?: Prisma.EpisodeRewardOmit
   xpLevel?: Prisma.XpLevelOmit
@@ -4692,6 +4906,7 @@ export type GlobalOmitConfig = {
   coinTransaction?: Prisma.CoinTransactionOmit
   userSubscription?: Prisma.UserSubscriptionOmit
   promptTemplate?: Prisma.PromptTemplateOmit
+  image?: Prisma.ImageOmit
 }
 
 /* Types for Logging */

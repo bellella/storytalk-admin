@@ -1,18 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef, DragEvent } from "react";
+import { useState, useEffect, useRef, useMemo, DragEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Upload,
   Link,
+  Search,
   Loader2,
   X,
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useImages } from "@/hooks/use-images";
 
 type ImageUploaderProps = {
   value: string;
@@ -33,7 +35,17 @@ export function ImageUploader({
   aspectRatio = "auto",
   maxSizeMB = 10,
 }: ImageUploaderProps) {
-  const [mode, setMode] = useState<"upload" | "url">("upload");
+  const [mode, setMode] = useState<"upload" | "url" | "search">("upload");
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: imageList = [] } = useImages();
+  const filteredImages = useMemo(() => {
+    if (!searchQuery.trim()) return imageList;
+    const q = searchQuery.toLowerCase();
+    return imageList.filter(
+      (img) =>
+        img.name?.toLowerCase().includes(q) || img.url.toLowerCase().includes(q)
+    );
+  }, [imageList, searchQuery]);
   const [uploading, setUploading] = useState(false);
   const [urlInput, setUrlInput] = useState(value || "");
   const [error, setError] = useState<string | null>(null);
@@ -240,7 +252,63 @@ export function ImageUploader({
             <Link className="w-3.5 h-3.5" />
             URL
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setMode("search");
+              setError(null);
+            }}
+            className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
+              mode === "search"
+                ? "bg-card text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Search className="w-3.5 h-3.5" />
+            검색
+          </button>
         </div>
+
+        {/* Search - Shows when search tab active */}
+        {mode === "search" && (
+          <div className="space-y-2">
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="이름 또는 URL로 검색..."
+              className="rounded-xl bg-secondary border-0"
+            />
+            <div className="max-h-48 overflow-y-auto rounded-xl border border-border bg-secondary/30 p-2 grid grid-cols-4 sm:grid-cols-6 gap-2">
+              {filteredImages.length === 0 ? (
+                <p className="col-span-full text-center text-sm text-muted-foreground py-6">
+                  등록된 이미지가 없습니다. 이미지 관리에서 등록하세요.
+                </p>
+              ) : (
+                filteredImages.map((img) => (
+                  <button
+                    key={img.id}
+                    type="button"
+                    onClick={() => {
+                      onChange(img.url);
+                      setUrlInput(img.url);
+                    }}
+                    className={cn(
+                      "aspect-square rounded-lg overflow-hidden border-2 transition-colors hover:border-primary",
+                      value === img.url ? "border-primary ring-2 ring-primary/30" : "border-transparent"
+                    )}
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.name || ""}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+        )}
 
         {/* URL Input - Shows when URL tab active */}
         {mode === "url" && (

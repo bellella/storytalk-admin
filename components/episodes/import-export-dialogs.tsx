@@ -164,11 +164,19 @@ export function ImportExportDialogs({
       setSceneImportError(null);
 
       const data = JSON.parse(sceneImportJson);
-      const payload = {
+      const payload: Record<string, unknown> = {
         scenes: data.scenes,
         sceneIndices: Array.from(selectedIndices).sort((a, b) => a - b),
         appendMode,
       };
+      // characterMap 등 기타 필드 전달 (전체 import와 동일 로직)
+      if (data.characterMap && Object.keys(data.characterMap).length > 0) {
+        payload.characterMap = data.characterMap;
+      }
+      if (data.title) payload.title = data.title;
+      if (data.koreanTitle) payload.koreanTitle = data.koreanTitle;
+      if (data.description) payload.description = data.description;
+      if (data.koreanDescription) payload.koreanDescription = data.koreanDescription;
 
       const res = await fetch(
         `/api/stories/${storyId}/episodes/${episodeId}/import`,

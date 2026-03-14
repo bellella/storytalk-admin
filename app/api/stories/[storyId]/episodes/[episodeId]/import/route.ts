@@ -18,6 +18,44 @@ const importTypeToDialogueType: Record<string, DialogueType> = {
   repeat_after_me: DialogueType.SPEAKING_MISSION,
 };
 
+/** JSON type(string) → DialogueType enum 정규화 (대소문자 무관, dialogues route와 동일) */
+function resolveDialogueType(input: unknown): DialogueType {
+  const s = typeof input === "string" ? String(input).trim().toLowerCase() : "";
+  if (!s) return DialogueType.DIALOGUE;
+  return (
+    importTypeToDialogueType[s] ??
+    (DialogueType as Record<string, string>)[input as string] ??
+    DialogueType.DIALOGUE
+  );
+}
+
+/** 매핑 키 정규화: trim + lowercase + 연속 공백. 발음기호(É→e) 제거 */
+function normalizeKey(s: string): string {
+  return s
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .normalize("NFC");
+}
+
+/** characterName / character / username / speaker 중 먼저 있는 값 */
+function getCharacterName(d: {
+  characterName?: string;
+  character?: string;
+  username?: string;
+  speaker?: string;
+}): string | null {
+  const v =
+    d.characterName ??
+    d.character ??
+    d.username ??
+    d.speaker ??
+    null;
+  return v && String(v).trim() ? String(v).trim() : null;
+}
+
 type ImportData = {
   title?: string;
   koreanTitle?: string;
@@ -39,6 +77,9 @@ type ImportData = {
       type: string;
       speakerRole?: string;
       characterName?: string;
+      character?: string;
+      username?: string;
+      speaker?: string;
       charImageLabel?: string;
       englishText?: string;
       koreanText?: string;
@@ -113,23 +154,35 @@ export async function POST(
         : importData.scenes;
 
       // Build characterMap from database if not provided
-      let characterMap: Record<string, number> = importData.characterMap || {};
+      // 씬별/전체 import 모두 동일: URL storyId 기준 (현재 보고 있는 story의 캐릭터)
+      const effectiveStoryId = parseInt(storyId, 10);
+
+      let characterMap: Record<string, number> = {};
 
       if (
-        !importData.characterMap ||
-        Object.keys(importData.characterMap).length === 0
+        importData.characterMap &&
+        Object.keys(importData.characterMap).length > 0
       ) {
+        // 사용자 제공 map: 키 정규화(lowercase, trim), 값은 숫자만
+        const raw = importData.characterMap as Record<string, unknown>;
+        for (const [k, v] of Object.entries(raw)) {
+          const key = normalizeKey(k);
+          const num = typeof v === "number" ? v : parseInt(String(v), 10);
+          if (!isNaN(num)) characterMap[key] = num;
+        }
+      } else if (!isNaN(effectiveStoryId) && effectiveStoryId > 0) {
         const storyCharacters = await prisma.storyCharacter.findMany({
-          where: { storyId: parseInt(storyId) },
-          include: { character: { select: { id: true, name: true } } },
+          where: { storyId: effectiveStoryId },
+          include: { character: { select: { id: true, name: true, koreanName: true } } },
         });
 
         characterMap = storyCharacters.reduce((acc, sc) => {
           if (sc.character) {
-            // Map by StoryCharacter.name (story-specific display name)
-            acc[sc.name.toLowerCase().trim()] = sc.character.id;
-            // Also map by Character.name for backward compatibility
-            acc[sc.character.name.toLowerCase().trim()] = sc.character.id;
+            acc[normalizeKey(sc.name)] = sc.character.id;
+            acc[normalizeKey(sc.character.name)] = sc.character.id;
+            if (sc.character.koreanName?.trim()) {
+              acc[normalizeKey(sc.character.koreanName)] = sc.character.id;
+            }
           }
           return acc;
         }, {} as Record<string, number>);
@@ -185,37 +238,46 @@ export async function POST(
           dialogueIndex++
         ) {
           const dialogueData = sceneData.dialogues[dialogueIndex];
-          const isHeading = dialogueData.type === "heading";
+          const dialogueType = resolveDialogueType(dialogueData.type);
+          const isHeading = dialogueType === DialogueType.HEADING;
+          const charName = getCharacterName(dialogueData);
 
           let characterId: number | null = null;
           const typeLower = dialogueData.type?.toLowerCase();
           const hasCharacter =
-            dialogueData.characterName &&
+            charName &&
             (typeLower === "dialogue" ||
               typeLower === "choice_result" ||
               typeLower === "user_input_slot" ||
               typeLower === "ai_input_slot" ||
               typeLower === "ai_slot");
           if (hasCharacter) {
-            characterId =
-              characterMap[dialogueData.characterName!.toLowerCase().trim()] ??
-              null;
+            characterId = characterMap[normalizeKey(charName)] ?? null;
+            // Fallback: map 조회 실패 시 DB에서 직접 검색 (대소문자/공백 차이 등)
+            if (characterId === null && effectiveStoryId) {
+              const fallback = await prisma.character.findFirst({
+                where: {
+                  storyLinks: { some: { storyId: effectiveStoryId } },
+                  OR: [
+                    { name: { equals: charName, mode: "insensitive" } },
+                    { koreanName: { equals: charName, mode: "insensitive" } },
+                  ],
+                },
+                select: { id: true },
+              });
+              if (fallback) characterId = fallback.id;
+            }
           }
 
-          const dialogueType =
-            importTypeToDialogueType[dialogueData.type?.toLowerCase()] ??
-            DialogueType.DIALOGUE;
-
+          const isUser = dialogueData.speakerRole === "USER";
           await prisma.dialogue.create({
             data: {
               sceneId: scene.id,
               order: dialogueIndex + 1,
               type: dialogueType,
-              speakerRole: dialogueData.speakerRole === "USER" ? "USER" : "SYSTEM",
-              characterId: isHeading ? null : characterId,
-              characterName: isHeading
-                ? null
-                : dialogueData.characterName ?? null,
+              speakerRole: isUser ? "USER" : "SYSTEM",
+              characterId: isUser || isHeading ? null : characterId,
+              characterName: isUser || isHeading ? null : charName,
               englishText: dialogueData.englishText ?? "",
               koreanText: dialogueData.koreanText ?? "",
               charImageLabel: isHeading

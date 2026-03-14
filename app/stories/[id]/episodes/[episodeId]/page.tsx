@@ -636,9 +636,9 @@ export default function EpisodeDetailPage() {
         ))}
       </div>
 
-      {/* Scenes Tab */}
+      {/* Scenes Tab - main 하나의 스크롤만 사용 */}
       {activeTab === "scenes" && (
-        <div className="grid grid-cols-12 gap-6 h-[calc(100vh-280px)]">
+        <div className="grid grid-cols-12 gap-6 min-w-0 overflow-x-hidden">
           <ScenesPanel
             scenes={episode.scenes}
             selectedScene={selectedScene}

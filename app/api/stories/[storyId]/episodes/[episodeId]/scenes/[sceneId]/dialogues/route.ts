@@ -3,6 +3,58 @@ import { DialogueCreateInput } from "@/src/generated/prisma/models";
 import { DialogueType, DialogueSpeakerRole } from "@/types";
 import { NextResponse } from "next/server";
 
+/** JSON type(string) → DialogueType enum 매핑 (대소문자 무관) */
+const typeToDialogueType: Record<string, DialogueType> = {
+  dialogue: DialogueType.DIALOGUE,
+  narration: DialogueType.NARRATION,
+  image: DialogueType.IMAGE,
+  heading: DialogueType.HEADING,
+  choice: DialogueType.CHOICE_SLOT,
+  choice_slot: DialogueType.CHOICE_SLOT,
+  choice_result: DialogueType.DIALOGUE,
+  user_input_slot: DialogueType.AI_INPUT_SLOT,
+  ai_input_slot: DialogueType.AI_INPUT_SLOT,
+  ai_output_slot: DialogueType.AI_SLOT,
+  ai_slot: DialogueType.AI_SLOT,
+  speaking_mission: DialogueType.SPEAKING_MISSION,
+  repeat_after_me: DialogueType.SPEAKING_MISSION,
+};
+
+function resolveDialogueType(input: unknown): DialogueType {
+  const s = typeof input === "string" ? input.trim().toLowerCase() : "";
+  if (!s) return DialogueType.DIALOGUE;
+  return typeToDialogueType[s] ?? (DialogueType as Record<string, string>)[input as string] ?? DialogueType.DIALOGUE;
+}
+
+/** characterName → characterId 매핑 (DialogueTimeline 대사 import용) */
+function normalizeKey(s: string): string {
+  return s
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .normalize("NFC");
+}
+
+async function getCharacterMap(storyId: number): Promise<Record<string, number>> {
+  const storyCharacters = await prisma.storyCharacter.findMany({
+    where: { storyId },
+    include: { character: { select: { id: true, name: true, koreanName: true } } },
+  });
+  const map: Record<string, number> = {};
+  for (const sc of storyCharacters) {
+    if (sc.character) {
+      map[normalizeKey(sc.name)] = sc.character.id;
+      map[normalizeKey(sc.character.name)] = sc.character.id;
+      if (sc.character.koreanName?.trim()) {
+        map[normalizeKey(sc.character.koreanName)] = sc.character.id;
+      }
+    }
+  }
+  return map;
+}
+
 export async function GET(
   _: Request,
   { params }: { params: Promise<{ sceneId: string }> }
@@ -90,17 +142,28 @@ function buildDialogueData(
     }
   }
 
-  // Text-only types (no character/image)
-  const textOnlyTypes = [DialogueType.HEADING, DialogueType.CHOICE_SLOT, "heading"];
-  if (textOnlyTypes.includes(type)) {
-    return {
+  // Types that don't use character - clear characterId, characterName, charImageLabel
+  const noCharacterTypes = [
+    DialogueType.NARRATION,
+    DialogueType.IMAGE,
+    DialogueType.HEADING,
+    DialogueType.CHOICE_SLOT,
+  ];
+  if (noCharacterTypes.includes(type as (typeof noCharacterTypes)[number])) {
+    const result: Record<string, unknown> = {
       ...base,
       characterName: null,
       characterId: null,
       charImageLabel: null,
-      imageUrl: null,
-      audioUrl: null,
     };
+    if (type === DialogueType.IMAGE) {
+      result.imageUrl = typeof body.imageUrl === "string" ? body.imageUrl : null;
+      result.audioUrl = typeof body.audioUrl === "string" ? body.audioUrl : null;
+    } else {
+      result.imageUrl = null;
+      result.audioUrl = null;
+    }
+    return result;
   }
 
   const speakerRole =
@@ -138,7 +201,7 @@ export async function POST(
 ) {
   const body = await req.json();
   const sceneId = parseInt((await params).sceneId);
-  const type = (body.type as string) || DialogueType.DIALOGUE;
+  const type = resolveDialogueType(body.type);
 
   // order가 없으면 max + 1 자동 계산
   if (body.order === undefined) {
@@ -158,6 +221,22 @@ export async function POST(
       { status: 400 }
     );
   }
+
+  // characterName 있으나 characterId 없으면 StoryCharacter에서 매핑
+  const charName = data.characterName as string | null;
+  if (charName && !data.characterId) {
+    const scene = await prisma.scene.findUnique({
+      where: { id: sceneId },
+      include: { episode: { select: { storyId: true } } },
+    });
+    const storyId = scene?.episode?.storyId;
+    if (storyId) {
+      const characterMap = await getCharacterMap(storyId);
+      const resolved = characterMap[normalizeKey(charName)];
+      if (resolved) data.characterId = resolved;
+    }
+  }
+
   const dialogue = await prisma.dialogue.create({
     data: data as DialogueCreateInput,
   });
@@ -184,7 +263,7 @@ export async function PUT(
     await tx.dialogue.deleteMany({ where: { sceneId } });
     for (let i = 0; i < dialoguesInput.length; i++) {
       const d = dialoguesInput[i] as Record<string, unknown>;
-      const type = (d.type as string) || DialogueType.DIALOGUE;
+      const type = resolveDialogueType(d.type);
       const data = buildDialogueData(type, d, sceneId, i + 1);
       await tx.dialogue.create({ data: data as unknown as DialogueCreateInput });
     }

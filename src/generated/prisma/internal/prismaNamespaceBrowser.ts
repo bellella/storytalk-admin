@@ -73,6 +73,7 @@ export const ModelName = {
   CharacterChat: 'CharacterChat',
   Message: 'Message',
   Sticker: 'Sticker',
+  FaceTalkSession: 'FaceTalkSession',
   dialogueBookmark: 'dialogueBookmark',
   EpisodeReward: 'EpisodeReward',
   XpLevel: 'XpLevel',
@@ -89,7 +90,8 @@ export const ModelName = {
   UserPurchase: 'UserPurchase',
   CoinTransaction: 'CoinTransaction',
   UserSubscription: 'UserSubscription',
-  PromptTemplate: 'PromptTemplate'
+  PromptTemplate: 'PromptTemplate',
+  Image: 'Image'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -399,6 +401,9 @@ export const CharacterChatScalarFieldEnum = {
   unreadCount: 'unreadCount',
   lastReadMessageId: 'lastReadMessageId',
   lastReadAt: 'lastReadAt',
+  summary: 'summary',
+  lastSummarizedMessageId: 'lastSummarizedMessageId',
+  lastSummarizedAt: 'lastSummarizedAt',
   isPinned: 'isPinned',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -414,6 +419,7 @@ export const MessageScalarFieldEnum = {
   characterId: 'characterId',
   isFromUser: 'isFromUser',
   type: 'type',
+  senderType: 'senderType',
   content: 'content',
   payload: 'payload',
   createdAt: 'createdAt',
@@ -434,6 +440,25 @@ export const StickerScalarFieldEnum = {
 } as const
 
 export type StickerScalarFieldEnum = (typeof StickerScalarFieldEnum)[keyof typeof StickerScalarFieldEnum]
+
+
+export const FaceTalkSessionScalarFieldEnum = {
+  id: 'id',
+  chatId: 'chatId',
+  userId: 'userId',
+  characterId: 'characterId',
+  status: 'status',
+  sessionMessages: 'sessionMessages',
+  startedAt: 'startedAt',
+  connectedAt: 'connectedAt',
+  endedAt: 'endedAt',
+  durationSeconds: 'durationSeconds',
+  totalTurns: 'totalTurns',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FaceTalkSessionScalarFieldEnum = (typeof FaceTalkSessionScalarFieldEnum)[keyof typeof FaceTalkSessionScalarFieldEnum]
 
 
 export const DialogueBookmarkScalarFieldEnum = {
@@ -691,6 +716,18 @@ export const PromptTemplateScalarFieldEnum = {
 } as const
 
 export type PromptTemplateScalarFieldEnum = (typeof PromptTemplateScalarFieldEnum)[keyof typeof PromptTemplateScalarFieldEnum]
+
+
+export const ImageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
 
 
 export const SortOrder = {

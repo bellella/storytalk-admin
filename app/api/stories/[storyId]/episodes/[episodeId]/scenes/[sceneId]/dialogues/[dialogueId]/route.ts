@@ -95,16 +95,28 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
     }
   }
 
-  const textOnlyTypes = [DialogueType.HEADING, DialogueType.CHOICE_SLOT, "heading"];
-  if (textOnlyTypes.includes(type)) {
-    return {
+  // Types that don't use character - clear characterId, characterName, charImageLabel
+  const noCharacterTypes = [
+    DialogueType.NARRATION,
+    DialogueType.IMAGE,
+    DialogueType.HEADING,
+    DialogueType.CHOICE_SLOT,
+  ];
+  if (noCharacterTypes.includes(type as (typeof noCharacterTypes)[number])) {
+    const result: Record<string, unknown> = {
       ...base,
       characterName: null,
       characterId: null,
       charImageLabel: null,
-      imageUrl: null,
-      audioUrl: null,
     };
+    if (type === DialogueType.IMAGE) {
+      result.imageUrl = body.imageUrl ?? null;
+      result.audioUrl = body.audioUrl ?? null;
+    } else {
+      result.imageUrl = null;
+      result.audioUrl = null;
+    }
+    return result;
   }
 
   const speakerRole =

@@ -23,6 +23,7 @@ import {
   LayoutGrid,
   BrainCircuit,
   Smile,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +36,7 @@ const navItems = [
   { icon: UserCircle, label: "Characters", href: "/characters" },
   { icon: ShoppingBag, label: "Products", href: "/products" },
   { icon: LayoutGrid, label: "Collections", href: "/collections" },
+  { icon: ImageIcon, label: "Images", href: "/images" },
   { icon: Users, label: "Users", href: "/users" },
   { icon: Sparkles, label: "XP", href: "/xp" },
   { icon: Smile, label: "Stickers", href: "/stickers" },
@@ -147,7 +149,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-6">{children}</main>
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 min-h-0">{children}</main>
       </div>
     </div>
   );

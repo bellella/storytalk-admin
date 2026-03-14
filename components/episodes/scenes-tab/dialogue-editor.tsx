@@ -687,8 +687,8 @@ export function DialogueEditor({
   };
 
   return (
-    <div className="col-span-4">
-      <Card className="rounded-2xl border-border/50 shadow-sm h-full flex flex-col">
+    <div className="col-span-4 min-w-0">
+      <Card className="rounded-2xl border-border/50 shadow-sm flex flex-col overflow-hidden">
         <CardHeader className="pb-3 flex-shrink-0">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-medium">Dialog Editor</CardTitle>
@@ -718,7 +718,7 @@ export function DialogueEditor({
           </div>
         </CardHeader>
 
-        <CardContent className="flex-1 overflow-auto space-y-4 p-4 pt-0">
+        <CardContent className="space-y-4 p-4 pt-0">
           {dialogue ? (
             <form onSubmit={form.handleSubmit((data) => onSave(data))}>
               <div className="space-y-4">

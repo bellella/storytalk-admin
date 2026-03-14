@@ -361,9 +361,9 @@ export function ScenesPanel({
   };
 
   return (
-    <div className="col-span-3 h-full">
-      {/* Scenes List — full height */}
-      <Card className="rounded-2xl border-border/50 shadow-sm h-full flex flex-col">
+    <div className="col-span-3 min-w-0">
+      {/* Scenes List */}
+      <Card className="rounded-2xl border-border/50 shadow-sm flex flex-col overflow-hidden">
         <CardHeader className="pb-3 flex-shrink-0">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-medium">Scenes</CardTitle>
@@ -373,7 +373,7 @@ export function ScenesPanel({
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 overflow-auto space-y-1 p-3 pt-0">
+        <CardContent className="space-y-1 p-3 pt-0">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
