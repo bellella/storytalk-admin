@@ -64,14 +64,14 @@ function safeParseJson(value: string): Record<string, unknown> {
 }
 
 
-type ScoreDeltaItem = { key: string; delta: number };
+type BranchScoreDelta = Record<string, number>;
 
 type ChoiceOption = {
   key: string;
   englishText: string;
   koreanText: string;
   followUpDialogueIds: number[];
-  branchScoreDelta: ScoreDeltaItem[];
+  branchScoreDelta: BranchScoreDelta;
 };
 
 const DEFAULT_CHOICE_OPTION: ChoiceOption = {
@@ -79,18 +79,34 @@ const DEFAULT_CHOICE_OPTION: ChoiceOption = {
   englishText: "",
   koreanText: "",
   followUpDialogueIds: [],
-  branchScoreDelta: [],
+  branchScoreDelta: {},
 };
 
-function normalizeScoreDeltaItem(item: unknown): ScoreDeltaItem {
-  if (item && typeof item === "object" && "key" in item && typeof (item as any).key === "string") {
-    return { key: (item as any).key, delta: Number((item as any).delta) || 0 };
+/** legacy array [{key, delta}] or [{sceneId, delta}] → { [key]: number } */
+function parseBranchScoreDelta(raw: unknown): BranchScoreDelta {
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    const obj = raw as Record<string, unknown>;
+    const result: Record<string, number> = {};
+    for (const [k, v] of Object.entries(obj)) {
+      const num = typeof v === "number" ? v : parseInt(String(v), 10);
+      if (!isNaN(num)) result[k] = num;
+    }
+    return result;
   }
-  // legacy: sceneId → key
-  if (item && typeof item === "object" && "sceneId" in item) {
-    return { key: `SCENE_${(item as any).sceneId}`, delta: Number((item as any).delta) || 0 };
+  if (Array.isArray(raw)) {
+    const result: Record<string, number> = {};
+    for (const item of raw) {
+      if (item && typeof item === "object") {
+        const anyItem = item as Record<string, unknown>;
+        let key = "";
+        if (typeof anyItem.key === "string") key = anyItem.key;
+        else if (typeof anyItem.sceneId !== "undefined") key = `SCENE_${anyItem.sceneId}`;
+        if (key) result[key] = Number(anyItem.delta) || 0;
+      }
+    }
+    return result;
   }
-  return { key: "", delta: 0 };
+  return {};
 }
 
 function ChoiceSlotEditor({
@@ -113,15 +129,20 @@ function ChoiceSlotEditor({
     englishText: opt?.englishText ?? "",
     koreanText: opt?.koreanText ?? "",
     followUpDialogueIds: Array.isArray(opt?.followUpDialogueIds) ? opt.followUpDialogueIds : [],
-    branchScoreDelta: Array.isArray(opt?.branchScoreDelta)
-      ? opt.branchScoreDelta.map(normalizeScoreDeltaItem)
-      : Array.isArray(opt?.scoreDelta)
-        ? opt.scoreDelta.map(normalizeScoreDeltaItem)
-        : [],
+    branchScoreDelta: parseBranchScoreDelta(opt?.branchScoreDelta ?? opt?.scoreDelta),
   }));
 
-  const emit = (newOptions: ChoiceOption[]) =>
-    onChange(JSON.stringify({ options: newOptions }));
+  const emit = (newOptions: ChoiceOption[]) => {
+    const sanitized = newOptions.map((o) => ({
+      ...o,
+      branchScoreDelta: Object.fromEntries(
+        Object.entries(o.branchScoreDelta).filter(
+          ([k]) => k && k !== "__new__"
+        )
+      ),
+    }));
+    onChange(JSON.stringify({ options: sanitized }));
+  };
 
   const updateOption = (i: number, patch: Partial<ChoiceOption>) => {
     const next = [...options];
@@ -281,33 +302,35 @@ function ChoiceSlotEditor({
             </div>
           </div>
 
-          {/* branchScoreDelta */}
+          {/* branchScoreDelta: { [key]: number } */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <Label className="text-xs text-muted-foreground">Branch Score Delta (route key)</Label>
+              <Label className="text-xs text-muted-foreground">Branch Score Delta (route key → delta)</Label>
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 className="h-5 text-xs rounded px-1.5"
-                onClick={() =>
+                onClick={() => {
+                  const newKey = branchKeys[0]?.key ?? "";
                   updateOption(i, {
-                    branchScoreDelta: [...opt.branchScoreDelta, { key: branchKeys[0]?.key ?? "", delta: 0 }],
-                  })
-                }
+                    branchScoreDelta: { ...opt.branchScoreDelta, [newKey || "__new__"]: 0 },
+                  });
+                }}
               >
                 <Plus className="w-2.5 h-2.5 mr-0.5" /> Add
               </Button>
             </div>
             <div className="space-y-1">
-              {opt.branchScoreDelta.map((sd, si) => (
-                <div key={si} className="flex items-center gap-1.5">
+              {Object.entries(opt.branchScoreDelta).map(([deltaKey, deltaVal]) => (
+                <div key={deltaKey} className="flex items-center gap-1.5">
                   {branchKeys.length > 0 ? (
                     <Select
-                      value={sd.key || "__none__"}
+                      value={deltaKey || "__none__"}
                       onValueChange={(v) => {
-                        const next = [...opt.branchScoreDelta];
-                        next[si] = { ...next[si], key: v === "__none__" ? "" : v };
+                        const next = { ...opt.branchScoreDelta };
+                        delete next[deltaKey];
+                        if (v !== "__none__") next[v] = deltaVal;
                         updateOption(i, { branchScoreDelta: next });
                       }}
                     >
@@ -318,9 +341,9 @@ function ChoiceSlotEditor({
                         <SelectItem value="__none__" className="rounded-lg text-xs text-muted-foreground">
                           —
                         </SelectItem>
-                        {sd.key && !branchKeys.some((bk) => bk.key === sd.key) && (
-                          <SelectItem value={sd.key} className="rounded-lg text-xs font-mono text-muted-foreground">
-                            {sd.key} (custom)
+                        {deltaKey && !branchKeys.some((bk) => bk.key === deltaKey) && (
+                          <SelectItem value={deltaKey} className="rounded-lg text-xs font-mono text-muted-foreground">
+                            {deltaKey} (custom)
                           </SelectItem>
                         )}
                         {branchKeys.map((bk) => (
@@ -335,11 +358,13 @@ function ChoiceSlotEditor({
                     </Select>
                   ) : (
                     <Input
-                      value={sd.key}
+                      value={deltaKey}
                       placeholder="에피소드에서 Branch Keys 정의 필요"
                       onChange={(e) => {
-                        const next = [...opt.branchScoreDelta];
-                        next[si] = { ...next[si], key: e.target.value };
+                        const next = { ...opt.branchScoreDelta };
+                        delete next[deltaKey];
+                        const k = e.target.value.trim();
+                        if (k) next[k] = deltaVal;
                         updateOption(i, { branchScoreDelta: next });
                       }}
                       className="rounded-lg bg-secondary border-0 h-7 text-xs flex-1 font-mono"
@@ -348,11 +373,11 @@ function ChoiceSlotEditor({
                   <span className="text-xs text-muted-foreground">Δ</span>
                   <Input
                     type="number"
-                    value={sd.delta}
+                    value={deltaVal}
                     placeholder="delta"
                     onChange={(e) => {
-                      const next = [...opt.branchScoreDelta];
-                      next[si] = { ...next[si], delta: parseInt(e.target.value) || 0 };
+                      const next = { ...opt.branchScoreDelta };
+                      next[deltaKey] = parseInt(e.target.value) || 0;
                       updateOption(i, { branchScoreDelta: next });
                     }}
                     className="rounded-lg bg-secondary border-0 h-7 text-xs w-24 min-w-[6rem]"
@@ -362,17 +387,17 @@ function ChoiceSlotEditor({
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 rounded-lg text-destructive hover:bg-destructive/10 flex-shrink-0"
-                    onClick={() =>
-                      updateOption(i, {
-                        branchScoreDelta: opt.branchScoreDelta.filter((_, j) => j !== si),
-                      })
-                    }
+                    onClick={() => {
+                      const next = { ...opt.branchScoreDelta };
+                      delete next[deltaKey];
+                      updateOption(i, { branchScoreDelta: next });
+                    }}
                   >
                     <X className="w-3 h-3" />
                   </Button>
                 </div>
               ))}
-              {opt.branchScoreDelta.length === 0 && (
+              {Object.keys(opt.branchScoreDelta).length === 0 && (
                 <p className="text-xs text-muted-foreground/60">없음</p>
               )}
             </div>

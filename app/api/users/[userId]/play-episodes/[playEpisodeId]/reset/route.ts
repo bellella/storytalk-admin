@@ -22,7 +22,7 @@ export async function POST(
     prisma.userPlayEpisode.update({
       where: { id: peId },
       data: {
-        data: null,
+        data: undefined,
         lastSceneId: null,
         lastSlotId: null,
       },
