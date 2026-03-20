@@ -50,11 +50,11 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-background overflow-hidden">
       {/* Sidebar */}
       <aside
         className={cn(
-          "flex flex-col bg-card border-r border-border transition-all duration-300 ease-in-out",
+          "flex flex-col min-h-0 bg-card border-r border-border transition-all duration-300 ease-in-out",
           collapsed ? "w-20" : "w-64"
         )}
       >
@@ -72,8 +72,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        {/* Navigation - scrollable when many items */}
+        <nav className="flex-1 min-h-0 overflow-y-auto p-4 space-y-2">
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||

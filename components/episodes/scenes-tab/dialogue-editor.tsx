@@ -1,6 +1,6 @@
 "use client";
 
-import type { DialogueBasic, StoryCharacterWithCharacter, SceneBasic } from "@/types";
+import type { DialogueBasic, StoryCharacterWithCharacter, SceneBasic, BranchKeyItem } from "@/types";
 import { DialogueType, DialogueSpeakerRole, DialogueFlowType } from "@/types";
 import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
@@ -64,12 +64,14 @@ function safeParseJson(value: string): Record<string, unknown> {
 }
 
 
+type ScoreDeltaItem = { key: string; delta: number };
+
 type ChoiceOption = {
   key: string;
   englishText: string;
   koreanText: string;
   followUpDialogueIds: number[];
-  scoreDelta: { sceneId: number; delta: number }[];
+  branchScoreDelta: ScoreDeltaItem[];
 };
 
 const DEFAULT_CHOICE_OPTION: ChoiceOption = {
@@ -77,26 +79,46 @@ const DEFAULT_CHOICE_OPTION: ChoiceOption = {
   englishText: "",
   koreanText: "",
   followUpDialogueIds: [],
-  scoreDelta: [],
+  branchScoreDelta: [],
 };
+
+function normalizeScoreDeltaItem(item: unknown): ScoreDeltaItem {
+  if (item && typeof item === "object" && "key" in item && typeof (item as any).key === "string") {
+    return { key: (item as any).key, delta: Number((item as any).delta) || 0 };
+  }
+  // legacy: sceneId → key
+  if (item && typeof item === "object" && "sceneId" in item) {
+    return { key: `SCENE_${(item as any).sceneId}`, delta: Number((item as any).delta) || 0 };
+  }
+  return { key: "", delta: 0 };
+}
 
 function ChoiceSlotEditor({
   value,
   onChange,
   createBranchDialogue,
-  scenes = [],
+  branchKeys = [],
 }: {
   value: string;
   onChange: (v: string) => void;
   createBranchDialogue?: (englishText: string, koreanText: string) => Promise<{ id: number } | null>;
-  scenes?: SceneBasic[];
+  branchKeys?: BranchKeyItem[];
 }) {
   const [creating, setCreating] = useState<number | null>(null);
 
   const parsed = safeParseJson(value);
-  const options: ChoiceOption[] = Array.isArray(parsed.options)
-    ? (parsed.options as ChoiceOption[])
-    : [];
+  const rawOptions = Array.isArray(parsed.options) ? parsed.options : [];
+  const options: ChoiceOption[] = rawOptions.map((opt: any) => ({
+    key: opt?.key ?? "",
+    englishText: opt?.englishText ?? "",
+    koreanText: opt?.koreanText ?? "",
+    followUpDialogueIds: Array.isArray(opt?.followUpDialogueIds) ? opt.followUpDialogueIds : [],
+    branchScoreDelta: Array.isArray(opt?.branchScoreDelta)
+      ? opt.branchScoreDelta.map(normalizeScoreDeltaItem)
+      : Array.isArray(opt?.scoreDelta)
+        ? opt.scoreDelta.map(normalizeScoreDeltaItem)
+        : [],
+  }));
 
   const emit = (newOptions: ChoiceOption[]) =>
     onChange(JSON.stringify({ options: newOptions }));
@@ -259,10 +281,10 @@ function ChoiceSlotEditor({
             </div>
           </div>
 
-          {/* scoreDelta */}
+          {/* branchScoreDelta */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <Label className="text-xs text-muted-foreground">Score Delta</Label>
+              <Label className="text-xs text-muted-foreground">Branch Score Delta (route key)</Label>
               <Button
                 type="button"
                 variant="ghost"
@@ -270,7 +292,7 @@ function ChoiceSlotEditor({
                 className="h-5 text-xs rounded px-1.5"
                 onClick={() =>
                   updateOption(i, {
-                    scoreDelta: [...opt.scoreDelta, { sceneId: 0, delta: 0 }],
+                    branchScoreDelta: [...opt.branchScoreDelta, { key: branchKeys[0]?.key ?? "", delta: 0 }],
                   })
                 }
               >
@@ -278,38 +300,62 @@ function ChoiceSlotEditor({
               </Button>
             </div>
             <div className="space-y-1">
-              {opt.scoreDelta.map((sd, si) => (
+              {opt.branchScoreDelta.map((sd, si) => (
                 <div key={si} className="flex items-center gap-1.5">
-                  <Select
-                    value={String(sd.sceneId || "")}
-                    onValueChange={(v) => {
-                      const next = [...opt.scoreDelta];
-                      next[si] = { ...next[si], sceneId: parseInt(v) || 0 };
-                      updateOption(i, { scoreDelta: next });
-                    }}
-                  >
-                    <SelectTrigger className="rounded-lg bg-secondary border-0 h-7 text-xs flex-1">
-                      <SelectValue placeholder="Scene" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      {scenes.map((s) => (
-                        <SelectItem key={s.id} value={String(s.id)} className="rounded-lg text-xs">
-                          #{s.id} {s.title}
+                  {branchKeys.length > 0 ? (
+                    <Select
+                      value={sd.key || "__none__"}
+                      onValueChange={(v) => {
+                        const next = [...opt.branchScoreDelta];
+                        next[si] = { ...next[si], key: v === "__none__" ? "" : v };
+                        updateOption(i, { branchScoreDelta: next });
+                      }}
+                    >
+                      <SelectTrigger className="rounded-lg bg-secondary border-0 h-7 text-xs flex-1 font-mono">
+                        <SelectValue placeholder="route key 선택" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        <SelectItem value="__none__" className="rounded-lg text-xs text-muted-foreground">
+                          —
                         </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                        {sd.key && !branchKeys.some((bk) => bk.key === sd.key) && (
+                          <SelectItem value={sd.key} className="rounded-lg text-xs font-mono text-muted-foreground">
+                            {sd.key} (custom)
+                          </SelectItem>
+                        )}
+                        {branchKeys.map((bk) => (
+                          <SelectItem key={bk.key} value={bk.key} className="rounded-lg text-xs font-mono">
+                            {bk.key}
+                            {bk.name && (
+                              <span className="text-muted-foreground ml-1">({bk.name})</span>
+                            )}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input
+                      value={sd.key}
+                      placeholder="에피소드에서 Branch Keys 정의 필요"
+                      onChange={(e) => {
+                        const next = [...opt.branchScoreDelta];
+                        next[si] = { ...next[si], key: e.target.value };
+                        updateOption(i, { branchScoreDelta: next });
+                      }}
+                      className="rounded-lg bg-secondary border-0 h-7 text-xs flex-1 font-mono"
+                    />
+                  )}
                   <span className="text-xs text-muted-foreground">Δ</span>
                   <Input
                     type="number"
                     value={sd.delta}
                     placeholder="delta"
                     onChange={(e) => {
-                      const next = [...opt.scoreDelta];
+                      const next = [...opt.branchScoreDelta];
                       next[si] = { ...next[si], delta: parseInt(e.target.value) || 0 };
-                      updateOption(i, { scoreDelta: next });
+                      updateOption(i, { branchScoreDelta: next });
                     }}
-                    className="rounded-lg bg-secondary border-0 h-7 text-xs w-20"
+                    className="rounded-lg bg-secondary border-0 h-7 text-xs w-24 min-w-[6rem]"
                   />
                   <Button
                     type="button"
@@ -318,7 +364,7 @@ function ChoiceSlotEditor({
                     className="h-7 w-7 rounded-lg text-destructive hover:bg-destructive/10 flex-shrink-0"
                     onClick={() =>
                       updateOption(i, {
-                        scoreDelta: opt.scoreDelta.filter((_, j) => j !== si),
+                        branchScoreDelta: opt.branchScoreDelta.filter((_, j) => j !== si),
                       })
                     }
                   >
@@ -326,7 +372,7 @@ function ChoiceSlotEditor({
                   </Button>
                 </div>
               ))}
-              {opt.scoreDelta.length === 0 && (
+              {opt.branchScoreDelta.length === 0 && (
                 <p className="text-xs text-muted-foreground/60">없음</p>
               )}
             </div>
@@ -580,6 +626,7 @@ interface DialogueEditorProps {
   dialogue: DialogueBasic | null;
   characters: StoryCharacterWithCharacter[];
   scenes?: SceneBasic[];
+  branchKeys?: BranchKeyItem[];
   saving: boolean;
   storyId: number;
   episodeId: number;
@@ -600,6 +647,7 @@ export function DialogueEditor({
   dialogue,
   characters,
   scenes = [],
+  branchKeys = [],
   saving,
   storyId,
   episodeId,
@@ -643,20 +691,6 @@ export function DialogueEditor({
     }
   }, [dialogue, form]);
 
-  // Initialize default data when type changes to a structured type
-  const currentType = form.watch("type");
-  useEffect(() => {
-    const defaults = TYPE_DEFAULT_DATA[currentType];
-    if (!defaults) return;
-    const current = safeParseJson(form.getValues("data"));
-    // Only set defaults if the current data doesn't match the expected shape
-    const keys = Object.keys(defaults);
-    const hasValidData = keys.some((k) => k in current);
-    if (!hasValidData) {
-      form.setValue("data", JSON.stringify(defaults));
-    }
-  }, [currentType, form]);
-
   const currentTypeValue = form.watch("type");
 
   const createBranchDialogue = async (englishText: string, koreanText: string) => {
@@ -687,8 +721,8 @@ export function DialogueEditor({
   };
 
   return (
-    <div className="col-span-4 min-w-0">
-      <Card className="rounded-2xl border-border/50 shadow-sm flex flex-col overflow-hidden">
+    <div className="col-span-4 min-w-0 sticky top-4 self-start h-[calc(100vh-6rem)] flex flex-col">
+      <Card className="rounded-2xl border-border/50 shadow-sm flex flex-col overflow-hidden flex-1 min-h-0">
         <CardHeader className="pb-3 flex-shrink-0">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-medium">Dialog Editor</CardTitle>
@@ -718,7 +752,7 @@ export function DialogueEditor({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4 p-4 pt-0">
+        <CardContent className="space-y-4 p-4 pt-0 overflow-y-auto flex-1 min-h-0">
           {dialogue ? (
             <form onSubmit={form.handleSubmit((data) => onSave(data))}>
               <div className="space-y-4">
@@ -728,9 +762,18 @@ export function DialogueEditor({
                     <Label className="text-sm font-medium">Type</Label>
                     <Select
                       value={form.watch("type")}
-                      onValueChange={(val: DialogueFormData["type"]) =>
-                        form.setValue("type", val)
-                      }
+                      onValueChange={(val: DialogueFormData["type"]) => {
+                        form.setValue("type", val);
+                        const defaults = TYPE_DEFAULT_DATA[val];
+                        if (defaults) {
+                          const current = safeParseJson(form.getValues("data"));
+                          const keys = Object.keys(defaults);
+                          const hasValidData = keys.some((k) => k in current);
+                          if (!hasValidData) {
+                            form.setValue("data", JSON.stringify(defaults));
+                          }
+                        }
+                      }}
                     >
                       <SelectTrigger className="mt-2 rounded-xl bg-secondary border-0">
                         <SelectValue />
@@ -865,7 +908,7 @@ export function DialogueEditor({
                               value={field.value}
                               onChange={field.onChange}
                               createBranchDialogue={sceneId ? createBranchDialogue : undefined}
-                              scenes={scenes}
+                              branchKeys={branchKeys}
                             />
                           );
                         }

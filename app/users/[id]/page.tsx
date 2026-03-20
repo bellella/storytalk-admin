@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { AdminLayout } from "@/components/admin/admin-layout";
@@ -30,6 +30,12 @@ import {
   UserCircle,
   Calendar,
   Loader2,
+  Gamepad2,
+  ChevronDown,
+  ChevronRight,
+  Trash2,
+  Save,
+  RotateCcw,
 } from "lucide-react";
 import {
   useUser,
@@ -37,8 +43,311 @@ import {
   useUserStoryProgress,
   useUserCharacters,
   useUserBookmarks,
+  useUserPlayEpisodes,
+  useDeleteUserPlayEpisode,
+  useDeletePlayEpisodeSlot,
+  useUpdateUserPlayEpisodeData,
+  useResetUserPlayEpisode,
 } from "@/hooks/use-users";
 import { PublishStatus } from "@/types";
+
+function JsonBlock({ label, data }: { label: string; data: unknown }) {
+  const [open, setOpen] = useState(false);
+  const str = data != null ? JSON.stringify(data, null, 2) : "null";
+  return (
+    <div className="rounded-lg border border-border/50 overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-3 py-2 text-left text-sm font-medium bg-secondary/30 hover:bg-secondary/50"
+      >
+        {label}
+        {open ? (
+          <ChevronDown className="w-4 h-4 text-muted-foreground" />
+        ) : (
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        )}
+      </button>
+      {open && (
+        <pre className="p-3 text-xs font-mono bg-muted/30 overflow-x-auto max-h-48 overflow-y-auto">
+          {str}
+        </pre>
+      )}
+    </div>
+  );
+}
+
+function EditableDataBlock({
+  label,
+  data,
+  playEpisodeId,
+  onSave,
+  isSaving,
+}: {
+  label: string;
+  data: unknown;
+  playEpisodeId: number;
+  onSave: (playEpisodeId: number, data: unknown) => void;
+  isSaving: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [editStr, setEditStr] = useState("");
+  const [hasChange, setHasChange] = useState(false);
+  const str = data != null ? JSON.stringify(data, null, 2) : "null";
+
+  const handleOpen = () => {
+    if (!open) {
+      setEditStr(str);
+      setHasChange(false);
+    }
+    setOpen(!open);
+  };
+
+  useEffect(() => {
+    if (open && !hasChange) {
+      setEditStr(str);
+    }
+  }, [open, str, hasChange]);
+
+  const handleSave = () => {
+    try {
+      const parsed = editStr.trim() === "null" ? null : JSON.parse(editStr);
+      onSave(playEpisodeId, parsed);
+      setHasChange(false);
+    } catch (e) {
+      alert("유효한 JSON이 아닙니다.");
+    }
+  };
+
+  return (
+    <div className="rounded-lg border border-border/50 overflow-hidden">
+      <button
+        type="button"
+        onClick={handleOpen}
+        className="w-full flex items-center justify-between px-3 py-2 text-left text-sm font-medium bg-secondary/30 hover:bg-secondary/50"
+      >
+        {label}
+        {open ? (
+          <ChevronDown className="w-4 h-4 text-muted-foreground" />
+        ) : (
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        )}
+      </button>
+      {open && (
+        <div className="p-3 space-y-2">
+          <textarea
+            value={editStr}
+            onChange={(e) => {
+              setEditStr(e.target.value);
+              setHasChange(e.target.value !== str);
+            }}
+            className="w-full p-3 text-xs font-mono bg-muted/30 border border-border rounded-lg min-h-[120px] max-h-48 overflow-y-auto resize-y"
+            spellCheck={false}
+          />
+          <Button
+            size="sm"
+            className="rounded-lg"
+            onClick={handleSave}
+            disabled={!hasChange || isSaving}
+          >
+            {isSaving ? (
+              <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+            ) : (
+              <Save className="w-3 h-3 mr-1" />
+            )}
+            저장
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PlayEpisodeProgressTab({
+  playEpisodes,
+  isLoading,
+  onDelete,
+  deletingId,
+  onDeleteSlot,
+  deletingSlotId,
+  onSaveData,
+  savingDataId,
+  onReset,
+  resettingId,
+}: {
+  playEpisodes: any[];
+  isLoading: boolean;
+  onDelete: (playEpisodeId: number) => void;
+  deletingId: number | null;
+  onDeleteSlot: (playEpisodeId: number, slotId: number) => void;
+  deletingSlotId: number | null;
+  onSaveData: (playEpisodeId: number, data: unknown) => void;
+  savingDataId: number | null;
+  onReset: (playEpisodeId: number) => void;
+  resettingId: number | null;
+}) {
+  if (isLoading) {
+    return (
+      <Card className="border-0 shadow-sm rounded-2xl overflow-hidden">
+        <CardContent className="flex items-center justify-center py-16 text-muted-foreground">
+          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+          로딩 중...
+        </CardContent>
+      </Card>
+    );
+  }
+  if (playEpisodes.length === 0) {
+    return (
+      <Card className="border-0 shadow-sm rounded-2xl overflow-hidden">
+        <CardContent className="text-center py-16 text-muted-foreground text-sm">
+          Play Episode 진행 기록이 없습니다
+        </CardContent>
+      </Card>
+    );
+  }
+  return (
+    <div className="space-y-4">
+      {playEpisodes.map((pe: any) => (
+        <Card key={pe.id} className="border-0 shadow-sm rounded-2xl overflow-hidden">
+          <CardContent className="p-5">
+            <div className="flex gap-4">
+              <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted flex-shrink-0">
+                {pe.episode?.thumbnailUrl ? (
+                  <img
+                    src={pe.episode.thumbnailUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                    <Gamepad2 className="w-8 h-8" />
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-semibold">{pe.episode?.title ?? `Episode #${pe.episodeId}`}</h3>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      title="data·slot 초기화"
+                      className="rounded-lg text-amber-600 hover:text-amber-700 hover:bg-amber-500/10 flex-shrink-0"
+                      onClick={() => {
+                        if (confirm("data와 slot을 모두 초기화하시겠습니까?")) {
+                          onReset(pe.id);
+                        }
+                      }}
+                      disabled={resettingId === pe.id}
+                    >
+                      {resettingId === pe.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <RotateCcw className="w-4 h-4" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10 flex-shrink-0"
+                      onClick={() => {
+                        if (confirm("해당 Play Episode 기록을 삭제하시겠습니까?")) {
+                          onDelete(pe.id);
+                        }
+                      }}
+                      disabled={deletingId === pe.id}
+                    >
+                      {deletingId === pe.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {pe.episode?.story?.title ?? "-"} · #{pe.episode?.order ?? "-"}
+                </p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <Badge variant="secondary" className="rounded-lg text-xs">
+                    {pe.status}
+                  </Badge>
+                  <Badge variant="outline" className="rounded-lg text-xs">
+                    {pe.mode}
+                  </Badge>
+                  {pe.ending && (
+                    <Badge className="rounded-lg text-xs bg-amber-500/10 text-amber-600">
+                      {pe.ending.key}
+                    </Badge>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  시작 {new Date(pe.startedAt).toLocaleString("ko-KR")}
+                  {pe.completedAt && (
+                    <> · 완료 {new Date(pe.completedAt).toLocaleString("ko-KR")}</>
+                  )}
+                </p>
+                {(pe.lastSceneId != null || pe.lastSlotId != null) && (
+                  <p className="text-xs text-muted-foreground mt-1 font-mono">
+                    lastSceneId: {pe.lastSceneId ?? "-"} · lastSlotId: {pe.lastSlotId ?? "-"}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              <JsonBlock label="result" data={pe.result} />
+              <EditableDataBlock
+                label="data"
+                data={pe.data}
+                playEpisodeId={pe.id}
+                onSave={onSaveData}
+                isSaving={savingDataId === pe.id}
+              />
+              {pe.slots?.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Slots ({pe.slots.length})</p>
+                  <div className="space-y-2">
+                    {pe.slots.map((slot: any, i: number) => (
+                      <div
+                        key={slot.id}
+                        className="rounded-lg border border-border/50 p-3 bg-secondary/20"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-xs font-mono text-muted-foreground">
+                            #{i + 1} {slot.type} · order {slot.order} · {slot.status}
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 px-2 rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10"
+                            onClick={() => {
+                              if (confirm("해당 Slot을 삭제하시겠습니까?")) {
+                                onDeleteSlot(pe.id, slot.id);
+                              }
+                            }}
+                            disabled={deletingSlotId === slot.id}
+                          >
+                            {deletingSlotId === slot.id ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <Trash2 className="w-3 h-3" />
+                            )}
+                          </Button>
+                        </div>
+                        <JsonBlock label={`slot.data`} data={slot.data} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
 
 export default function UserDetailPage() {
   const params = useParams();
@@ -53,6 +362,12 @@ export default function UserDetailPage() {
   const { data: characters, isLoading: charLoading } =
     useUserCharacters(userId);
   const { data: bookmarks, isLoading: bmLoading } = useUserBookmarks(userId);
+  const { data: playEpisodes, isLoading: peLoading } =
+    useUserPlayEpisodes(userId);
+  const deletePlayEpisode = useDeleteUserPlayEpisode(userId);
+  const deletePlayEpisodeSlot = useDeletePlayEpisodeSlot(userId);
+  const updatePlayEpisodeData = useUpdateUserPlayEpisodeData(userId);
+  const resetPlayEpisode = useResetUserPlayEpisode(userId);
 
   if (userLoading) {
     return (
@@ -82,6 +397,7 @@ export default function UserDetailPage() {
     { value: "overview", label: "Overview" },
     { value: "story-progress", label: "Story Progress" },
     { value: "episode-progress", label: "Episode Progress" },
+    { value: "play-episode-progress", label: "Play Episode Progress" },
     { value: "characters", label: "Characters" },
     { value: "bookmarks", label: "Bookmarks" },
   ];
@@ -259,6 +575,34 @@ export default function UserDetailPage() {
                 </Table>
               )}
             </Card>
+          </TabsContent>
+
+          {/* Play Episode Progress */}
+          <TabsContent value="play-episode-progress" className="mt-6">
+            <PlayEpisodeProgressTab
+              playEpisodes={playEpisodes ?? []}
+              isLoading={peLoading}
+              onDelete={(id) => deletePlayEpisode.mutate(id)}
+              deletingId={deletePlayEpisode.isPending && deletePlayEpisode.variables != null ? deletePlayEpisode.variables : null}
+              onDeleteSlot={(peId, slotId) => deletePlayEpisodeSlot.mutate({ playEpisodeId: peId, slotId })}
+              deletingSlotId={
+                deletePlayEpisodeSlot.isPending && deletePlayEpisodeSlot.variables != null
+                  ? deletePlayEpisodeSlot.variables.slotId
+                  : null
+              }
+              onSaveData={(peId, data) => updatePlayEpisodeData.mutate({ playEpisodeId: peId, data })}
+              savingDataId={
+                updatePlayEpisodeData.isPending && updatePlayEpisodeData.variables != null
+                  ? updatePlayEpisodeData.variables.playEpisodeId
+                  : null
+              }
+              onReset={(peId) => resetPlayEpisode.mutate(peId)}
+              resettingId={
+                resetPlayEpisode.isPending && resetPlayEpisode.variables != null
+                  ? resetPlayEpisode.variables
+                  : null
+              }
+            />
           </TabsContent>
 
           {/* Episode Progress */}

@@ -84,6 +84,11 @@ export type StoryWithRelations = {
 
 export type EpisodeType = "NOVEL" | "PLAY";
 
+export type BranchKeyItem = {
+  key: string;
+  name: string;
+};
+
 export type EpisodeBasic = {
   id: number;
   storyId: number;
@@ -96,6 +101,7 @@ export type EpisodeBasic = {
   koreanDescription: string | null;
   thumbnailUrl: string | null;
   totalScenes: number | null;
+  data?: { branchKeys?: BranchKeyItem[] } | null;
   status: "DRAFT" | "PUBLISHED" | "HIDDEN" | "ARCHIVED" | "DELETED";
   createdAt: string;
   updatedAt: string;
@@ -104,6 +110,7 @@ export type EpisodeBasic = {
 export type EpisodeWithScenes = EpisodeBasic & {
   scenes: SceneBasic[];
   rewards: EpisodeRewardBasic[];
+  endings?: EndingBasic[];
 };
 
 export type SceneType = "VISUAL" | "CHAT";
@@ -112,13 +119,16 @@ export type SceneBasic = {
   id: number;
   episodeId: number;
   type: SceneType;
-  flowType: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER";
+  flowType: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER" | "BRANCH_AND_TRIGGER";
+  branchKey?: string | null;
+  endingId?: number | null;
   title: string;
   koreanTitle: string | null;
   order: number;
   bgImageUrl: string | null;
   audioUrl: string | null;
   data: Record<string, unknown> | null;
+  status?: "DRAFT" | "PUBLISHED" | "HIDDEN" | "ARCHIVED" | "DELETED";
   createdAt: string;
   updatedAt: string;
   dialogues?: DialogueBasic[];
@@ -155,7 +165,8 @@ export type CharacterBasic = {
   mainImage: string | null;
   description: string;
   personality: string | null;
-  aiPrompt: string | null;
+  chatPrompt: string | null;
+  playEpisodePrompt: string | null;
   status: "DRAFT" | "PUBLISHED" | "HIDDEN" | "ARCHIVED" | "DELETED";
   createdAt: string;
   updatedAt: string;
@@ -253,6 +264,31 @@ export type ReviewItemBasic = {
 export type EpisodeRewardBasic = {
   id: number;
   episodeId: number;
+  type: "CHARACTER_INVITE" | "ITEM";
+  payload: Record<string, unknown>;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type EndingBasic = {
+  id: number;
+  episodeId: number;
+  key: string;
+  name: string;
+  imageUrl: string | null;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type EndingWithRewards = EndingBasic & {
+  rewards: EndingRewardBasic[];
+};
+
+export type EndingRewardBasic = {
+  id: number;
+  endingId: number;
   type: "CHARACTER_INVITE" | "ITEM";
   payload: Record<string, unknown>;
   isActive: boolean;

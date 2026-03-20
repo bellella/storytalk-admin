@@ -20,8 +20,9 @@ export async function POST(
   const body = await req.json();
   const episodeId = parseInt((await params).episodeId);
   const flowType =
-    body.flowType === "BRANCH" ? "BRANCH" :
-    body.flowType === "BRANCH_TRIGGER" ? "BRANCH_TRIGGER" : "NORMAL";
+    body.flowType === "BRANCH_AND_TRIGGER" ? "BRANCH_AND_TRIGGER" :
+    body.flowType === "BRANCH_TRIGGER" ? "BRANCH_TRIGGER" :
+    body.flowType === "BRANCH" ? "BRANCH" : "NORMAL";
 
   const scene = await prisma.scene.create({
     data: {

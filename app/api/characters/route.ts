@@ -25,7 +25,8 @@ export async function POST(req: Request) {
       mainImage: body.mainImage ?? null,
       description: body.description,
       personality: body.personality,
-      aiPrompt: body.aiPrompt,
+      chatPrompt: body.chatPrompt,
+      playEpisodePrompt: body.playEpisodePrompt,
       greetingMessage: body.greetingMessage ?? null,
       isUserSelectable: body.isUserSelectable ?? false,
       minUserLevel:

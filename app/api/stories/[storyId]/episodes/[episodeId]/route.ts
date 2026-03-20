@@ -20,6 +20,7 @@ export async function GET(
         },
       },
       rewards: true,
+      endings: { orderBy: { order: "asc" } },
     },
   });
   return NextResponse.json(episode);

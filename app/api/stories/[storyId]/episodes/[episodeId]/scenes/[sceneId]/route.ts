@@ -19,12 +19,15 @@ export async function GET(
 const SCENE_UPDATE_FIELDS = [
   "type",
   "flowType",
+  "branchKey",
+  "endingId",
   "title",
   "koreanTitle",
   "bgImageUrl",
   "audioUrl",
   "order",
   "data",
+  "status",
 ] as const;
 
 export async function PATCH(
@@ -50,6 +53,10 @@ export async function DELETE(
   { params }: { params: Promise<{ sceneId: string }> }
 ) {
   const { sceneId } = await params;
-  await prisma.scene.delete({ where: { id: parseInt(sceneId) } });
+  const id = parseInt(sceneId);
+  await prisma.$transaction([
+    prisma.dialogue.deleteMany({ where: { sceneId: id } }),
+    prisma.scene.delete({ where: { id } }),
+  ]);
   return NextResponse.json({ ok: true });
 }

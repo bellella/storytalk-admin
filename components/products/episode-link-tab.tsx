@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -51,15 +52,27 @@ export function EpisodeLinkTab({ product }: EpisodeLinkTabProps) {
           </div>
         ) : (
           <div className="space-y-2">
-            {linkedEpisodes.map((ep) => (
+            {linkedEpisodes.map((ep) => {
+              const storyId = ep.episode.storyId ?? ep.episode.story?.id
+              const href = storyId ? `/stories/${storyId}/episodes/${ep.episode.id}` : null
+              return (
               <div
                 key={ep.id}
                 className="flex items-center justify-between p-3 rounded-xl bg-green-50 border border-green-200"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{ep.episode.title}</p>
+                  <div className="min-w-0">
+                    {href ? (
+                      <Link
+                        href={href}
+                        className="text-sm font-medium text-foreground hover:text-primary hover:underline block truncate"
+                      >
+                        {ep.episode.title}
+                      </Link>
+                    ) : (
+                      <p className="text-sm font-medium text-foreground truncate">{ep.episode.title}</p>
+                    )}
                     <p className="text-xs text-muted-foreground">
                       {ep.episode.story?.title ?? "—"} · Ep.{ep.episode.order} ·{" "}
                       <span className="capitalize">{ep.episode.status.toLowerCase()}</span>
@@ -77,7 +90,7 @@ export function EpisodeLinkTab({ product }: EpisodeLinkTabProps) {
                   해제
                 </Button>
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>

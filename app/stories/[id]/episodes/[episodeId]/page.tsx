@@ -16,6 +16,9 @@ import {
   HelpCircle,
   Loader2,
   X,
+  Plus,
+  Key,
+  Trophy,
 } from "lucide-react";
 import {
   Select,
@@ -25,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEpisode, useUpdateEpisode } from "@/hooks/use-episodes";
 import { useStoryCharacters } from "@/hooks/use-story-characters";
 import { ScenesPanel } from "@/components/episodes/scenes-tab/scenes-panel";
@@ -33,9 +37,18 @@ import { DialogueEditor } from "@/components/episodes/scenes-tab/dialogue-editor
 import { ReviewTab } from "@/components/episodes/review-tab";
 import { QuizTab } from "@/components/episodes/quiz-tab";
 import { RewardsTab } from "@/components/episodes/rewards-tab";
+import { EndingsTab } from "@/components/episodes/endings-tab";
 import { ImportExportDialogs } from "@/components/episodes/import-export-dialogs";
 import { ImageUploader } from "@/components/ui/image-uploader";
-import type { SceneBasic, DialogueBasic, EpisodeWithScenes } from "@/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import type { SceneBasic, DialogueBasic, EpisodeWithScenes, BranchKeyItem } from "@/types";
 import { DialogueType, EpisodeType, PlayEpisodeMode } from "@/types";
 
 const tabs = [
@@ -43,9 +56,10 @@ const tabs = [
   { id: "review", label: "Review", icon: BookOpen },
   { id: "quiz", label: "Quiz", icon: HelpCircle },
   { id: "rewards", label: "Rewards", icon: Gift },
+  { id: "endings", label: "Endings", icon: Trophy },
 ];
 
-const VALID_TABS = ["scenes", "review", "quiz", "rewards"] as const;
+const VALID_TABS = ["scenes", "review", "quiz", "rewards", "endings"] as const;
 
 type DialogueFormData = {
   characterId?: number;
@@ -63,11 +77,14 @@ type DialogueFormData = {
 
 type SceneFormData = {
   type: "VISUAL" | "CHAT";
-  flowType: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER";
+  flowType: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER" | "BRANCH_AND_TRIGGER";
+  branchKey: string;
+  endingId: number | null;
   title: string;
   koreanTitle: string;
   bgImageUrl: string;
   data: string;
+  status: "PUBLISHED" | "HIDDEN";
 };
 
 export default function EpisodeDetailPage() {
@@ -111,16 +128,21 @@ export default function EpisodeDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+  const [isBranchKeysOpen, setIsBranchKeysOpen] = useState(false);
 
-  // Sync query data to local state
+  // Sync query data to local state (only when episodeData from server changes)
+  // DO NOT include selectedScene - that would overwrite local updates with stale cache
   useEffect(() => {
     if (episodeData) {
       setEpisode(episodeData);
-      if (!selectedScene && episodeData.scenes?.length > 0) {
-        setSelectedScene(episodeData.scenes[0]);
-      }
+      setSelectedScene((prev) => {
+        if (!episodeData.scenes?.length) return prev;
+        if (!prev) return episodeData.scenes[0];
+        const found = episodeData.scenes.find((s) => s.id === prev.id);
+        return found ?? episodeData.scenes[0];
+      });
     }
-  }, [episodeData, selectedScene]);
+  }, [episodeData]);
 
   // Fetch dialogues when scene changes
   useEffect(() => {
@@ -157,12 +179,25 @@ export default function EpisodeDetailPage() {
         description: episode.description,
         thumbnailUrl: episode.thumbnailUrl ?? null,
         totalScenes: episode.totalScenes ?? null,
+        data: episode.data ?? null,
         status: episode.status,
       },
       {
         onError: (e) => setError(e.message),
       }
     );
+  };
+
+  const branchKeys: BranchKeyItem[] = Array.isArray((episode?.data as any)?.branchKeys)
+    ? ((episode?.data as any)?.branchKeys as BranchKeyItem[])
+    : [];
+
+  const setBranchKeys = (next: BranchKeyItem[]) => {
+    if (!episode) return;
+    setEpisode({
+      ...episode,
+      data: { ...(episode.data as object || {}), branchKeys: next },
+    });
   };
 
   const handleCreateScene = async () => {
@@ -202,10 +237,15 @@ export default function EpisodeDetailPage() {
           body: JSON.stringify({
             type: data.type,
             flowType: data.flowType,
+            branchKey: (data.flowType === "BRANCH" || data.flowType === "BRANCH_AND_TRIGGER")
+              ? (data.branchKey || null)
+              : null,
+            endingId: data.endingId ?? null,
             title: data.title,
             koreanTitle: data.koreanTitle || null,
             bgImageUrl: data.bgImageUrl || null,
-            ...(data.flowType === "BRANCH_TRIGGER" && data.data?.trim()
+            status: data.status,
+            ...((data.flowType === "BRANCH_TRIGGER" || data.flowType === "BRANCH_AND_TRIGGER") && data.data?.trim()
               ? (() => {
                   try { return { data: JSON.parse(data.data) }; } catch { return {}; }
                 })()
@@ -287,9 +327,9 @@ export default function EpisodeDetailPage() {
         throw new Error(err.error || "Failed to save dialogue");
       }
       const updated = await res.json();
-      setDialogues(
-        dialogues.map((d) => (d.id === updated.id ? { ...d, ...updated } : d))
-      );
+      const newList = dialogues.map((d) => (d.id === updated.id ? { ...d, ...updated } : d));
+      setDialogues(newList);
+      setSelectedDialogue((prev) => (prev?.id === updated.id ? { ...prev, ...updated } : prev));
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to save dialogue");
     } finally {
@@ -330,6 +370,25 @@ export default function EpisodeDetailPage() {
       }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to create dialogue");
+    }
+  };
+
+  const handleDeleteScenes = async (sceneIds: number[]) => {
+    if (!episode) return;
+    try {
+      setSaving(true);
+      for (const id of sceneIds) {
+        const res = await fetch(
+          `/api/stories/${storyId}/episodes/${episodeId}/scenes/${id}`,
+          { method: "DELETE" }
+        );
+        if (!res.ok) throw new Error(`Failed to delete scene ${id}`);
+      }
+      await refetch();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to delete scenes");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -388,9 +447,12 @@ export default function EpisodeDetailPage() {
     }
   };
 
+  const queryClient = useQueryClient();
   const handleImportComplete = useCallback(async () => {
-    await refetch();
-  }, [refetch]);
+    await queryClient.invalidateQueries({
+      queryKey: ["stories", storyId, "episodes", episodeId],
+    });
+  }, [queryClient, storyId, episodeId]);
 
   const handleDialoguesChanged = useCallback((newDialogues: DialogueBasic[]) => {
     setDialogues(newDialogues);
@@ -443,159 +505,112 @@ export default function EpisodeDetailPage() {
 
   return (
     <AdminLayout>
-      {/* Header */}
-      <div className="mb-6">
-        <Link
-          href={`/stories/${storyId}?tab=episodes`}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Story
-        </Link>
-        <div className="flex items-start justify-between gap-6">
-          <div className="flex-1 min-w-0 space-y-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-sm text-muted-foreground font-medium">
-                Episode {episode.order}
-              </span>
-              <StatusBadge status={episode.status} />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground font-medium block mb-1">
-                Title
-              </label>
-              <Input
-                value={episode.title}
-                onChange={(e) =>
-                  setEpisode({ ...episode, title: e.target.value })
-                }
-                placeholder="Episode title"
-                className="text-xl font-semibold bg-secondary/50 border-0 rounded-xl h-11"
-              />
-            </div>
-            <div>
-              <label className="text-xs text-muted-foreground font-medium block mb-1">
-                Description
-              </label>
-              <Input
-                value={episode.description ?? ""}
-                onChange={(e) =>
-                  setEpisode({ ...episode, description: e.target.value })
-                }
-                placeholder="Brief description"
-                className="text-base bg-secondary/50 border-0 rounded-xl h-10"
-              />
-            </div>
-            <div className="flex items-end gap-3 flex-wrap">
-              <div className="w-40">
-                <label className="text-xs text-muted-foreground font-medium block mb-1">
-                  Type
-                </label>
-                <Select
-                  value={episode.type ?? "NOVEL"}
-                  onValueChange={(value: EpisodeType) =>
-                    setEpisode({ ...episode, type: value, playMode: value === "PLAY" ? (episode.playMode ?? PlayEpisodeMode.ROLEPLAY) : null })
-                  }
-                >
-                  <SelectTrigger className="rounded-xl bg-secondary/50 border-0 h-10">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="NOVEL" className="rounded-lg">
-                      Novel
-                    </SelectItem>
-                    <SelectItem value="PLAY" className="rounded-lg">
-                      Play
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {episode.type === "PLAY" && (
-                <div className="w-52">
-                  <label className="text-xs text-muted-foreground font-medium block mb-1">
-                    Play Mode
-                  </label>
-                  <Select
-                    value={episode.playMode ?? PlayEpisodeMode.ROLEPLAY}
-                    onValueChange={(value: PlayEpisodeMode) =>
-                      setEpisode({ ...episode, playMode: value })
-                    }
-                  >
-                    <SelectTrigger className="rounded-xl bg-secondary/50 border-0 h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      <SelectItem value={PlayEpisodeMode.ROLEPLAY} className="rounded-lg">
-                        Roleplay (평가 없음)
-                      </SelectItem>
-                      <SelectItem value={PlayEpisodeMode.ROLEPLAY_WITH_EVAL} className="rounded-lg">
-                        Roleplay + Evaluation
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            </div>
-            <div className="w-40">
-              <label className="text-xs text-muted-foreground font-medium block mb-1">
-                Total Scenes
-              </label>
-              <Input
-                type="number"
-                min={0}
-                value={episode.totalScenes ?? ""}
-                onChange={(e) =>
-                  setEpisode({
-                    ...episode,
-                    totalScenes: e.target.value === "" ? null : parseInt(e.target.value),
-                  })
-                }
-                placeholder="e.g. 12"
-                className="text-base bg-secondary/50 border-0 rounded-xl h-10"
-              />
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {episode.scenes.length} scenes · {dialogues.length} dialogs
-            </p>
+      {/* Header - compact single row + tabs */}
+      <div className="mb-4">
+        <div className="flex flex-wrap items-center gap-3 mb-3">
+          <Link
+            href={`/stories/${storyId}?tab=episodes`}
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Link>
+          <span className="text-muted-foreground">|</span>
+          <span className="text-sm font-medium">Episode {episode.order}</span>
+          <StatusBadge status={episode.status} />
+          <span className="text-xs text-muted-foreground">
+            {episode.scenes.length} scenes · {dialogues.length} dialogs
+          </span>
+        </div>
+        <div className="flex flex-wrap items-end gap-4">
+          <Input
+            value={episode.title}
+            onChange={(e) => setEpisode({ ...episode, title: e.target.value })}
+            placeholder="Episode title"
+            className="flex-1 min-w-[200px] max-w-md text-lg font-semibold bg-secondary/50 border-0 rounded-xl h-9"
+          />
+          <Input
+            value={episode.description ?? ""}
+            onChange={(e) => setEpisode({ ...episode, description: e.target.value })}
+            placeholder="Description"
+            className="flex-1 min-w-[180px] max-w-sm text-sm bg-secondary/50 border-0 rounded-xl h-9"
+          />
+          <Select
+            value={episode.type ?? "NOVEL"}
+            onValueChange={(value: EpisodeType) =>
+              setEpisode({ ...episode, type: value, playMode: value === "PLAY" ? (episode.playMode ?? PlayEpisodeMode.ROLEPLAY) : null })
+            }
+          >
+            <SelectTrigger className="w-28 rounded-xl bg-secondary/50 border-0 h-9 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="NOVEL" className="rounded-lg">Novel</SelectItem>
+              <SelectItem value="PLAY" className="rounded-lg">Play</SelectItem>
+            </SelectContent>
+          </Select>
+          {episode.type === "PLAY" && (
+            <Select
+              value={episode.playMode ?? PlayEpisodeMode.ROLEPLAY}
+              onValueChange={(value: PlayEpisodeMode) =>
+                setEpisode({ ...episode, playMode: value })
+              }
+            >
+              <SelectTrigger className="w-40 rounded-xl bg-secondary/50 border-0 h-9 text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                <SelectItem value={PlayEpisodeMode.ROLEPLAY} className="rounded-lg">Roleplay</SelectItem>
+                <SelectItem value={PlayEpisodeMode.ROLEPLAY_WITH_EVAL} className="rounded-lg">Roleplay+Eval</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          <Input
+            type="number"
+            min={0}
+            value={episode.totalScenes ?? ""}
+            onChange={(e) =>
+              setEpisode({ ...episode, totalScenes: e.target.value === "" ? null : parseInt(e.target.value) })
+            }
+            placeholder="Scenes"
+            className="w-20 rounded-xl bg-secondary/50 border-0 h-9 text-sm text-center"
+          />
+          <div className="w-24 flex-shrink-0">
+            <ImageUploader
+              value={episode.thumbnailUrl ?? ""}
+              onChange={(url) => setEpisode({ ...episode, thumbnailUrl: url || null })}
+              label=""
+              aspectRatio="video"
+              maxSizeMB={5}
+            />
           </div>
-          <div className="flex flex-col items-end gap-3 flex-shrink-0">
-            <div className="w-36">
-              <ImageUploader
-                value={episode.thumbnailUrl ?? ""}
-                onChange={(url) =>
-                  setEpisode({ ...episode, thumbnailUrl: url || null })
-                }
-                label="Thumbnail"
-                aspectRatio="video"
-                maxSizeMB={5}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <ImportExportDialogs
-                storyId={storyId}
-                episodeId={episodeId}
-                episodeOrder={episode.order}
-                scenes={episode.scenes}
-                isImportOpen={isImportDialogOpen}
-                isExportOpen={isExportDialogOpen}
-                onImportOpenChange={setIsImportDialogOpen}
-                onExportOpenChange={setIsExportDialogOpen}
-                onImportComplete={handleImportComplete}
-              />
-              <Button
-                className="rounded-xl shadow-lg shadow-primary/25"
-                onClick={handleSaveEpisode}
-                disabled={updateEpisode.isPending}
-              >
-                {updateEpisode.isPending ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Save className="w-4 h-4 mr-2" />
-                )}
-                Save Episode
-              </Button>
-            </div>
-          </div>
+          <Button
+            variant="outline"
+            className="rounded-xl"
+            onClick={() => setIsBranchKeysOpen(true)}
+          >
+            <Key className="w-4 h-4 mr-2" />
+            Branch Keys
+          </Button>
+          <ImportExportDialogs
+            storyId={storyId}
+            episodeId={episodeId}
+            episodeOrder={episode.order}
+            scenes={episode.scenes}
+            isImportOpen={isImportDialogOpen}
+            isExportOpen={isExportDialogOpen}
+            onImportOpenChange={setIsImportDialogOpen}
+            onExportOpenChange={setIsExportDialogOpen}
+            onImportComplete={handleImportComplete}
+          />
+          <Button
+            className="rounded-xl shadow-lg shadow-primary/25 h-9"
+            onClick={handleSaveEpisode}
+            disabled={updateEpisode.isPending}
+          >
+            {updateEpisode.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+            Save
+          </Button>
         </div>
       </div>
 
@@ -619,26 +634,32 @@ export default function EpisodeDetailPage() {
 
       {/* Tabs */}
       <div className="flex items-center gap-1 mb-6 bg-secondary/50 p-1.5 rounded-2xl w-fit">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
-              activeTab === tab.id
-                ? "bg-card text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <tab.icon className="w-4 h-4" />
-            {tab.label}
-          </button>
-        ))}
+        {tabs.map((tab) => {
+          const isEndingsDisabled = tab.id === "endings" && episode.type !== "PLAY";
+          return (
+            <button
+              key={tab.id}
+              onClick={() => !isEndingsDisabled && setActiveTab(tab.id)}
+              disabled={isEndingsDisabled}
+              title={isEndingsDisabled ? "PLAY 타입에서만 사용 가능" : undefined}
+              className={cn(
+                "flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
+                activeTab === tab.id
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+                isEndingsDisabled && "opacity-50 cursor-not-allowed hover:text-muted-foreground"
+              )}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Scenes Tab - main 하나의 스크롤만 사용 */}
       {activeTab === "scenes" && (
-        <div className="grid grid-cols-12 gap-6 min-w-0 overflow-x-hidden">
+        <div className="grid grid-cols-12 gap-6 min-w-0">
           <ScenesPanel
             scenes={episode.scenes}
             selectedScene={selectedScene}
@@ -646,6 +667,10 @@ export default function EpisodeDetailPage() {
             onCreateScene={handleCreateScene}
             onSaveScene={handleSaveScene}
             onReorderScenes={handleReorderScenes}
+            onDeleteScenes={handleDeleteScenes}
+            branchKeys={branchKeys}
+            endings={episode.endings ?? []}
+            onOpenBranchKeys={() => setIsBranchKeysOpen(true)}
             saving={saving}
             storyId={storyId}
             episodeId={episodeId}
@@ -665,6 +690,7 @@ export default function EpisodeDetailPage() {
             dialogue={selectedDialogue}
             characters={storyCharacters}
             scenes={episode.scenes}
+            branchKeys={branchKeys}
             saving={saving}
             storyId={storyId}
             episodeId={episodeId}
@@ -691,6 +717,81 @@ export default function EpisodeDetailPage() {
 
       {/* Rewards Tab */}
       {activeTab === "rewards" && <RewardsTab storyId={storyId} episodeId={episodeId} />}
+
+      {/* Endings Tab (PLAY only) */}
+      {activeTab === "endings" && episode.type === "PLAY" && (
+        <EndingsTab storyId={storyId} episodeId={episodeId} />
+      )}
+      {activeTab === "endings" && episode.type !== "PLAY" && (
+        <div className="py-12 text-center text-muted-foreground">
+          Endings는 PLAY 타입 에피소드에서만 사용할 수 있습니다.
+        </div>
+      )}
+
+      {/* Branch Keys Dialog */}
+      <Dialog open={isBranchKeysOpen} onOpenChange={setIsBranchKeysOpen}>
+        <DialogContent className="max-w-md rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Key className="w-4 h-4" />
+              Branch Keys
+            </DialogTitle>
+            <DialogDescription>
+              Choice Slot의 branchScoreDelta에서 사용할 route key를 정의합니다.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+            {branchKeys.map((bk, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Input
+                  value={bk.key}
+                  placeholder="key (e.g. BADA_ROUTE)"
+                  onChange={(e) => {
+                    const next = [...branchKeys];
+                    next[i] = { ...next[i], key: e.target.value };
+                    setBranchKeys(next);
+                  }}
+                  className="flex-1 rounded-xl bg-secondary border-0 h-8 text-sm font-mono"
+                />
+                <Input
+                  value={bk.name}
+                  placeholder="name"
+                  onChange={(e) => {
+                    const next = [...branchKeys];
+                    next[i] = { ...next[i], name: e.target.value };
+                    setBranchKeys(next);
+                  }}
+                  className="flex-1 rounded-xl bg-secondary border-0 h-8 text-sm"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 rounded-xl text-destructive hover:bg-destructive/10 flex-shrink-0"
+                  onClick={() => setBranchKeys(branchKeys.filter((_, j) => j !== i))}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full rounded-xl"
+              onClick={() => setBranchKeys([...branchKeys, { key: "", name: "" }])}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Branch Key
+            </Button>
+          </div>
+          <DialogFooter>
+            <p className="text-xs text-muted-foreground mr-auto">에피소드 save 필요</p>
+            <Button className="rounded-xl" onClick={() => setIsBranchKeysOpen(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminLayout>
   );
 }

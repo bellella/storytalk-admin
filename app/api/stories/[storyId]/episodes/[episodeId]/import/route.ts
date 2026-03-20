@@ -68,13 +68,14 @@ type ImportData = {
   sceneIndices?: number[];
   scenes?: Array<{
     type?: "VISUAL" | "CHAT";
-    flowType?: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER";
+    flowType?: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER" | "BRANCH_AND_TRIGGER";
     title: string;
     koreanTitle?: string;
     bgImageUrl?: string;
     data?: Record<string, unknown>;
     dialogues: Array<{
       type: string;
+      flowType?: "NORMAL" | "BRANCH";
       speakerRole?: string;
       characterName?: string;
       character?: string;
@@ -216,6 +217,7 @@ export async function POST(
       ) {
         const sceneData = scenesToImport[i];
         const sceneFlowType =
+          sceneData.flowType === "BRANCH_AND_TRIGGER" ? "BRANCH_AND_TRIGGER" :
           sceneData.flowType === "BRANCH_TRIGGER" ? "BRANCH_TRIGGER" :
           sceneData.flowType === "BRANCH" ? "BRANCH" : "NORMAL";
         const scene = await prisma.scene.create({
@@ -270,11 +272,14 @@ export async function POST(
           }
 
           const isUser = dialogueData.speakerRole === "USER";
+          const dialogueFlowType =
+            dialogueData.flowType === "BRANCH" ? "BRANCH" : "NORMAL";
           await prisma.dialogue.create({
             data: {
               sceneId: scene.id,
               order: dialogueIndex + 1,
               type: dialogueType,
+              flowType: dialogueFlowType,
               speakerRole: isUser ? "USER" : "SYSTEM",
               characterId: isUser || isHeading ? null : characterId,
               characterName: isUser || isHeading ? null : charName,

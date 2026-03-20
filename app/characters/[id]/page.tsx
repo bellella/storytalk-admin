@@ -42,7 +42,8 @@ type Character = {
   mainImage: string;
   description: string;
   personality: string | null;
-  aiPrompt: string | null;
+  chatPrompt: string | null;
+  playEpisodePrompt: string | null;
   greetingMessage: string | null;
   images: CharacterImage[];
 };
@@ -51,7 +52,8 @@ type CharacterFormData = {
   name: string;
   description: string;
   personality: string;
-  aiPrompt: string;
+  chatPrompt: string;
+  playEpisodePrompt: string;
   greetingMessage: string;
   avatarImage: string;
   mainImage: string;
@@ -80,7 +82,8 @@ export default function CharacterEditPage() {
         name: "",
         description: "",
         personality: "",
-        aiPrompt: "",
+        chatPrompt: "",
+        playEpisodePrompt: "",
         greetingMessage: "",
         avatarImage: "",
         mainImage: "",
@@ -108,7 +111,8 @@ export default function CharacterEditPage() {
           name: data.name,
           description: data.description,
           personality: data.personality || "",
-          aiPrompt: data.aiPrompt || "",
+          chatPrompt: data.chatPrompt || "",
+          playEpisodePrompt: data.playEpisodePrompt || "",
           greetingMessage: data.greetingMessage || "",
           avatarImage: data.avatarImage,
           mainImage: data.mainImage,
@@ -132,7 +136,8 @@ export default function CharacterEditPage() {
       avatarImage: data.avatarImage || "/placeholder-avatar.png",
       description: data.description,
       personality: data.personality || null,
-      aiPrompt: data.aiPrompt || null,
+      chatPrompt: data.chatPrompt || null,
+      playEpisodePrompt: data.playEpisodePrompt || null,
       greetingMessage: data.greetingMessage || null,
       mainImage: data.mainImage ?? null,
       isUserSelectable: data.isUserSelectable,
@@ -380,15 +385,28 @@ export default function CharacterEditPage() {
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-primary" />
-                  AI Character Prompt
+                  AI Character Prompts
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <Textarea
-                  {...register("aiPrompt")}
-                  className="rounded-xl bg-secondary border-0 min-h-[120px]"
-                  placeholder="Describe how this character should behave and respond in conversations. This will guide the AI when generating dialog for this character..."
-                />
+              <CardContent className="space-y-4">
+                <div>
+                  <Label className="text-sm font-medium">Chat Prompt</Label>
+                  <p className="text-xs text-muted-foreground mt-0.5 mb-2">캐릭터 채팅 시 사용되는 프롬프트</p>
+                  <Textarea
+                    {...register("chatPrompt")}
+                    className="rounded-xl bg-secondary border-0 min-h-[120px]"
+                    placeholder="채팅에서 이 캐릭터가 어떻게 행동하고 응답해야 하는지 설명하세요..."
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Play Episode Prompt</Label>
+                  <p className="text-xs text-muted-foreground mt-0.5 mb-2">Play 에피소드 AI 슬롯에서 사용되는 프롬프트</p>
+                  <Textarea
+                    {...register("playEpisodePrompt")}
+                    className="rounded-xl bg-secondary border-0 min-h-[120px]"
+                    placeholder="Play 에피소드에서 이 캐릭터가 어떻게 행동하고 응답해야 하는지 설명하세요..."
+                  />
+                </div>
               </CardContent>
             </Card>
 

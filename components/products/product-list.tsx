@@ -96,12 +96,23 @@ export function ProductList({ products }: ProductListProps) {
                         <AlertCircle className="w-3.5 h-3.5" />
                         미연결
                       </span>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">
-                        {product.episodes[0]?.episode.story?.title} · Ep.
-                        {product.episodes[0]?.episode.order}
-                      </span>
-                    )
+                    ) : (() => {
+                      const ep = product.episodes[0]?.episode
+                      const storyId = ep?.storyId ?? ep?.story?.id
+                      const href = storyId && ep ? `/stories/${storyId}/episodes/${ep.id}` : null
+                      return href ? (
+                        <Link
+                          href={href}
+                          className="text-xs text-muted-foreground hover:text-primary hover:underline transition-colors"
+                        >
+                          {ep?.story?.title ?? "—"} · Ep.{ep?.order}
+                        </Link>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">
+                          {ep?.story?.title ?? "—"} · Ep.{ep?.order}
+                        </span>
+                      )
+                    })()
                   ) : (
                     <span className="text-xs text-muted-foreground">—</span>
                   )}

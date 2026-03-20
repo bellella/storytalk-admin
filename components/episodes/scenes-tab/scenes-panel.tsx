@@ -1,6 +1,6 @@
 "use client";
 
-import type { SceneBasic, SceneType, SceneFlowTypeValue } from "@/types";
+import type { SceneBasic, SceneType, SceneFlowTypeValue, BranchKeyItem, EndingBasic } from "@/types";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import {
@@ -34,20 +34,26 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, GripVertical, ChevronRight, Settings2, Save, Loader2, X } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Plus, GripVertical, ChevronRight, Settings2, Save, Loader2, X, Trash2 } from "lucide-react";
 import { ImageUploader } from "@/components/ui/image-uploader";
 import { cn } from "@/lib/utils";
 
 type SceneFormData = {
   type: SceneType;
   flowType: SceneFlowTypeValue;
+  branchKey: string;
+  endingId: number | null;
   title: string;
   koreanTitle: string;
   bgImageUrl: string;
   data: string;
+  status: "PUBLISHED" | "HIDDEN";
 };
 
 // ── Branch Trigger Editor (Scene level) ──────────────────────────────────────
@@ -59,24 +65,25 @@ function safeParseJson(v: string): Record<string, unknown> {
 function SceneBranchTriggerEditor({
   value,
   onChange,
-  scenes = [],
+  branchKeys = [],
 }: {
   value: string;
   onChange: (v: string) => void;
-  scenes?: SceneBasic[];
+  branchKeys?: BranchKeyItem[];
 }) {
   const parsed = safeParseJson(value);
   const threshold = typeof parsed.threshold === "number" ? parsed.threshold : 70;
   const selectionMode = parsed.selectionMode === "RANDOM" ? "RANDOM" : "TOP";
-  const candidates: { sceneId: number }[] = Array.isArray(parsed.candidates)
-    ? (parsed.candidates as { sceneId: number }[])
-    : [];
-  const fallbackSceneIds: number[] = Array.isArray(parsed.fallbackSceneIds)
-    ? (parsed.fallbackSceneIds as number[])
-    : [];
+  // candidateKeys (new) | legacy: candidates (sceneId) → migrate to candidateKeys
+  const rawCandidateKeys = Array.isArray(parsed.candidateKeys)
+    ? (parsed.candidateKeys as string[])
+    : Array.isArray(parsed.candidates)
+      ? (parsed.candidates as { sceneId: number }[]).map((c) => `SCENE_${c.sceneId}`)
+      : [];
+  const candidateKeys = rawCandidateKeys.filter((k): k is string => typeof k === "string");
 
   const emit = (patch: object) =>
-    onChange(JSON.stringify({ threshold, selectionMode, candidates, fallbackSceneIds, ...patch }));
+    onChange(JSON.stringify({ threshold, selectionMode, candidateKeys, ...patch }));
 
   return (
     <div className="space-y-3 p-3 rounded-xl bg-rose-500/5 border border-rose-500/10">
@@ -103,88 +110,71 @@ function SceneBranchTriggerEditor({
         </div>
       </div>
 
-      {/* Candidates */}
+      {/* Candidate Keys */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <Label className="text-xs text-muted-foreground">Candidates (씬 IDs)</Label>
+          <Label className="text-xs text-muted-foreground">Candidate Keys</Label>
           <Button type="button" variant="ghost" size="sm" className="h-6 text-xs rounded-lg px-2"
-            onClick={() => emit({ candidates: [...candidates, { sceneId: 0 }] })}>
+            onClick={() => emit({ candidateKeys: [...candidateKeys, branchKeys[0]?.key ?? ""] })}
+            disabled={branchKeys.length === 0}>
             <Plus className="w-3 h-3 mr-1" /> Add
           </Button>
         </div>
         <div className="space-y-1.5">
-          {candidates.map((c, i) => (
+          {candidateKeys.map((key, i) => (
             <div key={i} className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground w-5 text-right">{i + 1}.</span>
-              <Select
-                value={String(c.sceneId || "")}
-                onValueChange={(v) => {
-                  const next = [...candidates];
-                  next[i] = { sceneId: parseInt(v) || 0 };
-                  emit({ candidates: next });
-                }}
-              >
-                <SelectTrigger className="rounded-xl bg-secondary border-0 h-8 flex-1 text-xs">
-                  <SelectValue placeholder="Scene" />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  {scenes.map((s) => (
-                    <SelectItem key={s.id} value={String(s.id)} className="rounded-lg text-xs">
-                      #{s.id} {s.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {branchKeys.length > 0 ? (
+                <Select
+                  value={key || "__none__"}
+                  onValueChange={(v) => {
+                    const next = [...candidateKeys];
+                    next[i] = v === "__none__" ? "" : v;
+                    emit({ candidateKeys: next });
+                  }}
+                >
+                  <SelectTrigger className="rounded-xl bg-secondary border-0 h-8 flex-1 text-xs font-mono">
+                    <SelectValue placeholder="branch key 선택" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="__none__" className="rounded-lg text-xs text-muted-foreground">—</SelectItem>
+                    {key && !branchKeys.some((bk) => bk.key === key) && (
+                      <SelectItem value={key} className="rounded-lg text-xs font-mono text-muted-foreground">
+                        {key} (custom)
+                      </SelectItem>
+                    )}
+                    {branchKeys.map((bk) => (
+                      <SelectItem key={bk.key} value={bk.key} className="rounded-lg text-xs font-mono">
+                        {bk.key}
+                        {bk.name && <span className="text-muted-foreground ml-1">({bk.name})</span>}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  value={key}
+                  placeholder="에피소드에서 Branch Keys 정의 필요"
+                  onChange={(e) => {
+                    const next = [...candidateKeys];
+                    next[i] = e.target.value;
+                    emit({ candidateKeys: next });
+                  }}
+                  className="flex-1 rounded-xl bg-secondary border-0 h-8 text-xs font-mono"
+                />
+              )}
               <Button type="button" variant="ghost" size="icon"
                 className="h-8 w-8 rounded-xl text-destructive hover:bg-destructive/10 flex-shrink-0"
-                onClick={() => emit({ candidates: candidates.filter((_, j) => j !== i) })}>
+                onClick={() => emit({ candidateKeys: candidateKeys.filter((_, j) => j !== i) })}>
                 <X className="w-3.5 h-3.5" />
               </Button>
             </div>
           ))}
-          {candidates.length === 0 && <p className="text-xs text-muted-foreground">No candidates</p>}
-        </div>
-      </div>
-
-      {/* Fallback Scene IDs */}
-      <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <Label className="text-xs text-muted-foreground">Fallback Scene IDs</Label>
-          <Button type="button" variant="ghost" size="sm" className="h-6 text-xs rounded-lg px-2"
-            onClick={() => emit({ fallbackSceneIds: [...fallbackSceneIds, 0] })}>
-            <Plus className="w-3 h-3 mr-1" /> Add
-          </Button>
-        </div>
-        <div className="space-y-1.5">
-          {fallbackSceneIds.map((id, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground w-5 text-right">{i + 1}.</span>
-              <Select
-                value={String(id || "")}
-                onValueChange={(v) => {
-                  const next = [...fallbackSceneIds];
-                  next[i] = parseInt(v) || 0;
-                  emit({ fallbackSceneIds: next });
-                }}
-              >
-                <SelectTrigger className="rounded-xl bg-secondary border-0 h-8 flex-1 text-xs">
-                  <SelectValue placeholder="Scene" />
-                </SelectTrigger>
-                <SelectContent className="rounded-xl">
-                  {scenes.map((s) => (
-                    <SelectItem key={s.id} value={String(s.id)} className="rounded-lg text-xs">
-                      #{s.id} {s.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button type="button" variant="ghost" size="icon"
-                className="h-8 w-8 rounded-xl text-destructive hover:bg-destructive/10 flex-shrink-0"
-                onClick={() => emit({ fallbackSceneIds: fallbackSceneIds.filter((_, j) => j !== i) })}>
-                <X className="w-3.5 h-3.5" />
-              </Button>
-            </div>
-          ))}
+          {candidateKeys.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              {branchKeys.length === 0 ? "에피소드에서 Branch Keys를 먼저 정의하세요" : "No candidates"}
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -198,6 +188,10 @@ interface ScenesPanelProps {
   onCreateScene: () => void;
   onSaveScene: (data: SceneFormData) => void;
   onReorderScenes: (reorderedScenes: SceneBasic[]) => void;
+  onDeleteScenes?: (sceneIds: number[]) => Promise<void>;
+  branchKeys?: BranchKeyItem[];
+  endings?: EndingBasic[];
+  onOpenBranchKeys?: () => void;
   saving: boolean;
   storyId: number;
   episodeId: number;
@@ -206,13 +200,17 @@ interface ScenesPanelProps {
 function SortableSceneItem({
   scene,
   isSelected,
+  isDeleteSelected,
   onSelect,
   onOpenSettings,
+  onToggleDeleteSelect,
 }: {
   scene: SceneBasic;
   isSelected: boolean;
+  isDeleteSelected?: boolean;
   onSelect: () => void;
   onOpenSettings: () => void;
+  onToggleDeleteSelect?: (e: React.MouseEvent) => void;
 }) {
   const {
     attributes,
@@ -231,11 +229,21 @@ function SortableSceneItem({
   return (
     <div ref={setNodeRef} style={style}>
       <div className="group flex items-center gap-1">
+        {onToggleDeleteSelect && (
+          <input
+            type="checkbox"
+            checked={isDeleteSelected}
+            onChange={(e) => { e.stopPropagation(); onToggleDeleteSelect(e as unknown as React.MouseEvent); }}
+            onClick={(e) => e.stopPropagation()}
+            className="mt-0.5 accent-primary cursor-pointer flex-shrink-0"
+          />
+        )}
         <button
           onClick={onSelect}
           className={cn(
             "flex-1 flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200 min-w-0",
             isSelected ? "bg-primary text-primary-foreground" : "hover:bg-secondary",
+            !isSelected && scene.status === "HIDDEN" && "bg-muted",
             isDragging && "opacity-50 shadow-lg"
           )}
         >
@@ -291,6 +299,14 @@ function SortableSceneItem({
                   TRIGGER
                 </span>
               )}
+              {scene.flowType === "BRANCH_AND_TRIGGER" && (
+                <span className={cn(
+                  "px-1.5 py-0.5 rounded text-[10px] font-medium",
+                  isSelected ? "bg-primary-foreground/20 text-primary-foreground" : "bg-amber-500/10 text-amber-600"
+                )}>
+                  BRANCH+TRIGGER
+                </span>
+              )}
             </p>
           </div>
           <ChevronRight
@@ -324,11 +340,47 @@ export function ScenesPanel({
   onCreateScene,
   onSaveScene,
   onReorderScenes,
+  onDeleteScenes,
+  branchKeys = [],
+  endings = [],
+  onOpenBranchKeys,
   saving,
 }: ScenesPanelProps) {
   const sceneForm = useForm<SceneFormData>({
-    defaultValues: { type: "VISUAL", flowType: "NORMAL", title: "", koreanTitle: "", bgImageUrl: "", data: "{}" },
+    defaultValues: { type: "VISUAL", flowType: "NORMAL", branchKey: "", endingId: null, title: "", koreanTitle: "", bgImageUrl: "", data: "{}", status: "PUBLISHED" },
   });
+
+  const [selectedForDelete, setSelectedForDelete] = useState<Set<number>>(new Set());
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const toggleSceneForDelete = (e: React.MouseEvent, sceneId: number) => {
+    e.stopPropagation();
+    setSelectedForDelete((prev) => {
+      const next = new Set(prev);
+      if (next.has(sceneId)) next.delete(sceneId);
+      else next.add(sceneId);
+      return next;
+    });
+  };
+
+  const allSelected = scenes.length > 0 && selectedForDelete.size === scenes.length;
+  const toggleSelectAll = () => {
+    if (allSelected) setSelectedForDelete(new Set());
+    else setSelectedForDelete(new Set(scenes.map((s) => s.id)));
+  };
+
+  const handleDeleteSelected = async () => {
+    if (!onDeleteScenes || selectedForDelete.size === 0) return;
+    try {
+      setDeleting(true);
+      await onDeleteScenes(Array.from(selectedForDelete));
+      setIsDeleteConfirmOpen(false);
+      setSelectedForDelete(new Set());
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -339,13 +391,19 @@ export function ScenesPanel({
 
   useEffect(() => {
     if (selectedScene) {
+      const s = selectedScene.status === "PUBLISHED" || selectedScene.status === "HIDDEN"
+        ? selectedScene.status
+        : "PUBLISHED";
       sceneForm.reset({
         type: selectedScene.type || "VISUAL",
         flowType: selectedScene.flowType ?? "NORMAL",
+        branchKey: selectedScene.branchKey ?? "",
+        endingId: selectedScene.endingId ?? null,
         title: selectedScene.title,
         koreanTitle: selectedScene.koreanTitle || "",
         bgImageUrl: selectedScene.bgImageUrl || "",
         data: selectedScene.data ? JSON.stringify(selectedScene.data) : "{}",
+        status: s,
       });
     }
   }, [selectedScene, sceneForm]);
@@ -365,12 +423,35 @@ export function ScenesPanel({
       {/* Scenes List */}
       <Card className="rounded-2xl border-border/50 shadow-sm flex flex-col overflow-hidden">
         <CardHeader className="pb-3 flex-shrink-0">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <CardTitle className="text-base font-medium">Scenes</CardTitle>
-            <Button size="sm" className="rounded-xl h-8" onClick={onCreateScene}>
-              <Plus className="w-3 h-3 mr-1" />
-              Add
-            </Button>
+            <div className="flex items-center gap-1.5">
+              {onDeleteScenes && scenes.length > 0 && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="rounded-xl h-8 text-muted-foreground hover:text-foreground"
+                  onClick={toggleSelectAll}
+                >
+                  {allSelected ? "전체 해제" : "전체 선택"}
+                </Button>
+              )}
+              {onDeleteScenes && selectedForDelete.size > 0 && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-xl h-8 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20"
+                  onClick={() => setIsDeleteConfirmOpen(true)}
+                >
+                  <Trash2 className="w-3.5 h-3.5 mr-1" />
+                  선택 삭제 ({selectedForDelete.size})
+                </Button>
+              )}
+              <Button size="sm" className="rounded-xl h-8" onClick={onCreateScene}>
+                <Plus className="w-3 h-3 mr-1" />
+                Add
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-1 p-3 pt-0">
@@ -388,11 +469,13 @@ export function ScenesPanel({
                   key={scene.id}
                   scene={scene}
                   isSelected={selectedScene?.id === scene.id}
+                  isDeleteSelected={selectedForDelete.has(scene.id)}
                   onSelect={() => onSelectScene(scene)}
                   onOpenSettings={() => {
                     onSelectScene(scene);
                     setIsSettingsOpen(true);
                   }}
+                  onToggleDeleteSelect={onDeleteScenes ? (e) => toggleSceneForDelete(e, scene.id) : undefined}
                 />
               ))}
             </SortableContext>
@@ -456,10 +539,128 @@ export function ScenesPanel({
                       <SelectItem value="NORMAL" className="rounded-lg">NORMAL</SelectItem>
                       <SelectItem value="BRANCH" className="rounded-lg">BRANCH</SelectItem>
                       <SelectItem value="BRANCH_TRIGGER" className="rounded-lg">BRANCH_TRIGGER</SelectItem>
+                      <SelectItem value="BRANCH_AND_TRIGGER" className="rounded-lg">BRANCH_AND_TRIGGER</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
+
+              {(sceneForm.watch("flowType") === "BRANCH" ||
+                sceneForm.watch("flowType") === "BRANCH_AND_TRIGGER") && (
+                <div>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs font-medium">Branch Key</Label>
+                    {branchKeys.length === 0 && onOpenBranchKeys && (
+                      <button
+                        type="button"
+                        onClick={onOpenBranchKeys}
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Branch Keys 정의 →
+                      </button>
+                    )}
+                  </div>
+                  <Select
+                    value={sceneForm.watch("branchKey") || "__none__"}
+                    onValueChange={(v) =>
+                      sceneForm.setValue("branchKey", v === "__none__" ? "" : v)
+                    }
+                    disabled={branchKeys.length === 0}
+                  >
+                    <SelectTrigger className="mt-1 rounded-xl bg-secondary border-0 h-9 text-sm font-mono">
+                      <SelectValue
+                        placeholder={
+                          branchKeys.length === 0
+                            ? "상단 Branch Keys에서 키를 정의하세요"
+                            : "branch key 선택"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      <SelectItem value="__none__" className="rounded-lg text-xs text-muted-foreground">
+                        —
+                      </SelectItem>
+                      {sceneForm.watch("branchKey") &&
+                        branchKeys.length > 0 &&
+                        !branchKeys.some((bk) => bk.key === sceneForm.watch("branchKey")) && (
+                          <SelectItem
+                            value={sceneForm.watch("branchKey")}
+                            className="rounded-lg text-xs font-mono text-muted-foreground"
+                          >
+                            {sceneForm.watch("branchKey")} (custom)
+                          </SelectItem>
+                        )}
+                      {branchKeys.map((bk) => (
+                        <SelectItem key={bk.key} value={bk.key} className="rounded-lg text-xs font-mono">
+                          {bk.key}
+                          {bk.name && (
+                            <span className="text-muted-foreground ml-1">({bk.name})</span>
+                          )}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {branchKeys.length === 0 && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      에피소드 상단 [Branch Keys] 버튼에서 키를 추가한 뒤 Save하세요.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
+                <Label className="text-xs font-medium">엔딩 여부</Label>
+                <div className="flex items-center gap-3">
+                  <Switch
+                    checked={!!sceneForm.watch("endingId")}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        if (endings.length > 0) {
+                          sceneForm.setValue("endingId", endings[0].id);
+                        }
+                      } else {
+                        sceneForm.setValue("endingId", null);
+                      }
+                    }}
+                  />
+                  {!!sceneForm.watch("endingId") && endings.length > 0 && (
+                    <Select
+                      value={String(sceneForm.watch("endingId") || "")}
+                      onValueChange={(v) =>
+                        sceneForm.setValue("endingId", v ? parseInt(v) : null)
+                      }
+                    >
+                      <SelectTrigger className="w-[200px] rounded-xl bg-secondary border-0 h-8 text-sm font-mono">
+                        <SelectValue placeholder="엔딩 선택" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        {sceneForm.watch("endingId") &&
+                          !endings.some((e) => e.id === sceneForm.watch("endingId")) && (
+                            <SelectItem
+                              value={String(sceneForm.watch("endingId"))}
+                              className="rounded-lg text-xs text-muted-foreground"
+                            >
+                              #{sceneForm.watch("endingId")} (삭제됨)
+                            </SelectItem>
+                          )}
+                        {endings.map((e) => (
+                          <SelectItem key={e.id} value={String(e.id)} className="rounded-lg text-xs font-mono">
+                            {e.key}
+                            {e.name && (
+                              <span className="text-muted-foreground ml-1">({e.name})</span>
+                            )}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </div>
+              </div>
+              {!!sceneForm.watch("endingId") && endings.length === 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Endings 탭에서 엔딩을 먼저 추가하세요. (PLAY 타입 에피소드)
+                </p>
+              )}
 
               <div>
                 <Label className="text-xs font-medium">Title</Label>
@@ -479,14 +680,30 @@ export function ScenesPanel({
                 />
               </div>
 
-              {sceneForm.watch("flowType") === "BRANCH_TRIGGER" && (
+              <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/50">
+                <Label className="text-xs font-medium">Status</Label>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">
+                    {sceneForm.watch("status") === "PUBLISHED" ? "PUBLISHED" : "HIDDEN"}
+                  </span>
+                  <Switch
+                    checked={sceneForm.watch("status") === "PUBLISHED"}
+                    onCheckedChange={(checked) =>
+                      sceneForm.setValue("status", checked ? "PUBLISHED" : "HIDDEN")
+                    }
+                  />
+                </div>
+              </div>
+
+              {(sceneForm.watch("flowType") === "BRANCH_TRIGGER" ||
+                sceneForm.watch("flowType") === "BRANCH_AND_TRIGGER") && (
                 <div>
                   <Label className="text-xs font-medium">Branch Trigger 설정</Label>
                   <div className="mt-1">
                     <SceneBranchTriggerEditor
                       value={sceneForm.watch("data")}
                       onChange={(v) => sceneForm.setValue("data", v)}
-                      scenes={scenes}
+                      branchKeys={branchKeys}
                     />
                   </div>
                 </div>
@@ -517,6 +734,37 @@ export function ScenesPanel({
               </Button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Scene multi-delete confirm */}
+      <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>선택 씬 삭제</DialogTitle>
+            <DialogDescription>
+              선택한 {selectedForDelete.size}개 씬을 삭제합니다. 되돌릴 수 없습니다.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              className="rounded-xl"
+              onClick={() => setIsDeleteConfirmOpen(false)}
+              disabled={deleting}
+            >
+              취소
+            </Button>
+            <Button
+              variant="destructive"
+              className="rounded-xl"
+              onClick={handleDeleteSelected}
+              disabled={deleting}
+            >
+              {deleting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              삭제
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

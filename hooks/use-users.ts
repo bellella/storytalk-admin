@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useUsers(search = "") {
   return useQuery({
@@ -73,6 +73,114 @@ export function useUserBookmarks(userId: number) {
       return res.json();
     },
     enabled: !!userId,
+  });
+}
+
+export function useUserPlayEpisodes(userId: number) {
+  return useQuery({
+    queryKey: ["users", userId, "play-episodes"],
+    queryFn: async () => {
+      const res = await fetch(`/api/users/${userId}/play-episodes`);
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+    enabled: !!userId,
+  });
+}
+
+export function useUpdateUserPlayEpisodeData(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      playEpisodeId,
+      data,
+    }: {
+      playEpisodeId: number;
+      data: unknown;
+    }) => {
+      const res = await fetch(
+        `/api/users/${userId}/play-episodes/${playEpisodeId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data }),
+        }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to update");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId, "play-episodes"] });
+    },
+  });
+}
+
+export function useResetUserPlayEpisode(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (playEpisodeId: number) => {
+      const res = await fetch(
+        `/api/users/${userId}/play-episodes/${playEpisodeId}/reset`,
+        { method: "POST" }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to reset");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId, "play-episodes"] });
+    },
+  });
+}
+
+export function useDeleteUserPlayEpisode(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (playEpisodeId: number) => {
+      const res = await fetch(
+        `/api/users/${userId}/play-episodes/${playEpisodeId}`,
+        { method: "DELETE" }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to delete");
+      }
+      return res.json() as Promise<{ deleted: number }>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId, "play-episodes"] });
+    },
+  });
+}
+
+export function useDeletePlayEpisodeSlot(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      playEpisodeId,
+      slotId,
+    }: {
+      playEpisodeId: number;
+      slotId: number;
+    }) => {
+      const res = await fetch(
+        `/api/users/${userId}/play-episodes/${playEpisodeId}/slots/${slotId}`,
+        { method: "DELETE" }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to delete");
+      }
+      return res.json() as Promise<{ deleted: number }>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId, "play-episodes"] });
+    },
   });
 }
 

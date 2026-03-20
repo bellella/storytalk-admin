@@ -26,6 +26,7 @@ import {
   Bot,
   Target,
   Upload,
+  Download,
   Trash2,
   Loader2,
 } from "lucide-react";
@@ -85,11 +86,15 @@ interface DialogueTimelineProps {
 function SortableDialogueItem({
   dialogue,
   isSelected,
+  isDeleteSelected,
   onSelect,
+  onToggleDeleteSelect,
 }: {
   dialogue: DialogueBasic;
   isSelected: boolean;
+  isDeleteSelected?: boolean;
   onSelect: () => void;
+  onToggleDeleteSelect?: (e: React.MouseEvent) => void;
 }) {
   const {
     attributes,
@@ -107,14 +112,24 @@ function SortableDialogueItem({
 
   return (
     <div ref={setNodeRef} style={style}>
-      <button
-        onClick={onSelect}
-        className={cn(
-          "w-full flex items-start gap-3 p-3 rounded-xl text-left transition-all duration-200",
-          isSelected ? "bg-primary/10 ring-2 ring-primary" : "hover:bg-secondary",
-          isDragging && "opacity-50 shadow-lg"
+      <div className="group flex items-center gap-1">
+        {onToggleDeleteSelect && (
+          <input
+            type="checkbox"
+            checked={isDeleteSelected}
+            onChange={(e) => { e.stopPropagation(); onToggleDeleteSelect(e as unknown as React.MouseEvent); }}
+            onClick={(e) => e.stopPropagation()}
+            className="mt-1 accent-primary cursor-pointer flex-shrink-0"
+          />
         )}
-      >
+        <button
+          onClick={onSelect}
+          className={cn(
+            "flex-1 w-full flex items-start gap-3 p-3 rounded-xl text-left transition-all duration-200",
+            isSelected ? "bg-primary/10 ring-2 ring-primary" : "hover:bg-secondary",
+            isDragging && "opacity-50 shadow-lg"
+          )}
+        >
         <div
           {...attributes}
           {...listeners}
@@ -177,7 +192,8 @@ function SortableDialogueItem({
             {dialogue.englishText}
           </p>
         </div>
-      </button>
+        </button>
+      </div>
     </div>
   );
 }
@@ -204,9 +220,54 @@ export function DialogueTimeline({
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState<string | null>(null);
 
+  // Export state
+  const [isExportOpen, setIsExportOpen] = useState(false);
+
   // Delete all state
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [deletingAll, setDeletingAll] = useState(false);
+
+  // Multi-select delete state
+  const [selectedForDelete, setSelectedForDelete] = useState<Set<number>>(new Set());
+  const [isDeleteSelectedConfirmOpen, setIsDeleteSelectedConfirmOpen] = useState(false);
+  const [deletingSelected, setDeletingSelected] = useState(false);
+
+  const toggleDialogueForDelete = (e: React.MouseEvent, dialogueId: number) => {
+    e.stopPropagation();
+    setSelectedForDelete((prev) => {
+      const next = new Set(prev);
+      if (next.has(dialogueId)) next.delete(dialogueId);
+      else next.add(dialogueId);
+      return next;
+    });
+  };
+
+  const handleDeleteSelected = async () => {
+    if (!sceneId || selectedForDelete.size === 0) return;
+    try {
+      setDeletingSelected(true);
+      for (const id of selectedForDelete) {
+        const res = await fetch(
+          `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues/${id}`,
+          { method: "DELETE" }
+        );
+        if (!res.ok) throw new Error(`Failed to delete dialogue ${id}`);
+      }
+      const res = await fetch(
+        `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`
+      );
+      if (res.ok) {
+        const updated = await res.json();
+        onDialoguesChanged(updated);
+      }
+      setIsDeleteSelectedConfirmOpen(false);
+      setSelectedForDelete(new Set());
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setDeletingSelected(false);
+    }
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -317,6 +378,27 @@ export function DialogueTimeline({
                   <Button
                     size="sm"
                     variant="outline"
+                    className="rounded-xl h-8 gap-1.5 text-xs"
+                    onClick={() => setIsExportOpen(true)}
+                    disabled={dialogues.length === 0}
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    Export
+                  </Button>
+                  {selectedForDelete.size > 0 && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="rounded-xl h-8 gap-1.5 text-xs text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20"
+                      onClick={() => setIsDeleteSelectedConfirmOpen(true)}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      선택 삭제 ({selectedForDelete.size})
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="outline"
                     className="rounded-xl h-8 gap-1.5 text-xs text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20"
                     onClick={() => setIsDeleteConfirmOpen(true)}
                     disabled={dialogues.length === 0}
@@ -352,7 +434,9 @@ export function DialogueTimeline({
                   key={dialogue.id}
                   dialogue={dialogue}
                   isSelected={selectedDialogue?.id === dialogue.id}
+                  isDeleteSelected={selectedForDelete.has(dialogue.id)}
                   onSelect={() => onSelectDialogue(dialogue)}
+                  onToggleDeleteSelect={sceneId ? (e) => toggleDialogueForDelete(e, dialogue.id) : undefined}
                 />
               ))}
             </SortableContext>
@@ -406,6 +490,37 @@ export function DialogueTimeline({
         </DialogContent>
       </Dialog>
 
+      {/* Export Dialog */}
+      <Dialog open={isExportOpen} onOpenChange={setIsExportOpen}>
+        <DialogContent className="max-w-lg rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>대화 Export</DialogTitle>
+            <DialogDescription>
+              현재 씬의 대화 {dialogues.length}개를 JSON으로 내보냅니다. Import 시 사용할 수 있는 형식입니다.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Textarea
+              value={JSON.stringify({ dialogues: dialogues.map((d) => ({ order: d.order, type: d.type, speakerRole: d.speakerRole ?? "SYSTEM", characterName: d.characterName || "", charImageLabel: d.charImageLabel, englishText: d.englishText, koreanText: d.koreanText, imageUrl: d.imageUrl, audioUrl: d.audioUrl, ...(d.aiPromptName != null && { aiPromptName: d.aiPromptName }), data: d.data ?? null, flowType: d.flowType })) }, null, 2)}
+              readOnly
+              className="font-mono text-xs h-52 rounded-xl resize-none"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" className="rounded-xl" onClick={() => setIsExportOpen(false)}>
+              닫기
+            </Button>
+            <Button
+              className="rounded-xl"
+              variant="outline"
+              onClick={() => navigator.clipboard.writeText(JSON.stringify({ dialogues: dialogues.map((d) => ({ order: d.order, type: d.type, speakerRole: d.speakerRole ?? "SYSTEM", characterName: d.characterName || "", charImageLabel: d.charImageLabel, englishText: d.englishText, koreanText: d.koreanText, imageUrl: d.imageUrl, audioUrl: d.audioUrl, ...(d.aiPromptName != null && { aiPromptName: d.aiPromptName }), data: d.data ?? null, flowType: d.flowType })) }, null, 2))}
+            >
+              복사
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Delete All Confirm Dialog */}
       <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
         <DialogContent className="max-w-sm rounded-2xl">
@@ -432,6 +547,37 @@ export function DialogueTimeline({
             >
               {deletingAll && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               전체 삭제
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Selected Confirm Dialog */}
+      <Dialog open={isDeleteSelectedConfirmOpen} onOpenChange={setIsDeleteSelectedConfirmOpen}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>선택 대화 삭제</DialogTitle>
+            <DialogDescription>
+              선택한 {selectedForDelete.size}개 대화를 삭제합니다. 되돌릴 수 없습니다.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              className="rounded-xl"
+              onClick={() => setIsDeleteSelectedConfirmOpen(false)}
+              disabled={deletingSelected}
+            >
+              취소
+            </Button>
+            <Button
+              variant="destructive"
+              className="rounded-xl"
+              onClick={handleDeleteSelected}
+              disabled={deletingSelected}
+            >
+              {deletingSelected && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              삭제
             </Button>
           </DialogFooter>
         </DialogContent>
