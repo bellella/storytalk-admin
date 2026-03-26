@@ -879,7 +879,7 @@ export function DialogueEditor({
                         form.setValue("characterId", id);
                         form.setValue(
                           "characterName",
-                          sc?.name ?? sc?.character.name ?? ""
+                          sc?.name || sc?.character.name || ""
                         );
                       }}
                     >

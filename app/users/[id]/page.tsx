@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -48,7 +49,12 @@ import {
   useDeletePlayEpisodeSlot,
   useUpdateUserPlayEpisodeData,
   useResetUserPlayEpisode,
+  useUpdateCharacterAffinity,
+  useUserCharacterChats,
+  useUpdateMessage,
+  useDeleteMessage,
 } from "@/hooks/use-users";
+import { ChatMessagesTab } from "@/components/users/chat-messages-tab";
 import { PublishStatus } from "@/types";
 
 function JsonBlock({ label, data }: { label: string; data: unknown }) {
@@ -160,6 +166,106 @@ function EditableDataBlock({
         </div>
       )}
     </div>
+  );
+}
+
+function CharacterAffinityCard({
+  cf,
+  onSave,
+}: {
+  cf: any;
+  onSave: (affinity: number) => Promise<unknown>;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(String(cf.affinity));
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    const num = parseInt(value, 10);
+    if (isNaN(num) || num < 0) {
+      alert("0 이상의 정수를 입력하세요.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await onSave(num);
+      setEditing(false);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setValue(String(cf.affinity));
+    setEditing(false);
+  };
+
+  return (
+    <Card className="border-0 shadow-sm rounded-2xl">
+      <CardContent className="p-5">
+        <div className="flex items-start gap-4">
+          <Avatar className="w-14 h-14 ring-2 ring-primary/20">
+            <AvatarImage src={cf.character.avatarImage ?? undefined} />
+            <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
+              {cf.character.name[0]}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-lg">{cf.character.name}</h3>
+            <div className="flex items-center gap-1.5 mt-1">
+              <Heart className="w-4 h-4 text-pink-500 shrink-0" />
+              {editing ? (
+                <div className="flex items-center gap-1.5">
+                  <Input
+                    type="number"
+                    min={0}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    className="h-7 w-24 text-sm px-2"
+                    autoFocus
+                  />
+                  <Button
+                    size="sm"
+                    className="h-7 px-2 text-xs rounded-lg"
+                    onClick={handleSave}
+                    disabled={saving}
+                  >
+                    {saving ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Save className="w-3 h-3" />
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 px-2 text-xs rounded-lg"
+                    onClick={handleCancel}
+                    disabled={saving}
+                  >
+                    ✕
+                  </Button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setEditing(true)}
+                  className="text-sm hover:underline cursor-pointer"
+                >
+                  친밀도 {cf.affinity}
+                </button>
+              )}
+            </div>
+            <Badge variant="outline" className="mt-2 text-xs rounded-lg">
+              {cf.status}
+            </Badge>
+          </div>
+        </div>
+        <div className="mt-4 pt-4 border-t border-border text-xs text-muted-foreground">
+          등록일 {new Date(cf.createdAt).toLocaleDateString("ko-KR")}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -364,10 +470,15 @@ export default function UserDetailPage() {
   const { data: bookmarks, isLoading: bmLoading } = useUserBookmarks(userId);
   const { data: playEpisodes, isLoading: peLoading } =
     useUserPlayEpisodes(userId);
+  const { data: characterChats, isLoading: chatLoading } =
+    useUserCharacterChats(userId);
+  const updateMessage = useUpdateMessage(userId);
+  const deleteMessage = useDeleteMessage(userId);
   const deletePlayEpisode = useDeleteUserPlayEpisode(userId);
   const deletePlayEpisodeSlot = useDeletePlayEpisodeSlot(userId);
   const updatePlayEpisodeData = useUpdateUserPlayEpisodeData(userId);
   const resetPlayEpisode = useResetUserPlayEpisode(userId);
+  const updateAffinity = useUpdateCharacterAffinity(userId);
 
   if (userLoading) {
     return (
@@ -398,6 +509,7 @@ export default function UserDetailPage() {
     { value: "story-progress", label: "Story Progress" },
     { value: "episode-progress", label: "Episode Progress" },
     { value: "play-episode-progress", label: "Play Episode Progress" },
+    { value: "chat-messages", label: "Chat Messages" },
     { value: "characters", label: "Characters" },
     { value: "bookmarks", label: "Bookmarks" },
   ];
@@ -605,6 +717,28 @@ export default function UserDetailPage() {
             />
           </TabsContent>
 
+          {/* Chat Messages */}
+          <TabsContent value="chat-messages" className="mt-6">
+            <ChatMessagesTab
+              chats={characterChats ?? []}
+              isLoading={chatLoading}
+              onEditMessage={(messageId, content) =>
+                updateMessage.mutate({ messageId, content })
+              }
+              onDeleteMessage={(messageId) => deleteMessage.mutate(messageId)}
+              editingId={
+                updateMessage.isPending && updateMessage.variables != null
+                  ? updateMessage.variables.messageId
+                  : null
+              }
+              deletingId={
+                deleteMessage.isPending && deleteMessage.variables != null
+                  ? deleteMessage.variables
+                  : null
+              }
+            />
+          </TabsContent>
+
           {/* Episode Progress */}
           <TabsContent value="episode-progress" className="mt-6">
             <Card className="border-0 shadow-sm rounded-2xl overflow-hidden">
@@ -679,41 +813,13 @@ export default function UserDetailPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {(characters ?? []).map((cf: any) => (
-                  <Card key={cf.id} className="border-0 shadow-sm rounded-2xl">
-                    <CardContent className="p-5">
-                      <div className="flex items-start gap-4">
-                        <Avatar className="w-14 h-14 ring-2 ring-primary/20">
-                          <AvatarImage
-                            src={cf.character.profileImageUrl ?? undefined}
-                          />
-                          <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
-                            {cf.character.name[0]}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg">
-                            {cf.character.name}
-                          </h3>
-                          <div className="flex items-center gap-1.5 mt-1">
-                            <Heart className="w-4 h-4 text-pink-500" />
-                            <span className="text-sm">
-                              친밀도 {cf.affinity}
-                            </span>
-                          </div>
-                          <Badge
-                            variant="outline"
-                            className="mt-2 text-xs rounded-lg"
-                          >
-                            {cf.status}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="mt-4 pt-4 border-t border-border text-xs text-muted-foreground">
-                        등록일{" "}
-                        {new Date(cf.createdAt).toLocaleDateString("ko-KR")}
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <CharacterAffinityCard
+                    key={cf.id}
+                    cf={cf}
+                    onSave={(affinity) =>
+                      updateAffinity.mutateAsync({ friendId: cf.id, affinity })
+                    }
+                  />
                 ))}
                 {(characters ?? []).length === 0 && (
                   <div className="col-span-3 text-center py-16 text-muted-foreground text-sm">

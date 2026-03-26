@@ -6,7 +6,8 @@
       "Bash(npx tsc:*)",
       "Bash(npx prisma:*)",
       "Bash(wc:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git -C /Users/miinaa/projects/storytalk-admin diff HEAD -- components/episodes/scenes-tab/scenes-panel.tsx)"
     ]
   }
 }

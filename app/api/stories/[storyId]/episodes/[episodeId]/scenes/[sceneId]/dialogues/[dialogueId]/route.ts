@@ -179,6 +179,7 @@ export async function PATCH(
   const dialogue = await prisma.dialogue.update({
     where: { id: parseInt((await params).dialogueId) },
     data,
+    include: { character: true },
   });
   return NextResponse.json(dialogue);
 }

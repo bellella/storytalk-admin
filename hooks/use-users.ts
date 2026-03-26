@@ -64,6 +64,33 @@ export function useUserCharacters(userId: number) {
   });
 }
 
+export function useUpdateCharacterAffinity(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      friendId,
+      affinity,
+    }: {
+      friendId: number;
+      affinity: number;
+    }) => {
+      const res = await fetch(`/api/users/${userId}/friends/${friendId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ affinity }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to update affinity");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId, "friends"] });
+    },
+  });
+}
+
 export function useUserBookmarks(userId: number) {
   return useQuery({
     queryKey: ["users", userId, "bookmarks"],
@@ -154,6 +181,65 @@ export function useDeleteUserPlayEpisode(userId: number) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users", userId, "play-episodes"] });
+    },
+  });
+}
+
+export function useUserCharacterChats(userId: number) {
+  return useQuery({
+    queryKey: ["users", userId, "character-chats"],
+    queryFn: async () => {
+      const res = await fetch(`/api/users/${userId}/character-chats`);
+      if (!res.ok) throw new Error("Failed to fetch chats");
+      return res.json();
+    },
+    enabled: !!userId,
+  });
+}
+
+export function useUpdateMessage(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      messageId,
+      content,
+    }: { messageId: number; content: string }) => {
+      const res = await fetch(
+        `/api/users/${userId}/messages/${messageId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to update");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId, "character-chats"] });
+    },
+  });
+}
+
+export function useDeleteMessage(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (messageId: number) => {
+      const res = await fetch(
+        `/api/users/${userId}/messages/${messageId}`,
+        { method: "DELETE" }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to delete");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId, "character-chats"] });
     },
   });
 }
