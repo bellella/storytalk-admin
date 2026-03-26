@@ -322,11 +322,15 @@ export type UserWhereInput = {
   userQuizSessions?: Prisma.UserQuizSessionListRelationFilter
   characterChats?: Prisma.CharacterChatListRelationFilter
   userPlayEpisodes?: Prisma.UserPlayEpisodeListRelationFilter
+  userEpisodeLikes?: Prisma.UserEpisodeLikeListRelationFilter
   products?: Prisma.EpisodeProductListRelationFilter
   userPurchases?: Prisma.UserPurchaseListRelationFilter
   coinTransactions?: Prisma.CoinTransactionListRelationFilter
   userSubscriptions?: Prisma.UserSubscriptionListRelationFilter
   userEndings?: Prisma.UserEndingListRelationFilter
+  userCoupons?: Prisma.UserCouponListRelationFilter
+  couponUsages?: Prisma.CouponUsageListRelationFilter
+  couponCodes?: Prisma.CouponCodeListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -355,11 +359,15 @@ export type UserOrderByWithRelationInput = {
   userQuizSessions?: Prisma.UserQuizSessionOrderByRelationAggregateInput
   characterChats?: Prisma.CharacterChatOrderByRelationAggregateInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeOrderByRelationAggregateInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeOrderByRelationAggregateInput
   products?: Prisma.EpisodeProductOrderByRelationAggregateInput
   userPurchases?: Prisma.UserPurchaseOrderByRelationAggregateInput
   coinTransactions?: Prisma.CoinTransactionOrderByRelationAggregateInput
   userSubscriptions?: Prisma.UserSubscriptionOrderByRelationAggregateInput
   userEndings?: Prisma.UserEndingOrderByRelationAggregateInput
+  userCoupons?: Prisma.UserCouponOrderByRelationAggregateInput
+  couponUsages?: Prisma.CouponUsageOrderByRelationAggregateInput
+  couponCodes?: Prisma.CouponCodeOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -392,11 +400,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   userQuizSessions?: Prisma.UserQuizSessionListRelationFilter
   characterChats?: Prisma.CharacterChatListRelationFilter
   userPlayEpisodes?: Prisma.UserPlayEpisodeListRelationFilter
+  userEpisodeLikes?: Prisma.UserEpisodeLikeListRelationFilter
   products?: Prisma.EpisodeProductListRelationFilter
   userPurchases?: Prisma.UserPurchaseListRelationFilter
   coinTransactions?: Prisma.CoinTransactionListRelationFilter
   userSubscriptions?: Prisma.UserSubscriptionListRelationFilter
   userEndings?: Prisma.UserEndingListRelationFilter
+  userCoupons?: Prisma.UserCouponListRelationFilter
+  couponUsages?: Prisma.CouponUsageListRelationFilter
+  couponCodes?: Prisma.CouponCodeListRelationFilter
 }, "id" | "email_provider">
 
 export type UserOrderByWithAggregationInput = {
@@ -467,11 +479,15 @@ export type UserCreateInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -499,11 +515,15 @@ export type UserUncheckedCreateInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUpdateInput = {
@@ -530,11 +550,15 @@ export type UserUpdateInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -562,11 +586,15 @@ export type UserUncheckedUpdateInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -914,6 +942,20 @@ export type UserUpdateOneRequiredWithoutUserEpisodesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserEpisodesInput, Prisma.UserUpdateWithoutUserEpisodesInput>, Prisma.UserUncheckedUpdateWithoutUserEpisodesInput>
 }
 
+export type UserCreateNestedOneWithoutUserEpisodeLikesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserEpisodeLikesInput, Prisma.UserUncheckedCreateWithoutUserEpisodeLikesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserEpisodeLikesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUserEpisodeLikesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserEpisodeLikesInput, Prisma.UserUncheckedCreateWithoutUserEpisodeLikesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserEpisodeLikesInput
+  upsert?: Prisma.UserUpsertWithoutUserEpisodeLikesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserEpisodeLikesInput, Prisma.UserUpdateWithoutUserEpisodeLikesInput>, Prisma.UserUncheckedUpdateWithoutUserEpisodeLikesInput>
+}
+
 export type UserCreateNestedOneWithoutUserPlayEpisodesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutUserPlayEpisodesInput, Prisma.UserUncheckedCreateWithoutUserPlayEpisodesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserPlayEpisodesInput
@@ -986,6 +1028,50 @@ export type UserUpdateOneRequiredWithoutCoinTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCoinTransactionsInput, Prisma.UserUpdateWithoutCoinTransactionsInput>, Prisma.UserUncheckedUpdateWithoutCoinTransactionsInput>
 }
 
+export type UserCreateNestedOneWithoutCouponCodesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponCodesInput, Prisma.UserUncheckedCreateWithoutCouponCodesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponCodesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCouponCodesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponCodesInput, Prisma.UserUncheckedCreateWithoutCouponCodesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponCodesInput
+  upsert?: Prisma.UserUpsertWithoutCouponCodesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCouponCodesInput, Prisma.UserUpdateWithoutCouponCodesInput>, Prisma.UserUncheckedUpdateWithoutCouponCodesInput>
+}
+
+export type UserCreateNestedOneWithoutUserCouponsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserCouponsInput, Prisma.UserUncheckedCreateWithoutUserCouponsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserCouponsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUserCouponsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUserCouponsInput, Prisma.UserUncheckedCreateWithoutUserCouponsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserCouponsInput
+  upsert?: Prisma.UserUpsertWithoutUserCouponsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserCouponsInput, Prisma.UserUpdateWithoutUserCouponsInput>, Prisma.UserUncheckedUpdateWithoutUserCouponsInput>
+}
+
+export type UserCreateNestedOneWithoutCouponUsagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponUsagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCouponUsagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponUsagesInput
+  upsert?: Prisma.UserUpsertWithoutCouponUsagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCouponUsagesInput, Prisma.UserUpdateWithoutCouponUsagesInput>, Prisma.UserUncheckedUpdateWithoutCouponUsagesInput>
+}
+
 export type UserCreateNestedOneWithoutUserSubscriptionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutUserSubscriptionsInput, Prisma.UserUncheckedCreateWithoutUserSubscriptionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUserSubscriptionsInput
@@ -1023,11 +1109,15 @@ export type UserCreateWithoutStoryProgressInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryProgressInput = {
@@ -1054,11 +1144,15 @@ export type UserUncheckedCreateWithoutStoryProgressInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryProgressInput = {
@@ -1100,11 +1194,15 @@ export type UserUpdateWithoutStoryProgressInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryProgressInput = {
@@ -1131,11 +1229,15 @@ export type UserUncheckedUpdateWithoutStoryProgressInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutUserReviewItemsInput = {
@@ -1161,11 +1263,15 @@ export type UserCreateWithoutUserReviewItemsInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserReviewItemsInput = {
@@ -1192,11 +1298,15 @@ export type UserUncheckedCreateWithoutUserReviewItemsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserReviewItemsInput = {
@@ -1238,11 +1348,15 @@ export type UserUpdateWithoutUserReviewItemsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserReviewItemsInput = {
@@ -1269,11 +1383,15 @@ export type UserUncheckedUpdateWithoutUserReviewItemsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutUserQuizSessionsInput = {
@@ -1299,11 +1417,15 @@ export type UserCreateWithoutUserQuizSessionsInput = {
   Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserQuizSessionsInput = {
@@ -1330,11 +1452,15 @@ export type UserUncheckedCreateWithoutUserQuizSessionsInput = {
   Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserQuizSessionsInput = {
@@ -1376,11 +1502,15 @@ export type UserUpdateWithoutUserQuizSessionsInput = {
   Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserQuizSessionsInput = {
@@ -1407,11 +1537,15 @@ export type UserUncheckedUpdateWithoutUserQuizSessionsInput = {
   Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutSelectedCharacterInput = {
@@ -1437,11 +1571,15 @@ export type UserCreateWithoutSelectedCharacterInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutSelectedCharacterInput = {
@@ -1468,11 +1606,15 @@ export type UserUncheckedCreateWithoutSelectedCharacterInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutSelectedCharacterInput = {
@@ -1545,11 +1687,15 @@ export type UserCreateWithoutCharacterFriendsInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutCharacterFriendsInput = {
@@ -1576,11 +1722,15 @@ export type UserUncheckedCreateWithoutCharacterFriendsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutCharacterFriendsInput = {
@@ -1622,11 +1772,15 @@ export type UserUpdateWithoutCharacterFriendsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCharacterFriendsInput = {
@@ -1653,11 +1807,15 @@ export type UserUncheckedUpdateWithoutCharacterFriendsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutCharacterChatsInput = {
@@ -1683,11 +1841,15 @@ export type UserCreateWithoutCharacterChatsInput = {
   Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutCharacterChatsInput = {
@@ -1714,11 +1876,15 @@ export type UserUncheckedCreateWithoutCharacterChatsInput = {
   Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutCharacterChatsInput = {
@@ -1760,11 +1926,15 @@ export type UserUpdateWithoutCharacterChatsInput = {
   Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCharacterChatsInput = {
@@ -1791,11 +1961,15 @@ export type UserUncheckedUpdateWithoutCharacterChatsInput = {
   Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutMessagesInput = {
@@ -1821,11 +1995,15 @@ export type UserCreateWithoutMessagesInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -1852,11 +2030,15 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -1898,11 +2080,15 @@ export type UserUpdateWithoutMessagesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -1929,11 +2115,15 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutDialogueBookmarksInput = {
@@ -1959,11 +2149,15 @@ export type UserCreateWithoutDialogueBookmarksInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutDialogueBookmarksInput = {
@@ -1990,11 +2184,15 @@ export type UserUncheckedCreateWithoutDialogueBookmarksInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutDialogueBookmarksInput = {
@@ -2036,11 +2234,15 @@ export type UserUpdateWithoutDialogueBookmarksInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDialogueBookmarksInput = {
@@ -2067,11 +2269,15 @@ export type UserUncheckedUpdateWithoutDialogueBookmarksInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutUserEpisodesInput = {
@@ -2097,11 +2303,15 @@ export type UserCreateWithoutUserEpisodesInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserEpisodesInput = {
@@ -2128,11 +2338,15 @@ export type UserUncheckedCreateWithoutUserEpisodesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserEpisodesInput = {
@@ -2174,11 +2388,15 @@ export type UserUpdateWithoutUserEpisodesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserEpisodesInput = {
@@ -2205,11 +2423,169 @@ export type UserUncheckedUpdateWithoutUserEpisodesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
+}
+
+export type UserCreateWithoutUserEpisodeLikesInput = {
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  selectedCharacter?: Prisma.CharacterCreateNestedOneWithoutUsersInput
+  storyProgress?: Prisma.StoryProgressCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
+}
+
+export type UserUncheckedCreateWithoutUserEpisodeLikesInput = {
+  id?: number
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  selectedCharacterId?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  storyProgress?: Prisma.StoryProgressUncheckedCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendUncheckedCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
+}
+
+export type UserCreateOrConnectWithoutUserEpisodeLikesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserEpisodeLikesInput, Prisma.UserUncheckedCreateWithoutUserEpisodeLikesInput>
+}
+
+export type UserUpsertWithoutUserEpisodeLikesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUserEpisodeLikesInput, Prisma.UserUncheckedUpdateWithoutUserEpisodeLikesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserEpisodeLikesInput, Prisma.UserUncheckedCreateWithoutUserEpisodeLikesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUserEpisodeLikesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUserEpisodeLikesInput, Prisma.UserUncheckedUpdateWithoutUserEpisodeLikesInput>
+}
+
+export type UserUpdateWithoutUserEpisodeLikesInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  selectedCharacter?: Prisma.CharacterUpdateOneWithoutUsersNestedInput
+  storyProgress?: Prisma.StoryProgressUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUserEpisodeLikesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  storyProgress?: Prisma.StoryProgressUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUncheckedUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutUserPlayEpisodesInput = {
@@ -2235,11 +2611,15 @@ export type UserCreateWithoutUserPlayEpisodesInput = {
   Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserPlayEpisodesInput = {
@@ -2266,11 +2646,15 @@ export type UserUncheckedCreateWithoutUserPlayEpisodesInput = {
   Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserPlayEpisodesInput = {
@@ -2312,11 +2696,15 @@ export type UserUpdateWithoutUserPlayEpisodesInput = {
   Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserPlayEpisodesInput = {
@@ -2343,11 +2731,15 @@ export type UserUncheckedUpdateWithoutUserPlayEpisodesInput = {
   Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutUserEndingsInput = {
@@ -2374,10 +2766,14 @@ export type UserCreateWithoutUserEndingsInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserEndingsInput = {
@@ -2405,10 +2801,14 @@ export type UserUncheckedCreateWithoutUserEndingsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserEndingsInput = {
@@ -2451,10 +2851,14 @@ export type UserUpdateWithoutUserEndingsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserEndingsInput = {
@@ -2482,10 +2886,14 @@ export type UserUncheckedUpdateWithoutUserEndingsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutProductsInput = {
@@ -2512,10 +2920,14 @@ export type UserCreateWithoutProductsInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutProductsInput = {
@@ -2543,10 +2955,14 @@ export type UserUncheckedCreateWithoutProductsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutProductsInput = {
@@ -2589,10 +3005,14 @@ export type UserUpdateWithoutProductsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProductsInput = {
@@ -2620,10 +3040,14 @@ export type UserUncheckedUpdateWithoutProductsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutUserPurchasesInput = {
@@ -2650,10 +3074,14 @@ export type UserCreateWithoutUserPurchasesInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserPurchasesInput = {
@@ -2681,10 +3109,14 @@ export type UserUncheckedCreateWithoutUserPurchasesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserPurchasesInput = {
@@ -2727,10 +3159,14 @@ export type UserUpdateWithoutUserPurchasesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserPurchasesInput = {
@@ -2758,10 +3194,14 @@ export type UserUncheckedUpdateWithoutUserPurchasesInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutCoinTransactionsInput = {
@@ -2788,10 +3228,14 @@ export type UserCreateWithoutCoinTransactionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutCoinTransactionsInput = {
@@ -2819,10 +3263,14 @@ export type UserUncheckedCreateWithoutCoinTransactionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutCoinTransactionsInput = {
@@ -2865,10 +3313,14 @@ export type UserUpdateWithoutCoinTransactionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
@@ -2896,10 +3348,476 @@ export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
+}
+
+export type UserCreateWithoutCouponCodesInput = {
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  selectedCharacter?: Prisma.CharacterCreateNestedOneWithoutUsersInput
+  storyProgress?: Prisma.StoryProgressCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCouponCodesInput = {
+  id?: number
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  selectedCharacterId?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  storyProgress?: Prisma.StoryProgressUncheckedCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendUncheckedCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCouponCodesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponCodesInput, Prisma.UserUncheckedCreateWithoutCouponCodesInput>
+}
+
+export type UserUpsertWithoutCouponCodesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCouponCodesInput, Prisma.UserUncheckedUpdateWithoutCouponCodesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponCodesInput, Prisma.UserUncheckedCreateWithoutCouponCodesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCouponCodesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCouponCodesInput, Prisma.UserUncheckedUpdateWithoutCouponCodesInput>
+}
+
+export type UserUpdateWithoutCouponCodesInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  selectedCharacter?: Prisma.CharacterUpdateOneWithoutUsersNestedInput
+  storyProgress?: Prisma.StoryProgressUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCouponCodesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  storyProgress?: Prisma.StoryProgressUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUncheckedUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutUserCouponsInput = {
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  selectedCharacter?: Prisma.CharacterCreateNestedOneWithoutUsersInput
+  storyProgress?: Prisma.StoryProgressCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
+}
+
+export type UserUncheckedCreateWithoutUserCouponsInput = {
+  id?: number
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  selectedCharacterId?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  storyProgress?: Prisma.StoryProgressUncheckedCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendUncheckedCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
+}
+
+export type UserCreateOrConnectWithoutUserCouponsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserCouponsInput, Prisma.UserUncheckedCreateWithoutUserCouponsInput>
+}
+
+export type UserUpsertWithoutUserCouponsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUserCouponsInput, Prisma.UserUncheckedUpdateWithoutUserCouponsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUserCouponsInput, Prisma.UserUncheckedCreateWithoutUserCouponsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUserCouponsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUserCouponsInput, Prisma.UserUncheckedUpdateWithoutUserCouponsInput>
+}
+
+export type UserUpdateWithoutUserCouponsInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  selectedCharacter?: Prisma.CharacterUpdateOneWithoutUsersNestedInput
+  storyProgress?: Prisma.StoryProgressUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUserCouponsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  storyProgress?: Prisma.StoryProgressUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUncheckedUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
+}
+
+export type UserCreateWithoutCouponUsagesInput = {
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  selectedCharacter?: Prisma.CharacterCreateNestedOneWithoutUsersInput
+  storyProgress?: Prisma.StoryProgressCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
+}
+
+export type UserUncheckedCreateWithoutCouponUsagesInput = {
+  id?: number
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  profileImage?: string | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  selectedCharacterId?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  storyProgress?: Prisma.StoryProgressUncheckedCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendUncheckedCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
+}
+
+export type UserCreateOrConnectWithoutCouponUsagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+}
+
+export type UserUpsertWithoutCouponUsagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCouponUsagesInput, Prisma.UserUncheckedUpdateWithoutCouponUsagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponUsagesInput, Prisma.UserUncheckedCreateWithoutCouponUsagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCouponUsagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCouponUsagesInput, Prisma.UserUncheckedUpdateWithoutCouponUsagesInput>
+}
+
+export type UserUpdateWithoutCouponUsagesInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  selectedCharacter?: Prisma.CharacterUpdateOneWithoutUsersNestedInput
+  storyProgress?: Prisma.StoryProgressUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCouponUsagesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  storyProgress?: Prisma.StoryProgressUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUncheckedUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateWithoutUserSubscriptionsInput = {
@@ -2926,10 +3844,14 @@ export type UserCreateWithoutUserSubscriptionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserSubscriptionsInput = {
@@ -2957,10 +3879,14 @@ export type UserUncheckedCreateWithoutUserSubscriptionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
   characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
   products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
   userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
   coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserSubscriptionsInput = {
@@ -3003,10 +3929,14 @@ export type UserUpdateWithoutUserSubscriptionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserSubscriptionsInput = {
@@ -3034,10 +3964,14 @@ export type UserUncheckedUpdateWithoutUserSubscriptionsInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserCreateManySelectedCharacterInput = {
@@ -3080,11 +4014,15 @@ export type UserUpdateWithoutSelectedCharacterInput = {
   userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSelectedCharacterInput = {
@@ -3111,11 +4049,15 @@ export type UserUncheckedUpdateWithoutSelectedCharacterInput = {
   userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
   characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
   userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
   products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
   userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
   coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutSelectedCharacterInput = {
@@ -3150,11 +4092,15 @@ export type UserCountOutputType = {
   userQuizSessions: number
   characterChats: number
   userPlayEpisodes: number
+  userEpisodeLikes: number
   products: number
   userPurchases: number
   coinTransactions: number
   userSubscriptions: number
   userEndings: number
+  userCoupons: number
+  couponUsages: number
+  couponCodes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3167,11 +4113,15 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   userQuizSessions?: boolean | UserCountOutputTypeCountUserQuizSessionsArgs
   characterChats?: boolean | UserCountOutputTypeCountCharacterChatsArgs
   userPlayEpisodes?: boolean | UserCountOutputTypeCountUserPlayEpisodesArgs
+  userEpisodeLikes?: boolean | UserCountOutputTypeCountUserEpisodeLikesArgs
   products?: boolean | UserCountOutputTypeCountProductsArgs
   userPurchases?: boolean | UserCountOutputTypeCountUserPurchasesArgs
   coinTransactions?: boolean | UserCountOutputTypeCountCoinTransactionsArgs
   userSubscriptions?: boolean | UserCountOutputTypeCountUserSubscriptionsArgs
   userEndings?: boolean | UserCountOutputTypeCountUserEndingsArgs
+  userCoupons?: boolean | UserCountOutputTypeCountUserCouponsArgs
+  couponUsages?: boolean | UserCountOutputTypeCountCouponUsagesArgs
+  couponCodes?: boolean | UserCountOutputTypeCountCouponCodesArgs
 }
 
 /**
@@ -3250,6 +4200,13 @@ export type UserCountOutputTypeCountUserPlayEpisodesArgs<ExtArgs extends runtime
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountUserEpisodeLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserEpisodeLikeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EpisodeProductWhereInput
 }
@@ -3282,6 +4239,27 @@ export type UserCountOutputTypeCountUserEndingsArgs<ExtArgs extends runtime.Type
   where?: Prisma.UserEndingWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUserCouponsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserCouponWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCouponUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CouponUsageWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCouponCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CouponCodeWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3309,11 +4287,15 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   userQuizSessions?: boolean | Prisma.User$userQuizSessionsArgs<ExtArgs>
   characterChats?: boolean | Prisma.User$characterChatsArgs<ExtArgs>
   userPlayEpisodes?: boolean | Prisma.User$userPlayEpisodesArgs<ExtArgs>
+  userEpisodeLikes?: boolean | Prisma.User$userEpisodeLikesArgs<ExtArgs>
   products?: boolean | Prisma.User$productsArgs<ExtArgs>
   userPurchases?: boolean | Prisma.User$userPurchasesArgs<ExtArgs>
   coinTransactions?: boolean | Prisma.User$coinTransactionsArgs<ExtArgs>
   userSubscriptions?: boolean | Prisma.User$userSubscriptionsArgs<ExtArgs>
   userEndings?: boolean | Prisma.User$userEndingsArgs<ExtArgs>
+  userCoupons?: boolean | Prisma.User$userCouponsArgs<ExtArgs>
+  couponUsages?: boolean | Prisma.User$couponUsagesArgs<ExtArgs>
+  couponCodes?: boolean | Prisma.User$couponCodesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -3385,11 +4367,15 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   userQuizSessions?: boolean | Prisma.User$userQuizSessionsArgs<ExtArgs>
   characterChats?: boolean | Prisma.User$characterChatsArgs<ExtArgs>
   userPlayEpisodes?: boolean | Prisma.User$userPlayEpisodesArgs<ExtArgs>
+  userEpisodeLikes?: boolean | Prisma.User$userEpisodeLikesArgs<ExtArgs>
   products?: boolean | Prisma.User$productsArgs<ExtArgs>
   userPurchases?: boolean | Prisma.User$userPurchasesArgs<ExtArgs>
   coinTransactions?: boolean | Prisma.User$coinTransactionsArgs<ExtArgs>
   userSubscriptions?: boolean | Prisma.User$userSubscriptionsArgs<ExtArgs>
   userEndings?: boolean | Prisma.User$userEndingsArgs<ExtArgs>
+  userCoupons?: boolean | Prisma.User$userCouponsArgs<ExtArgs>
+  couponUsages?: boolean | Prisma.User$couponUsagesArgs<ExtArgs>
+  couponCodes?: boolean | Prisma.User$couponCodesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3412,11 +4398,15 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     userQuizSessions: Prisma.$UserQuizSessionPayload<ExtArgs>[]
     characterChats: Prisma.$CharacterChatPayload<ExtArgs>[]
     userPlayEpisodes: Prisma.$UserPlayEpisodePayload<ExtArgs>[]
+    userEpisodeLikes: Prisma.$UserEpisodeLikePayload<ExtArgs>[]
     products: Prisma.$EpisodeProductPayload<ExtArgs>[]
     userPurchases: Prisma.$UserPurchasePayload<ExtArgs>[]
     coinTransactions: Prisma.$CoinTransactionPayload<ExtArgs>[]
     userSubscriptions: Prisma.$UserSubscriptionPayload<ExtArgs>[]
     userEndings: Prisma.$UserEndingPayload<ExtArgs>[]
+    userCoupons: Prisma.$UserCouponPayload<ExtArgs>[]
+    couponUsages: Prisma.$CouponUsagePayload<ExtArgs>[]
+    couponCodes: Prisma.$CouponCodePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -3838,11 +4828,15 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   userQuizSessions<T extends Prisma.User$userQuizSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userQuizSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserQuizSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   characterChats<T extends Prisma.User$characterChatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$characterChatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CharacterChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userPlayEpisodes<T extends Prisma.User$userPlayEpisodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userPlayEpisodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPlayEpisodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userEpisodeLikes<T extends Prisma.User$userEpisodeLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userEpisodeLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserEpisodeLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.User$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EpisodeProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userPurchases<T extends Prisma.User$userPurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   coinTransactions<T extends Prisma.User$coinTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$coinTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userSubscriptions<T extends Prisma.User$userSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userEndings<T extends Prisma.User$userEndingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userEndingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserEndingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userCoupons<T extends Prisma.User$userCouponsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userCouponsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserCouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  couponUsages<T extends Prisma.User$couponUsagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$couponUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CouponUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  couponCodes<T extends Prisma.User$couponCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$couponCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CouponCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4518,6 +5512,30 @@ export type User$userPlayEpisodesArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * User.userEpisodeLikes
+ */
+export type User$userEpisodeLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserEpisodeLike
+   */
+  select?: Prisma.UserEpisodeLikeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserEpisodeLike
+   */
+  omit?: Prisma.UserEpisodeLikeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserEpisodeLikeInclude<ExtArgs> | null
+  where?: Prisma.UserEpisodeLikeWhereInput
+  orderBy?: Prisma.UserEpisodeLikeOrderByWithRelationInput | Prisma.UserEpisodeLikeOrderByWithRelationInput[]
+  cursor?: Prisma.UserEpisodeLikeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserEpisodeLikeScalarFieldEnum | Prisma.UserEpisodeLikeScalarFieldEnum[]
+}
+
+/**
  * User.products
  */
 export type User$productsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4635,6 +5653,78 @@ export type User$userEndingsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.UserEndingScalarFieldEnum | Prisma.UserEndingScalarFieldEnum[]
+}
+
+/**
+ * User.userCoupons
+ */
+export type User$userCouponsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCoupon
+   */
+  select?: Prisma.UserCouponSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserCoupon
+   */
+  omit?: Prisma.UserCouponOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserCouponInclude<ExtArgs> | null
+  where?: Prisma.UserCouponWhereInput
+  orderBy?: Prisma.UserCouponOrderByWithRelationInput | Prisma.UserCouponOrderByWithRelationInput[]
+  cursor?: Prisma.UserCouponWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserCouponScalarFieldEnum | Prisma.UserCouponScalarFieldEnum[]
+}
+
+/**
+ * User.couponUsages
+ */
+export type User$couponUsagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CouponUsage
+   */
+  select?: Prisma.CouponUsageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CouponUsage
+   */
+  omit?: Prisma.CouponUsageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponUsageInclude<ExtArgs> | null
+  where?: Prisma.CouponUsageWhereInput
+  orderBy?: Prisma.CouponUsageOrderByWithRelationInput | Prisma.CouponUsageOrderByWithRelationInput[]
+  cursor?: Prisma.CouponUsageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CouponUsageScalarFieldEnum | Prisma.CouponUsageScalarFieldEnum[]
+}
+
+/**
+ * User.couponCodes
+ */
+export type User$couponCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CouponCode
+   */
+  select?: Prisma.CouponCodeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CouponCode
+   */
+  omit?: Prisma.CouponCodeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponCodeInclude<ExtArgs> | null
+  where?: Prisma.CouponCodeWhereInput
+  orderBy?: Prisma.CouponCodeOrderByWithRelationInput | Prisma.CouponCodeOrderByWithRelationInput[]
+  cursor?: Prisma.CouponCodeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CouponCodeScalarFieldEnum | Prisma.CouponCodeScalarFieldEnum[]
 }
 
 /**

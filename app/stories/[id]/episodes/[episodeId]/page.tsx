@@ -6,7 +6,9 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { AdminLayout } from "@/components/admin/admin-layout";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   ArrowLeft,
   Save,
@@ -49,7 +51,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { SceneBasic, DialogueBasic, EpisodeWithScenes, BranchKeyItem } from "@/types";
-import { DialogueType, EpisodeType, PlayEpisodeMode } from "@/types";
+import { DialogueType, EpisodeType, PlayEpisodeMode, PublishStatus } from "@/types";
 
 const tabs = [
   { id: "scenes", label: "Scenes", icon: FileText },
@@ -60,6 +62,15 @@ const tabs = [
 ];
 
 const VALID_TABS = ["scenes", "review", "quiz", "rewards", "endings"] as const;
+
+function episodeTagsAsStrings(raw: unknown): string[] {
+  if (raw == null) return [];
+  if (!Array.isArray(raw)) return [];
+  const out = raw.filter(
+    (x): x is string => typeof x === "string" && x.trim() !== ""
+  );
+  return [...new Set(out.map((s) => s.trim()))];
+}
 
 type DialogueFormData = {
   characterId?: number;
@@ -129,6 +140,8 @@ export default function EpisodeDetailPage() {
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
   const [isBranchKeysOpen, setIsBranchKeysOpen] = useState(false);
+  const [isThumbnailOpen, setIsThumbnailOpen] = useState(false);
+  const [tagInput, setTagInput] = useState("");
 
   // Sync query data to local state (only when episodeData from server changes)
   // DO NOT include selectedScene - that would overwrite local updates with stale cache
@@ -180,12 +193,33 @@ export default function EpisodeDetailPage() {
         thumbnailUrl: episode.thumbnailUrl ?? null,
         totalScenes: episode.totalScenes ?? null,
         data: episode.data ?? null,
+        tags: episode.tags ?? null,
         status: episode.status,
       },
       {
         onError: (e) => setError(e.message),
       }
     );
+  };
+
+  const tagList = episodeTagsAsStrings(episode?.tags);
+
+  const addEpisodeTag = () => {
+    if (!episode) return;
+    const v = tagInput.trim();
+    if (!v) return;
+    if (tagList.includes(v)) {
+      setTagInput("");
+      return;
+    }
+    setEpisode({ ...episode, tags: [...tagList, v] });
+    setTagInput("");
+  };
+
+  const removeEpisodeTag = (t: string) => {
+    if (!episode) return;
+    const next = tagList.filter((x) => x !== t);
+    setEpisode({ ...episode, tags: next.length > 0 ? next : null });
   };
 
   const branchKeys: BranchKeyItem[] = Array.isArray((episode?.data as any)?.branchKeys)
@@ -311,7 +345,7 @@ export default function EpisodeDetailPage() {
             englishText: data.englishText,
             koreanText: data.koreanText,
             charImageLabel: data.charImageLabel,
-            imageUrl: data.type === DialogueType.IMAGE ? data.imageUrl : null,
+            imageUrl: (data.type === DialogueType.IMAGE || data.type === DialogueType.BG_CHANGE) ? data.imageUrl : null,
             aiPromptName: data.aiPromptName || null,
             data:
               data.type === DialogueType.CHOICE_SLOT ||
@@ -452,6 +486,9 @@ export default function EpisodeDetailPage() {
     await queryClient.invalidateQueries({
       queryKey: ["stories", storyId, "episodes", episodeId],
     });
+    await queryClient.refetchQueries({
+      queryKey: ["stories", storyId, "episodes", episodeId],
+    });
   }, [queryClient, storyId, episodeId]);
 
   const handleDialoguesChanged = useCallback((newDialogues: DialogueBasic[]) => {
@@ -522,18 +559,39 @@ export default function EpisodeDetailPage() {
             {episode.scenes.length} scenes · {dialogues.length} dialogs
           </span>
         </div>
-        <div className="flex flex-wrap items-end gap-4">
+        {/* Row 1: inputs */}
+        <div className="flex flex-wrap items-center gap-2 mb-2">
+          {/* Thumbnail button */}
+          <button
+            type="button"
+            onClick={() => setIsThumbnailOpen(true)}
+            className="w-32 aspect-video rounded-xl overflow-hidden border-2 border-dashed border-border bg-secondary hover:border-primary/50 transition-colors flex-shrink-0 relative group"
+          >
+            {episode.thumbnailUrl ? (
+              <>
+                <img src={episode.thumbnailUrl} alt="" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white text-xs font-medium">변경</span>
+                </div>
+              </>
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+                <Plus className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span className="text-[10px] text-muted-foreground group-hover:text-primary transition-colors">Thumbnail</span>
+              </div>
+            )}
+          </button>
           <Input
             value={episode.title}
             onChange={(e) => setEpisode({ ...episode, title: e.target.value })}
             placeholder="Episode title"
-            className="flex-1 min-w-[200px] max-w-md text-lg font-semibold bg-secondary/50 border-0 rounded-xl h-9"
+            className="flex-1 min-w-[180px] max-w-xs text-base font-semibold bg-secondary/50 border-0 rounded-xl h-9"
           />
           <Input
             value={episode.description ?? ""}
             onChange={(e) => setEpisode({ ...episode, description: e.target.value })}
             placeholder="Description"
-            className="flex-1 min-w-[180px] max-w-sm text-sm bg-secondary/50 border-0 rounded-xl h-9"
+            className="flex-1 min-w-[160px] max-w-sm text-sm bg-secondary/50 border-0 rounded-xl h-9"
           />
           <Select
             value={episode.type ?? "NOVEL"}
@@ -575,18 +633,81 @@ export default function EpisodeDetailPage() {
             placeholder="Scenes"
             className="w-20 rounded-xl bg-secondary/50 border-0 h-9 text-sm text-center"
           />
-          <div className="w-24 flex-shrink-0">
-            <ImageUploader
-              value={episode.thumbnailUrl ?? ""}
-              onChange={(url) => setEpisode({ ...episode, thumbnailUrl: url || null })}
-              label=""
-              aspectRatio="video"
-              maxSizeMB={5}
-            />
+          <Select
+            value={episode.status}
+            onValueChange={(value: PublishStatus) =>
+              setEpisode({ ...episode, status: value })
+            }
+          >
+            <SelectTrigger className="w-[9.5rem] rounded-xl bg-secondary/50 border-0 h-9 text-sm">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value={PublishStatus.DRAFT} className="rounded-lg">
+                Draft
+              </SelectItem>
+              <SelectItem value={PublishStatus.PUBLISHED} className="rounded-lg">
+                Published
+              </SelectItem>
+              <SelectItem value={PublishStatus.HIDDEN} className="rounded-lg">
+                Hidden
+              </SelectItem>
+              <SelectItem value={PublishStatus.ARCHIVED} className="rounded-lg">
+                Archived
+              </SelectItem>
+              <SelectItem value={PublishStatus.DELETED} className="rounded-lg text-destructive">
+                Deleted
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        {/* Tags (JSON string[] in DB) */}
+        <div className="flex flex-wrap items-end gap-2 mb-2 w-full">
+          <div className="flex flex-col gap-1.5 min-w-0 flex-1 max-w-2xl">
+            <Label className="text-xs text-muted-foreground">Tags</Label>
+            <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-border/60 bg-secondary/30 px-2 py-1.5 min-h-10">
+              {tagList.map((t) => (
+                <Badge
+                  key={t}
+                  variant="secondary"
+                  className="gap-0.5 pr-1 pl-2 py-0.5 rounded-lg font-normal"
+                >
+                  {t}
+                  <button
+                    type="button"
+                    className="rounded p-0.5 hover:bg-muted-foreground/20"
+                    aria-label={`Remove ${t}`}
+                    onClick={() => removeEpisodeTag(t)}
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </Badge>
+              ))}
+              <Input
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addEpisodeTag();
+                  }
+                }}
+                placeholder="Add tag, Enter"
+                className="h-8 min-w-[120px] flex-1 max-w-[200px] border-0 bg-transparent shadow-none focus-visible:ring-0"
+              />
+            </div>
+            {episode.tags != null && !Array.isArray(episode.tags) && (
+              <p className="text-xs text-amber-600 dark:text-amber-500">
+                tags가 배열이 아닙니다. DB/다른 도구에서 JSON을 수정하세요.
+              </p>
+            )}
           </div>
+        </div>
+        {/* Row 2: action buttons */}
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="rounded-xl"
+            className="rounded-xl h-9"
             onClick={() => setIsBranchKeysOpen(true)}
           >
             <Key className="w-4 h-4 mr-2" />
@@ -613,6 +734,22 @@ export default function EpisodeDetailPage() {
           </Button>
         </div>
       </div>
+
+      {/* Thumbnail Dialog */}
+      <Dialog open={isThumbnailOpen} onOpenChange={setIsThumbnailOpen}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-base">Thumbnail</DialogTitle>
+          </DialogHeader>
+          <ImageUploader
+            value={episode.thumbnailUrl ?? ""}
+            onChange={(url) => setEpisode({ ...episode, thumbnailUrl: url || null })}
+            label=""
+            aspectRatio="video"
+            maxSizeMB={5}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Error Message */}
       {error && (
@@ -670,6 +807,7 @@ export default function EpisodeDetailPage() {
             onDeleteScenes={handleDeleteScenes}
             branchKeys={branchKeys}
             endings={episode.endings ?? []}
+            episodeType={episode.type ?? undefined}
             onOpenBranchKeys={() => setIsBranchKeysOpen(true)}
             saving={saving}
             storyId={storyId}
@@ -684,7 +822,9 @@ export default function EpisodeDetailPage() {
             storyId={storyId}
             episodeId={episodeId}
             sceneId={selectedScene?.id}
+            scene={selectedScene}
             onDialoguesChanged={handleDialoguesChanged}
+            onImportComplete={handleImportComplete}
           />
           <DialogueEditor
             dialogue={selectedDialogue}

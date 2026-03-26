@@ -80,6 +80,7 @@ export const ModelName = {
   XpRule: 'XpRule',
   UserXpHistory: 'UserXpHistory',
   UserEpisode: 'UserEpisode',
+  UserEpisodeLike: 'UserEpisodeLike',
   UserPlayEpisode: 'UserPlayEpisode',
   PlayEpisodeSlot: 'PlayEpisodeSlot',
   SlotDialogue: 'SlotDialogue',
@@ -92,6 +93,10 @@ export const ModelName = {
   EpisodeProduct: 'EpisodeProduct',
   UserPurchase: 'UserPurchase',
   CoinTransaction: 'CoinTransaction',
+  Coupon: 'Coupon',
+  CouponCode: 'CouponCode',
+  UserCoupon: 'UserCoupon',
+  CouponUsage: 'CouponUsage',
   UserSubscription: 'UserSubscription',
   PromptTemplate: 'PromptTemplate',
   Image: 'Image'
@@ -198,6 +203,7 @@ export const EpisodeScalarFieldEnum = {
   koreanDescription: 'koreanDescription',
   thumbnailUrl: 'thumbnailUrl',
   data: 'data',
+  tags: 'tags',
   totalScenes: 'totalScenes',
   status: 'status',
   createdAt: 'createdAt',
@@ -368,6 +374,8 @@ export const StoryCharacterScalarFieldEnum = {
   storyId: 'storyId',
   characterId: 'characterId',
   name: 'name',
+  listed: 'listed',
+  order: 'order',
   createdAt: 'createdAt'
 } as const
 
@@ -551,6 +559,16 @@ export const UserEpisodeScalarFieldEnum = {
 export type UserEpisodeScalarFieldEnum = (typeof UserEpisodeScalarFieldEnum)[keyof typeof UserEpisodeScalarFieldEnum]
 
 
+export const UserEpisodeLikeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  episodeId: 'episodeId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserEpisodeLikeScalarFieldEnum = (typeof UserEpisodeLikeScalarFieldEnum)[keyof typeof UserEpisodeLikeScalarFieldEnum]
+
+
 export const UserPlayEpisodeScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -712,6 +730,8 @@ export const UserPurchaseScalarFieldEnum = {
   productId: 'productId',
   type: 'type',
   pricePaid: 'pricePaid',
+  originalPrice: 'originalPrice',
+  discountAmount: 'discountAmount',
   currency: 'currency',
   storeOrderId: 'storeOrderId',
   createdAt: 'createdAt'
@@ -732,6 +752,80 @@ export const CoinTransactionScalarFieldEnum = {
 } as const
 
 export type CoinTransactionScalarFieldEnum = (typeof CoinTransactionScalarFieldEnum)[keyof typeof CoinTransactionScalarFieldEnum]
+
+
+export const CouponScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  key: 'key',
+  description: 'description',
+  benefitType: 'benefitType',
+  discountAmount: 'discountAmount',
+  discountPercent: 'discountPercent',
+  maxDiscountAmount: 'maxDiscountAmount',
+  rewardCoinAmount: 'rewardCoinAmount',
+  minPurchaseAmount: 'minPurchaseAmount',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  issuedCount: 'issuedCount',
+  usedCount: 'usedCount',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  expiresInDays: 'expiresInDays',
+  isPublic: 'isPublic',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CouponScalarFieldEnum = (typeof CouponScalarFieldEnum)[keyof typeof CouponScalarFieldEnum]
+
+
+export const CouponCodeScalarFieldEnum = {
+  id: 'id',
+  couponId: 'couponId',
+  code: 'code',
+  assignedUserId: 'assignedUserId',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CouponCodeScalarFieldEnum = (typeof CouponCodeScalarFieldEnum)[keyof typeof CouponCodeScalarFieldEnum]
+
+
+export const UserCouponScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  couponId: 'couponId',
+  status: 'status',
+  issuedAt: 'issuedAt',
+  usedAt: 'usedAt',
+  expiredAt: 'expiredAt',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  source: 'source',
+  sourceId: 'sourceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserCouponScalarFieldEnum = (typeof UserCouponScalarFieldEnum)[keyof typeof UserCouponScalarFieldEnum]
+
+
+export const CouponUsageScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  couponId: 'couponId',
+  userCouponId: 'userCouponId',
+  status: 'status',
+  userPurchaseId: 'userPurchaseId',
+  appliedAmount: 'appliedAmount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CouponUsageScalarFieldEnum = (typeof CouponUsageScalarFieldEnum)[keyof typeof CouponUsageScalarFieldEnum]
 
 
 export const UserSubscriptionScalarFieldEnum = {

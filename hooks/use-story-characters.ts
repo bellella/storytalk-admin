@@ -50,16 +50,23 @@ export function useLinkCharacter(storyId: number) {
   });
 }
 
-export function useUpdateStoryCharacterName(storyId: number) {
+export type StoryCharacterPatch = {
+  id: number;
+  name?: string;
+  listed?: boolean;
+  order?: number;
+};
+
+export function useUpdateStoryCharacter(storyId: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: { id: number; name: string }) => {
+    mutationFn: async (data: StoryCharacterPatch) => {
       const res = await fetch(`/api/stories/${storyId}/characters`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("Failed to update character name");
+      if (!res.ok) throw new Error("Failed to update story character");
       return res.json();
     },
     onSuccess: () => {

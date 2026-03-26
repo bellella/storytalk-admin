@@ -21,7 +21,7 @@ import {
   useStoryCharacters,
   useLinkCharacter,
   useUnlinkCharacter,
-  useUpdateStoryCharacterName,
+  useUpdateStoryCharacter,
 } from "@/hooks/use-story-characters";
 import { useCharacters } from "@/hooks/use-characters";
 import {
@@ -35,7 +35,11 @@ import { useCreateEpisode } from "@/hooks/use-episodes";
 import { StoryOverviewTab } from "@/components/stories/story-overview-tab";
 import { StoryEpisodesTab } from "@/components/stories/story-episodes-tab";
 import { StoryCharactersTab } from "@/components/stories/story-characters-tab";
-import type { StoryWithRelations, StoryType } from "@/types";
+import type {
+  StoryWithRelations,
+  StoryType,
+  StoryCharacterWithCharacter,
+} from "@/types";
 
 const tabs = [
   { id: "overview", label: "Overview", icon: FileText },
@@ -73,7 +77,7 @@ export default function StoryDetailPage() {
   const updateStory = useUpdateStory();
   const linkCharacter = useLinkCharacter(storyId);
   const unlinkCharacter = useUnlinkCharacter(storyId);
-  const updateCharacterName = useUpdateStoryCharacterName(storyId);
+  const updateStoryCharacter = useUpdateStoryCharacter(storyId);
   const createEpisode = useCreateEpisode();
   const addStoryTag = useAddStoryTag(storyId);
   const removeStoryTag = useRemoveStoryTag(storyId);
@@ -157,6 +161,32 @@ export default function StoryDetailPage() {
     }
   };
 
+  const [reorderingCharacters, setReorderingCharacters] = useState(false);
+  const handleReorderStoryCharacters = async (
+    reordered: StoryCharacterWithCharacter[]
+  ) => {
+    setReorderingCharacters(true);
+    try {
+      const res = await fetch(`/api/stories/${storyId}/characters`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          storyCharacterIds: reordered.map((c) => c.id),
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to reorder characters");
+      const updated: StoryCharacterWithCharacter[] = await res.json();
+      queryClient.setQueryData(["stories", storyId, "characters"], updated);
+    } catch (e) {
+      console.error(e);
+      queryClient.invalidateQueries({
+        queryKey: ["stories", storyId, "characters"],
+      });
+    } finally {
+      setReorderingCharacters(false);
+    }
+  };
+
   const handleSelectCharacter = (characterId: number) => {
     const character = allCharacters.find((c) => c.id === characterId);
     if (!character) return;
@@ -171,8 +201,11 @@ export default function StoryDetailPage() {
     unlinkCharacter.mutate(id);
   };
 
-  const handleUpdateCharacterName = (id: number, name: string) => {
-    updateCharacterName.mutate({ id, name });
+  const handlePatchStoryCharacter = (
+    id: number,
+    patch: { name?: string; listed?: boolean; order?: number }
+  ) => {
+    updateStoryCharacter.mutate({ id, ...patch });
   };
 
   const handleCreateStoryCharacter = () => {
@@ -326,7 +359,9 @@ export default function StoryDetailPage() {
           characters={storyCharacters}
           onAddCharacter={() => setIsCharacterDialogOpen(true)}
           onRemoveCharacter={handleRemoveCharacter}
-          onUpdateCharacterName={handleUpdateCharacterName}
+          onPatchCharacter={handlePatchStoryCharacter}
+          onReorderCharacters={handleReorderStoryCharacters}
+          reordering={reorderingCharacters}
           isDialogOpen={isCharacterDialogOpen}
           onDialogChange={setIsCharacterDialogOpen}
           allCharacters={allCharacters}

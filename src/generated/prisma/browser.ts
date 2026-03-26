@@ -163,6 +163,11 @@ export type UserXpHistory = Prisma.UserXpHistoryModel
  */
 export type UserEpisode = Prisma.UserEpisodeModel
 /**
+ * Model UserEpisodeLike
+ * 
+ */
+export type UserEpisodeLike = Prisma.UserEpisodeLikeModel
+/**
  * Model UserPlayEpisode
  * 
  */
@@ -222,6 +227,26 @@ export type UserPurchase = Prisma.UserPurchaseModel
  * 
  */
 export type CoinTransaction = Prisma.CoinTransactionModel
+/**
+ * Model Coupon
+ * 
+ */
+export type Coupon = Prisma.CouponModel
+/**
+ * Model CouponCode
+ * 
+ */
+export type CouponCode = Prisma.CouponCodeModel
+/**
+ * Model UserCoupon
+ * 
+ */
+export type UserCoupon = Prisma.UserCouponModel
+/**
+ * Model CouponUsage
+ * 
+ */
+export type CouponUsage = Prisma.CouponUsageModel
 /**
  * Model UserSubscription
  * 

@@ -102,6 +102,8 @@ export type EpisodeBasic = {
   thumbnailUrl: string | null;
   totalScenes: number | null;
   data?: { branchKeys?: BranchKeyItem[] } | null;
+  /** JSON (권장: 문자열 배열) */
+  tags?: unknown;
   status: "DRAFT" | "PUBLISHED" | "HIDDEN" | "ARCHIVED" | "DELETED";
   createdAt: string;
   updatedAt: string;
@@ -192,6 +194,8 @@ export type StoryCharacterWithCharacter = {
   storyId: number;
   characterId: number;
   name: string;
+  listed: boolean;
+  order: number;
   createdAt: string;
   character: CharacterBasic & { images?: CharacterImageBasic[] };
 };
@@ -201,6 +205,8 @@ export type StoryCharacterWithStory = {
   storyId: number;
   characterId: number;
   name: string;
+  listed: boolean;
+  order: number;
   story: { id: number; title: string };
 };
 
@@ -371,4 +377,73 @@ export type CollectionProductBasic = {
 export type CollectionWithProducts = CollectionBasic & {
   products: CollectionProductBasic[];
   _count?: { products: number };
+};
+
+// ─────────────────────────────────────────────
+// COUPON
+// ─────────────────────────────────────────────
+
+export type CouponStatus = "ACTIVE" | "INACTIVE" | "EXPIRED" | "DELETED";
+export type CouponTargetType = "ALL" | "PRODUCT" | "PRODUCT_TYPE";
+export type CouponBenefitType =
+  | "FIXED_AMOUNT"
+  | "PERCENTAGE"
+  | "FREE_PRODUCT"
+  | "FREE_PRODUCT_TYPE"
+  | "COIN_REWARD";
+export type UserCouponStatus = "AVAILABLE" | "USED" | "EXPIRED" | "CANCELED";
+export type CouponUsageStatus = "APPLIED" | "CANCELED" | "RESTORED";
+
+export type CouponBasic = {
+  id: number;
+  name: string;
+  key: string | null;
+  description: string | null;
+  benefitType: CouponBenefitType;
+  discountAmount: number | null;
+  discountPercent: number | null;
+  maxDiscountAmount: number | null;
+  rewardCoinAmount: number | null;
+  minPurchaseAmount: number | null;
+  targetType: CouponTargetType;
+  targetId: number | null;
+  issuedCount: number;
+  usedCount: number;
+  validFrom: string | null;
+  validUntil: string | null;
+  expiresInDays: number | null;
+  isPublic: boolean;
+  status: CouponStatus;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CouponCodeBasic = {
+  id: number;
+  couponId: number;
+  code: string;
+  assignedUserId: number | null;
+  usedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  assignedUser?: { id: number; name: string | null; email: string } | null;
+};
+
+export type UserCouponBasic = {
+  id: number;
+  userId: number;
+  couponId: number;
+  status: UserCouponStatus;
+  issuedAt: string;
+  usedAt: string | null;
+  expiredAt: string | null;
+  validFrom: string | null;
+  validUntil: string | null;
+  source: string | null;
+  createdAt: string;
+  user?: { id: number; name: string | null; email: string };
+};
+
+export type CouponWithCounts = CouponBasic & {
+  _count?: { codes: number; userCoupons: number };
 };

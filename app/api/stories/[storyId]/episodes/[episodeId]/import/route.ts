@@ -56,6 +56,18 @@ function getCharacterName(d: {
   return v && String(v).trim() ? String(v).trim() : null;
 }
 
+/** characterId가 스토리 캐릭터로 해석되면 DB에 StoryCharacter.name(스토리 표시명) 저장 */
+function storedCharacterNameForDialogue(
+  characterId: number | null,
+  importCharName: string | null,
+  idToStoryCharacterName: Map<number, string>
+): string | null {
+  if (characterId != null && idToStoryCharacterName.has(characterId)) {
+    return idToStoryCharacterName.get(characterId)!;
+  }
+  return importCharName;
+}
+
 type ImportData = {
   title?: string;
   koreanTitle?: string;
@@ -104,6 +116,35 @@ type ImportData = {
     options?: string[];
     data?: Record<string, unknown>;
   }>;
+  // ── 씬별 import: 기존 씬 1개에 대해서만 scene 메타 + dialogues 업데이트
+  sceneId?: number;
+  sceneIndex?: number; // order 기준 0-based (sceneId 없을 때)
+  scene?: {
+    type?: "VISUAL" | "CHAT";
+    flowType?: "NORMAL" | "BRANCH" | "BRANCH_TRIGGER" | "BRANCH_AND_TRIGGER";
+    branchKey?: string;
+    endingId?: number | null;
+    title?: string;
+    koreanTitle?: string;
+    bgImageUrl?: string;
+    data?: Record<string, unknown>;
+  };
+  dialogues?: Array<{
+    type: string;
+    flowType?: "NORMAL" | "BRANCH";
+    speakerRole?: string;
+    characterName?: string;
+    character?: string;
+    username?: string;
+    speaker?: string;
+    charImageLabel?: string;
+    englishText?: string;
+    koreanText?: string;
+    imageUrl?: string;
+    audioUrl?: string;
+    aiPromptName?: string;
+    data?: Record<string, unknown>;
+  }>;
 };
 
 export async function POST(
@@ -144,9 +185,11 @@ export async function POST(
     let reviewItemsCreated = 0;
     let quizzesCreated = 0;
 
-    // Handle scenes import (only if scenes array is provided)
+    const effectiveStoryId = parseInt(storyId, 10);
+
+    // ── 1) 전체 scenes import (우선)
     if (importData.scenes && importData.scenes.length > 0) {
-      const appendMode = importData.appendMode ?? false;
+      const appendMode = importData.appendMode ?? true;
       const sceneIndices = importData.sceneIndices; // undefined = 전체
 
       // 선택된 씬만 필터링 (sceneIndices 없으면 전체)
@@ -159,34 +202,40 @@ export async function POST(
       const effectiveStoryId = parseInt(storyId, 10);
 
       let characterMap: Record<string, number> = {};
+      const idToStoryCharacterName = new Map<number, string>();
 
-      if (
-        importData.characterMap &&
-        Object.keys(importData.characterMap).length > 0
-      ) {
-        // 사용자 제공 map: 키 정규화(lowercase, trim), 값은 숫자만
-        const raw = importData.characterMap as Record<string, unknown>;
-        for (const [k, v] of Object.entries(raw)) {
-          const key = normalizeKey(k);
-          const num = typeof v === "number" ? v : parseInt(String(v), 10);
-          if (!isNaN(num)) characterMap[key] = num;
-        }
-      } else if (!isNaN(effectiveStoryId) && effectiveStoryId > 0) {
+      if (!isNaN(effectiveStoryId) && effectiveStoryId > 0) {
         const storyCharacters = await prisma.storyCharacter.findMany({
           where: { storyId: effectiveStoryId },
           include: { character: { select: { id: true, name: true, koreanName: true } } },
         });
-
-        characterMap = storyCharacters.reduce((acc, sc) => {
+        for (const sc of storyCharacters) {
           if (sc.character) {
-            acc[normalizeKey(sc.name)] = sc.character.id;
-            acc[normalizeKey(sc.character.name)] = sc.character.id;
-            if (sc.character.koreanName?.trim()) {
-              acc[normalizeKey(sc.character.koreanName)] = sc.character.id;
-            }
+            idToStoryCharacterName.set(sc.character.id, sc.name);
           }
-          return acc;
-        }, {} as Record<string, number>);
+        }
+        if (
+          importData.characterMap &&
+          Object.keys(importData.characterMap).length > 0
+        ) {
+          const raw = importData.characterMap as Record<string, unknown>;
+          for (const [k, v] of Object.entries(raw)) {
+            const key = normalizeKey(k);
+            const num = typeof v === "number" ? v : parseInt(String(v), 10);
+            if (!isNaN(num)) characterMap[key] = num;
+          }
+        } else {
+          characterMap = storyCharacters.reduce((acc, sc) => {
+            if (sc.character) {
+              acc[normalizeKey(sc.name)] = sc.character.id;
+              acc[normalizeKey(sc.character.name)] = sc.character.id;
+              if (sc.character.koreanName?.trim()) {
+                acc[normalizeKey(sc.character.koreanName)] = sc.character.id;
+              }
+            }
+            return acc;
+          }, {} as Record<string, number>);
+        }
       }
 
       // appendMode가 아니면 기존 씬 삭제
@@ -282,7 +331,13 @@ export async function POST(
               flowType: dialogueFlowType,
               speakerRole: isUser ? "USER" : "SYSTEM",
               characterId: isUser || isHeading ? null : characterId,
-              characterName: isUser || isHeading ? null : charName,
+              characterName: isUser || isHeading
+                ? null
+                : storedCharacterNameForDialogue(
+                    characterId,
+                    charName,
+                    idToStoryCharacterName
+                  ),
               englishText: dialogueData.englishText ?? "",
               koreanText: dialogueData.koreanText ?? "",
               charImageLabel: isHeading
@@ -297,6 +352,164 @@ export async function POST(
           totalDialogues++;
         }
         scenesCreated++;
+      }
+    }
+    // ── 2) 씬별 import: sceneId 또는 sceneIndex + dialogues (기존 씬 1개만 업데이트)
+    else if (
+      Array.isArray(importData.dialogues) &&
+      (importData.sceneId != null || importData.sceneIndex != null)
+    ) {
+      const singleSceneDialogues = importData.dialogues;
+      const singleSceneId = importData.sceneId;
+      const singleSceneIndex = importData.sceneIndex;
+
+      const episodeScenes = await prisma.scene.findMany({
+        where: { episodeId: episodeIdNum },
+        orderBy: { order: "asc" },
+      });
+      let targetScene: (typeof episodeScenes)[0] | null = null;
+      if (singleSceneId != null) {
+        targetScene = episodeScenes.find((s) => s.id === singleSceneId) ?? null;
+      } else if (
+        singleSceneIndex != null &&
+        singleSceneIndex >= 0 &&
+        singleSceneIndex < episodeScenes.length
+      ) {
+        targetScene = episodeScenes[singleSceneIndex];
+      }
+      if (!targetScene) {
+        return NextResponse.json(
+          { error: "Scene not found (check sceneId/sceneIndex)" },
+          { status: 400 }
+        );
+      }
+
+      // scene 메타가 있으면 업데이트
+      if (importData.scene && typeof importData.scene === "object") {
+        const scenePatch = importData.scene;
+        const flowType =
+          scenePatch.flowType === "BRANCH_AND_TRIGGER" ? "BRANCH_AND_TRIGGER" :
+          scenePatch.flowType === "BRANCH_TRIGGER" ? "BRANCH_TRIGGER" :
+          scenePatch.flowType === "BRANCH" ? "BRANCH" :
+          scenePatch.flowType === "NORMAL" ? "NORMAL" : undefined;
+        await prisma.scene.update({
+          where: { id: targetScene.id },
+          data: {
+            ...(scenePatch.type != null && { type: scenePatch.type === "CHAT" ? "CHAT" : "VISUAL" }),
+            ...(flowType != null && { flowType: flowType }),
+            ...(scenePatch.branchKey !== undefined && { branchKey: scenePatch.branchKey || null }),
+            ...(scenePatch.endingId !== undefined && { endingId: scenePatch.endingId ?? null }),
+            ...(scenePatch.title != null && { title: scenePatch.title }),
+            ...(scenePatch.koreanTitle !== undefined && { koreanTitle: scenePatch.koreanTitle || null }),
+            ...(scenePatch.bgImageUrl !== undefined && { bgImageUrl: scenePatch.bgImageUrl || null }),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ...(scenePatch.data != null && { data: scenePatch.data as any }),
+          },
+        });
+      }
+
+      // dialogues 치환
+      await prisma.dialogue.deleteMany({ where: { sceneId: targetScene.id } });
+
+      let characterMap: Record<string, number> = {};
+      const idToStoryCharacterNameSingle = new Map<number, string>();
+
+      if (!isNaN(effectiveStoryId) && effectiveStoryId > 0) {
+        const storyCharacters = await prisma.storyCharacter.findMany({
+          where: { storyId: effectiveStoryId },
+          include: { character: { select: { id: true, name: true, koreanName: true } } },
+        });
+        for (const sc of storyCharacters) {
+          if (sc.character) {
+            idToStoryCharacterNameSingle.set(sc.character.id, sc.name);
+          }
+        }
+        if (
+          importData.characterMap &&
+          Object.keys(importData.characterMap as object).length > 0
+        ) {
+          const raw = importData.characterMap as Record<string, unknown>;
+          for (const [k, v] of Object.entries(raw)) {
+            const key = normalizeKey(k);
+            const num = typeof v === "number" ? v : parseInt(String(v), 10);
+            if (!isNaN(num)) characterMap[key] = num;
+          }
+        } else {
+          characterMap = storyCharacters.reduce((acc, sc) => {
+            if (sc.character) {
+              acc[normalizeKey(sc.name)] = sc.character.id;
+              acc[normalizeKey(sc.character.name)] = sc.character.id;
+              if (sc.character.koreanName?.trim()) {
+                acc[normalizeKey(sc.character.koreanName)] = sc.character.id;
+              }
+            }
+            return acc;
+          }, {} as Record<string, number>);
+        }
+      }
+
+      for (let dialogueIndex = 0; dialogueIndex < singleSceneDialogues.length; dialogueIndex++) {
+        const dialogueData = singleSceneDialogues[dialogueIndex];
+        const dialogueType = resolveDialogueType(dialogueData.type);
+        const isHeading = dialogueType === DialogueType.HEADING;
+        const charName = getCharacterName(dialogueData);
+
+        let characterId: number | null = null;
+        const typeLower = dialogueData.type?.toLowerCase();
+        const hasCharacter =
+          charName &&
+          (typeLower === "dialogue" ||
+            typeLower === "choice_result" ||
+            typeLower === "user_input_slot" ||
+            typeLower === "ai_input_slot" ||
+            typeLower === "ai_slot");
+        if (hasCharacter) {
+          characterId = characterMap[normalizeKey(charName)] ?? null;
+          if (characterId === null && effectiveStoryId) {
+            const fallback = await prisma.character.findFirst({
+              where: {
+                storyLinks: { some: { storyId: effectiveStoryId } },
+                OR: [
+                  { name: { equals: charName, mode: "insensitive" } },
+                  { koreanName: { equals: charName, mode: "insensitive" } },
+                ],
+              },
+              select: { id: true },
+            });
+            if (fallback) characterId = fallback.id;
+          }
+        }
+
+        const isUser = dialogueData.speakerRole === "USER";
+        const dialogueFlowType =
+          dialogueData.flowType === "BRANCH" ? "BRANCH" : "NORMAL";
+        await prisma.dialogue.create({
+          data: {
+            sceneId: targetScene.id,
+            order: dialogueIndex + 1,
+            type: dialogueType,
+            flowType: dialogueFlowType,
+            speakerRole: isUser ? "USER" : "SYSTEM",
+            characterId: isUser || isHeading ? null : characterId,
+            characterName: isUser || isHeading
+              ? null
+              : storedCharacterNameForDialogue(
+                  characterId,
+                  charName,
+                  idToStoryCharacterNameSingle
+                ),
+            englishText: dialogueData.englishText ?? "",
+            koreanText: dialogueData.koreanText ?? "",
+            charImageLabel: isHeading
+              ? null
+              : dialogueData.charImageLabel || "default",
+            imageUrl: isHeading ? null : dialogueData.imageUrl || null,
+            audioUrl: dialogueData.audioUrl || null,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ...(dialogueData.data != null && { data: dialogueData.data as any }),
+          },
+        });
+        totalDialogues++;
       }
     }
 

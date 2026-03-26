@@ -50,11 +50,7 @@ import {
   useUpdateUserPlayEpisodeData,
   useResetUserPlayEpisode,
   useUpdateCharacterAffinity,
-  useUserCharacterChats,
-  useUpdateMessage,
-  useDeleteMessage,
 } from "@/hooks/use-users";
-import { ChatMessagesTab } from "@/components/users/chat-messages-tab";
 import { PublishStatus } from "@/types";
 
 function JsonBlock({ label, data }: { label: string; data: unknown }) {
@@ -314,7 +310,10 @@ function PlayEpisodeProgressTab({
   return (
     <div className="space-y-4">
       {playEpisodes.map((pe: any) => (
-        <Card key={pe.id} className="border-0 shadow-sm rounded-2xl overflow-hidden">
+        <Card
+          key={pe.id}
+          className="border-0 shadow-sm rounded-2xl overflow-hidden"
+        >
           <CardContent className="p-5">
             <div className="flex gap-4">
               <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted flex-shrink-0">
@@ -332,7 +331,9 @@ function PlayEpisodeProgressTab({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold">{pe.episode?.title ?? `Episode #${pe.episodeId}`}</h3>
+                  <h3 className="font-semibold">
+                    {pe.episode?.title ?? `Episode #${pe.episodeId}`}
+                  </h3>
                   <div className="flex items-center gap-1">
                     <Button
                       variant="ghost"
@@ -357,7 +358,9 @@ function PlayEpisodeProgressTab({
                       size="sm"
                       className="rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10 flex-shrink-0"
                       onClick={() => {
-                        if (confirm("해당 Play Episode 기록을 삭제하시겠습니까?")) {
+                        if (
+                          confirm("해당 Play Episode 기록을 삭제하시겠습니까?")
+                        ) {
                           onDelete(pe.id);
                         }
                       }}
@@ -372,7 +375,8 @@ function PlayEpisodeProgressTab({
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {pe.episode?.story?.title ?? "-"} · #{pe.episode?.order ?? "-"}
+                  {pe.episode?.story?.title ?? "-"} · #
+                  {pe.episode?.order ?? "-"}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <Badge variant="secondary" className="rounded-lg text-xs">
@@ -390,12 +394,16 @@ function PlayEpisodeProgressTab({
                 <p className="text-xs text-muted-foreground mt-1">
                   시작 {new Date(pe.startedAt).toLocaleString("ko-KR")}
                   {pe.completedAt && (
-                    <> · 완료 {new Date(pe.completedAt).toLocaleString("ko-KR")}</>
+                    <>
+                      {" "}
+                      · 완료 {new Date(pe.completedAt).toLocaleString("ko-KR")}
+                    </>
                   )}
                 </p>
                 {(pe.lastSceneId != null || pe.lastSlotId != null) && (
                   <p className="text-xs text-muted-foreground mt-1 font-mono">
-                    lastSceneId: {pe.lastSceneId ?? "-"} · lastSlotId: {pe.lastSlotId ?? "-"}
+                    lastSceneId: {pe.lastSceneId ?? "-"} · lastSlotId:{" "}
+                    {pe.lastSlotId ?? "-"}
                   </p>
                 )}
               </div>
@@ -412,7 +420,9 @@ function PlayEpisodeProgressTab({
               />
               {pe.slots?.length > 0 && (
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Slots ({pe.slots.length})</p>
+                  <p className="text-sm font-medium">
+                    Slots ({pe.slots.length})
+                  </p>
                   <div className="space-y-2">
                     {pe.slots.map((slot: any, i: number) => (
                       <div
@@ -421,7 +431,8 @@ function PlayEpisodeProgressTab({
                       >
                         <div className="flex items-center justify-between gap-2 mb-2">
                           <span className="text-xs font-mono text-muted-foreground">
-                            #{i + 1} {slot.type} · order {slot.order} · {slot.status}
+                            #{i + 1} {slot.type} · order {slot.order} ·{" "}
+                            {slot.status}
                           </span>
                           <Button
                             variant="ghost"
@@ -470,10 +481,6 @@ export default function UserDetailPage() {
   const { data: bookmarks, isLoading: bmLoading } = useUserBookmarks(userId);
   const { data: playEpisodes, isLoading: peLoading } =
     useUserPlayEpisodes(userId);
-  const { data: characterChats, isLoading: chatLoading } =
-    useUserCharacterChats(userId);
-  const updateMessage = useUpdateMessage(userId);
-  const deleteMessage = useDeleteMessage(userId);
   const deletePlayEpisode = useDeleteUserPlayEpisode(userId);
   const deletePlayEpisodeSlot = useDeletePlayEpisodeSlot(userId);
   const updatePlayEpisodeData = useUpdateUserPlayEpisodeData(userId);
@@ -509,7 +516,6 @@ export default function UserDetailPage() {
     { value: "story-progress", label: "Story Progress" },
     { value: "episode-progress", label: "Episode Progress" },
     { value: "play-episode-progress", label: "Play Episode Progress" },
-    { value: "chat-messages", label: "Chat Messages" },
     { value: "characters", label: "Characters" },
     { value: "bookmarks", label: "Bookmarks" },
   ];
@@ -695,16 +701,27 @@ export default function UserDetailPage() {
               playEpisodes={playEpisodes ?? []}
               isLoading={peLoading}
               onDelete={(id) => deletePlayEpisode.mutate(id)}
-              deletingId={deletePlayEpisode.isPending && deletePlayEpisode.variables != null ? deletePlayEpisode.variables : null}
-              onDeleteSlot={(peId, slotId) => deletePlayEpisodeSlot.mutate({ playEpisodeId: peId, slotId })}
+              deletingId={
+                deletePlayEpisode.isPending &&
+                deletePlayEpisode.variables != null
+                  ? deletePlayEpisode.variables
+                  : null
+              }
+              onDeleteSlot={(peId, slotId) =>
+                deletePlayEpisodeSlot.mutate({ playEpisodeId: peId, slotId })
+              }
               deletingSlotId={
-                deletePlayEpisodeSlot.isPending && deletePlayEpisodeSlot.variables != null
+                deletePlayEpisodeSlot.isPending &&
+                deletePlayEpisodeSlot.variables != null
                   ? deletePlayEpisodeSlot.variables.slotId
                   : null
               }
-              onSaveData={(peId, data) => updatePlayEpisodeData.mutate({ playEpisodeId: peId, data })}
+              onSaveData={(peId, data) =>
+                updatePlayEpisodeData.mutate({ playEpisodeId: peId, data })
+              }
               savingDataId={
-                updatePlayEpisodeData.isPending && updatePlayEpisodeData.variables != null
+                updatePlayEpisodeData.isPending &&
+                updatePlayEpisodeData.variables != null
                   ? updatePlayEpisodeData.variables.playEpisodeId
                   : null
               }
@@ -712,28 +729,6 @@ export default function UserDetailPage() {
               resettingId={
                 resetPlayEpisode.isPending && resetPlayEpisode.variables != null
                   ? resetPlayEpisode.variables
-                  : null
-              }
-            />
-          </TabsContent>
-
-          {/* Chat Messages */}
-          <TabsContent value="chat-messages" className="mt-6">
-            <ChatMessagesTab
-              chats={characterChats ?? []}
-              isLoading={chatLoading}
-              onEditMessage={(messageId, content) =>
-                updateMessage.mutate({ messageId, content })
-              }
-              onDeleteMessage={(messageId) => deleteMessage.mutate(messageId)}
-              editingId={
-                updateMessage.isPending && updateMessage.variables != null
-                  ? updateMessage.variables.messageId
-                  : null
-              }
-              deletingId={
-                deleteMessage.isPending && deleteMessage.variables != null
-                  ? deleteMessage.variables
                   : null
               }
             />

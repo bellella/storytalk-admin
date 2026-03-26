@@ -18,6 +18,7 @@ const typeToDialogueType: Record<string, DialogueType> = {
   ai_slot: DialogueType.AI_SLOT,
   speaking_mission: DialogueType.SPEAKING_MISSION,
   repeat_after_me: DialogueType.SPEAKING_MISSION,
+  bg_change: DialogueType.BG_CHANGE,
 };
 
 function resolveDialogueType(input: unknown): DialogueType {
@@ -148,6 +149,7 @@ function buildDialogueData(
     DialogueType.IMAGE,
     DialogueType.HEADING,
     DialogueType.CHOICE_SLOT,
+    DialogueType.BG_CHANGE,
   ];
   if (noCharacterTypes.includes(type as (typeof noCharacterTypes)[number])) {
     const result: Record<string, unknown> = {
@@ -159,6 +161,9 @@ function buildDialogueData(
     if (type === DialogueType.IMAGE) {
       result.imageUrl = typeof body.imageUrl === "string" ? body.imageUrl : null;
       result.audioUrl = typeof body.audioUrl === "string" ? body.audioUrl : null;
+    } else if (type === DialogueType.BG_CHANGE) {
+      result.imageUrl = typeof body.imageUrl === "string" ? body.imageUrl : null;
+      result.audioUrl = null;
     } else {
       result.imageUrl = null;
       result.audioUrl = null;

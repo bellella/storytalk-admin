@@ -101,6 +101,7 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
     DialogueType.IMAGE,
     DialogueType.HEADING,
     DialogueType.CHOICE_SLOT,
+    DialogueType.BG_CHANGE,
   ];
   if (noCharacterTypes.includes(type as (typeof noCharacterTypes)[number])) {
     const result: Record<string, unknown> = {
@@ -112,6 +113,9 @@ function buildDialogueUpdateData(type: string, body: Record<string, unknown>) {
     if (type === DialogueType.IMAGE) {
       result.imageUrl = body.imageUrl ?? null;
       result.audioUrl = body.audioUrl ?? null;
+    } else if (type === DialogueType.BG_CHANGE) {
+      result.imageUrl = body.imageUrl ?? null;
+      result.audioUrl = null;
     } else {
       result.imageUrl = null;
       result.audioUrl = null;

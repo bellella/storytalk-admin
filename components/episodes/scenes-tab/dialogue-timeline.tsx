@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { DialogueBasic } from "@/types";
+import type { DialogueBasic, SceneBasic } from "@/types";
 import { DialogueType } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,6 +61,7 @@ const DIALOGUE_TYPE_CONFIG: Record<
   [DialogueType.AI_INPUT_SLOT]: { label: "AI Input", icon: MessageSquare, badgeClass: "bg-orange-500/10 text-orange-600" },
   [DialogueType.AI_SLOT]: { label: "AI Slot", icon: Bot, badgeClass: "bg-indigo-500/10 text-indigo-600" },
   [DialogueType.SPEAKING_MISSION]: { label: "Speaking Mission", icon: Target, badgeClass: "bg-pink-500/10 text-pink-600" },
+  [DialogueType.BG_CHANGE]: { label: "BG Change", icon: ImageIcon, badgeClass: "bg-teal-500/10 text-teal-600" },
 };
 
 function getDialogueTypeConfig(type: string) {
@@ -80,7 +81,10 @@ interface DialogueTimelineProps {
   storyId: number;
   episodeId: number;
   sceneId: number | undefined;
+  scene?: SceneBasic | null;
   onDialoguesChanged: (dialogues: DialogueBasic[]) => void;
+  /** 씬 메타 업데이트 시 에피소드 refetch (Import에 scene 포함된 경우) */
+  onImportComplete?: () => void;
 }
 
 function SortableDialogueItem({
@@ -119,13 +123,16 @@ function SortableDialogueItem({
             checked={isDeleteSelected}
             onChange={(e) => { e.stopPropagation(); onToggleDeleteSelect(e as unknown as React.MouseEvent); }}
             onClick={(e) => e.stopPropagation()}
-            className="mt-1 accent-primary cursor-pointer flex-shrink-0"
+            className={cn(
+              "accent-primary cursor-pointer flex-shrink-0 transition-opacity",
+              !isDeleteSelected && "opacity-0 group-hover:opacity-100"
+            )}
           />
         )}
         <button
           onClick={onSelect}
           className={cn(
-            "flex-1 w-full flex items-start gap-3 p-3 rounded-xl text-left transition-all duration-200",
+            "flex-1 w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200",
             isSelected ? "bg-primary/10 ring-2 ring-primary" : "hover:bg-secondary",
             isDragging && "opacity-50 shadow-lg"
           )}
@@ -133,7 +140,7 @@ function SortableDialogueItem({
         <div
           {...attributes}
           {...listeners}
-          className="touch-none cursor-grab active:cursor-grabbing mt-1"
+          className="touch-none cursor-grab active:cursor-grabbing"
           onClick={(e) => e.stopPropagation()}
         >
           <GripVertical className="w-4 h-4 text-muted-foreground/50 flex-shrink-0" />
@@ -207,7 +214,9 @@ export function DialogueTimeline({
   storyId,
   episodeId,
   sceneId,
+  scene,
   onDialoguesChanged,
+  onImportComplete,
 }: DialogueTimelineProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -293,34 +302,61 @@ export function DialogueTimeline({
       return;
     }
 
-    const dialoguesArray = Array.isArray(parsed)
+    const obj = typeof parsed === "object" && parsed != null ? (parsed as Record<string, unknown>) : {};
+    const sceneObj = obj.scene && typeof obj.scene === "object" ? (obj.scene as Record<string, unknown>) : null;
+
+    // dialogues: top-level obj.dialogues 또는 scene 안의 scene.dialogues
+    let dialoguesArray: unknown[] | null = Array.isArray(parsed)
       ? parsed
-      : (parsed as Record<string, unknown>).dialogues;
+      : Array.isArray(obj.dialogues)
+        ? obj.dialogues
+        : sceneObj && Array.isArray(sceneObj.dialogues)
+          ? sceneObj.dialogues
+          : null;
 
     if (!Array.isArray(dialoguesArray) || dialoguesArray.length === 0) {
-      setImportError('dialogues 배열을 찾을 수 없습니다. 배열이나 { "dialogues": [...] } 형태로 붙여넣으세요.');
+      setImportError('dialogues 배열을 찾을 수 없습니다. { "dialogues": [...] } 또는 { "scene": { "dialogues": [...], "title": "..." } } 형태로 붙여넣으세요.');
       return;
     }
 
+    // scene 메타: scene에서 dialogues만 제외 (title, type, koreanTitle 등 유지)
+    const rawScene = sceneObj ?? (obj.scene && typeof obj.scene === "object" ? obj.scene : null);
+    const sceneMeta = rawScene
+      ? (() => {
+          const s = { ...(rawScene as Record<string, unknown>) };
+          delete s.dialogues;
+          return Object.keys(s).length > 0 ? s : undefined;
+        })()
+      : undefined;
+
     try {
       setImporting(true);
-      for (const d of dialoguesArray) {
-        await fetch(
-          `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(d),
-          }
-        );
-      }
       const res = await fetch(
+        `/api/stories/${storyId}/episodes/${episodeId}/import`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sceneId,
+            dialogues: dialoguesArray,
+            ...(sceneMeta && { scene: sceneMeta }),
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Import 실패");
+      }
+
+      const fetchRes = await fetch(
         `/api/stories/${storyId}/episodes/${episodeId}/scenes/${sceneId}/dialogues`
       );
-      if (res.ok) {
-        const updated = await res.json();
+      if (fetchRes.ok) {
+        const updated = await fetchRes.json();
         onDialoguesChanged(updated);
       }
+      await onImportComplete?.();
       setIsImportOpen(false);
       setImportJson("");
     } catch (e) {
@@ -453,16 +489,16 @@ export function DialogueTimeline({
       <Dialog open={isImportOpen} onOpenChange={(open) => { if (!open) { setIsImportOpen(false); setImportJson(""); setImportError(null); } }}>
         <DialogContent className="max-w-lg rounded-2xl">
           <DialogHeader>
-            <DialogTitle>대화 Import (추가)</DialogTitle>
+            <DialogTitle>씬별 Import</DialogTitle>
             <DialogDescription>
-              기존 대화를 유지하고, JSON의 대화를 뒤에 추가합니다.
+              현재 씬의 대화를 치환합니다. scene이 포함되면 씬 메타(title, type, flowType 등)도 업데이트됩니다.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <Textarea
               value={importJson}
               onChange={(e) => { setImportJson(e.target.value); setImportError(null); }}
-              placeholder={'배열이나 { "dialogues": [...] } 형태의 JSON을 붙여넣으세요'}
+              placeholder={'{ "dialogues": [...], "scene": { "title": "...", "type": "VISUAL" } }'}
               className="font-mono text-xs h-52 rounded-xl resize-none"
             />
             {importError && (
@@ -484,7 +520,7 @@ export function DialogueTimeline({
               disabled={importing || !importJson.trim()}
             >
               {importing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              {importing ? "추가 중..." : "추가"}
+              {importing ? "Import 중..." : "Import"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -501,7 +537,10 @@ export function DialogueTimeline({
           </DialogHeader>
           <div className="space-y-3">
             <Textarea
-              value={JSON.stringify({ dialogues: dialogues.map((d) => ({ order: d.order, type: d.type, speakerRole: d.speakerRole ?? "SYSTEM", characterName: d.characterName || "", charImageLabel: d.charImageLabel, englishText: d.englishText, koreanText: d.koreanText, imageUrl: d.imageUrl, audioUrl: d.audioUrl, ...(d.aiPromptName != null && { aiPromptName: d.aiPromptName }), data: d.data ?? null, flowType: d.flowType })) }, null, 2)}
+              value={JSON.stringify({
+                ...(scene && { scene: { type: scene.type, flowType: scene.flowType, title: scene.title, koreanTitle: scene.koreanTitle, bgImageUrl: scene.bgImageUrl, data: scene.data } }),
+                dialogues: dialogues.map((d) => ({ order: d.order, type: d.type, speakerRole: d.speakerRole ?? "SYSTEM", characterName: d.characterName || "", charImageLabel: d.charImageLabel, englishText: d.englishText, koreanText: d.koreanText, imageUrl: d.imageUrl, audioUrl: d.audioUrl, ...(d.aiPromptName != null && { aiPromptName: d.aiPromptName }), data: d.data ?? null, flowType: d.flowType })),
+              }, null, 2)}
               readOnly
               className="font-mono text-xs h-52 rounded-xl resize-none"
             />
@@ -513,7 +552,10 @@ export function DialogueTimeline({
             <Button
               className="rounded-xl"
               variant="outline"
-              onClick={() => navigator.clipboard.writeText(JSON.stringify({ dialogues: dialogues.map((d) => ({ order: d.order, type: d.type, speakerRole: d.speakerRole ?? "SYSTEM", characterName: d.characterName || "", charImageLabel: d.charImageLabel, englishText: d.englishText, koreanText: d.koreanText, imageUrl: d.imageUrl, audioUrl: d.audioUrl, ...(d.aiPromptName != null && { aiPromptName: d.aiPromptName }), data: d.data ?? null, flowType: d.flowType })) }, null, 2))}
+              onClick={() => navigator.clipboard.writeText(JSON.stringify({
+                ...(scene && { scene: { type: scene.type, flowType: scene.flowType, title: scene.title, koreanTitle: scene.koreanTitle, bgImageUrl: scene.bgImageUrl, data: scene.data } }),
+                dialogues: dialogues.map((d) => ({ order: d.order, type: d.type, speakerRole: d.speakerRole ?? "SYSTEM", characterName: d.characterName || "", charImageLabel: d.charImageLabel, englishText: d.englishText, koreanText: d.koreanText, imageUrl: d.imageUrl, audioUrl: d.audioUrl, ...(d.aiPromptName != null && { aiPromptName: d.aiPromptName }), data: d.data ?? null, flowType: d.flowType })),
+              }, null, 2))}
             >
               복사
             </Button>

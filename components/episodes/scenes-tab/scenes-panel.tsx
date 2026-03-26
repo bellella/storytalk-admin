@@ -81,9 +81,12 @@ function SceneBranchTriggerEditor({
       ? (parsed.candidates as { sceneId: number }[]).map((c) => `SCENE_${c.sceneId}`)
       : [];
   const candidateKeys = rawCandidateKeys.filter((k): k is string => typeof k === "string");
+  const fallbackKeys = Array.isArray(parsed.fallbackKeys)
+    ? (parsed.fallbackKeys as string[]).filter((k): k is string => typeof k === "string")
+    : [];
 
   const emit = (patch: object) =>
-    onChange(JSON.stringify({ threshold, selectionMode, candidateKeys, ...patch }));
+    onChange(JSON.stringify({ threshold, selectionMode, candidateKeys, fallbackKeys, ...patch }));
 
   return (
     <div className="space-y-3 p-3 rounded-xl bg-rose-500/5 border border-rose-500/10">
@@ -177,6 +180,74 @@ function SceneBranchTriggerEditor({
           )}
         </div>
       </div>
+
+      {/* Fallback Keys */}
+      <div>
+        <div className="flex items-center justify-between mb-1.5">
+          <Label className="text-xs text-muted-foreground">Fallback Keys</Label>
+          <Button type="button" variant="ghost" size="sm" className="h-6 text-xs rounded-lg px-2"
+            onClick={() => emit({ fallbackKeys: [...fallbackKeys, branchKeys[0]?.key ?? ""] })}
+            disabled={branchKeys.length === 0}>
+            <Plus className="w-3 h-3 mr-1" /> Add
+          </Button>
+        </div>
+        <div className="space-y-1.5">
+          {fallbackKeys.map((key, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground w-5 text-right">{i + 1}.</span>
+              {branchKeys.length > 0 ? (
+                <Select
+                  value={key || "__none__"}
+                  onValueChange={(v) => {
+                    const next = [...fallbackKeys];
+                    next[i] = v === "__none__" ? "" : v;
+                    emit({ fallbackKeys: next });
+                  }}
+                >
+                  <SelectTrigger className="rounded-xl bg-secondary border-0 h-8 flex-1 text-xs font-mono">
+                    <SelectValue placeholder="branch key 선택" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="__none__" className="rounded-lg text-xs text-muted-foreground">—</SelectItem>
+                    {key && !branchKeys.some((bk) => bk.key === key) && (
+                      <SelectItem value={key} className="rounded-lg text-xs font-mono text-muted-foreground">
+                        {key} (custom)
+                      </SelectItem>
+                    )}
+                    {branchKeys.map((bk) => (
+                      <SelectItem key={bk.key} value={bk.key} className="rounded-lg text-xs font-mono">
+                        {bk.key}
+                        {bk.name && <span className="text-muted-foreground ml-1">({bk.name})</span>}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  value={key}
+                  placeholder="에피소드에서 Branch Keys 정의 필요"
+                  onChange={(e) => {
+                    const next = [...fallbackKeys];
+                    next[i] = e.target.value;
+                    emit({ fallbackKeys: next });
+                  }}
+                  className="flex-1 rounded-xl bg-secondary border-0 h-8 text-xs font-mono"
+                />
+              )}
+              <Button type="button" variant="ghost" size="icon"
+                className="h-8 w-8 rounded-xl text-destructive hover:bg-destructive/10 flex-shrink-0"
+                onClick={() => emit({ fallbackKeys: fallbackKeys.filter((_, j) => j !== i) })}>
+                <X className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          ))}
+          {fallbackKeys.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              {branchKeys.length === 0 ? "에피소드에서 Branch Keys를 먼저 정의하세요" : "No fallbacks"}
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -191,6 +262,8 @@ interface ScenesPanelProps {
   onDeleteScenes?: (sceneIds: number[]) => Promise<void>;
   branchKeys?: BranchKeyItem[];
   endings?: EndingBasic[];
+  /** PLAY 타입일 때만 엔딩 여부 스위치 사용 가능 */
+  episodeType?: "UNIT" | "NOVEL" | "PLAY";
   onOpenBranchKeys?: () => void;
   saving: boolean;
   storyId: number;
@@ -235,7 +308,10 @@ function SortableSceneItem({
             checked={isDeleteSelected}
             onChange={(e) => { e.stopPropagation(); onToggleDeleteSelect(e as unknown as React.MouseEvent); }}
             onClick={(e) => e.stopPropagation()}
-            className="mt-0.5 accent-primary cursor-pointer flex-shrink-0"
+            className={cn(
+              "mt-0.5 accent-primary cursor-pointer flex-shrink-0 transition-opacity",
+              !isDeleteSelected && "opacity-0 group-hover:opacity-100"
+            )}
           />
         )}
         <button
@@ -343,6 +419,7 @@ export function ScenesPanel({
   onDeleteScenes,
   branchKeys = [],
   endings = [],
+  episodeType,
   onOpenBranchKeys,
   saving,
 }: ScenesPanelProps) {
@@ -613,6 +690,14 @@ export function ScenesPanel({
                 <div className="flex items-center gap-3">
                   <Switch
                     checked={!!sceneForm.watch("endingId")}
+                    disabled={episodeType !== "PLAY" || (endings.length === 0 && !sceneForm.watch("endingId"))}
+                    title={
+                      episodeType !== "PLAY"
+                        ? "PLAY 타입 에피소드에서만 사용 가능"
+                        : endings.length === 0 && !sceneForm.watch("endingId")
+                          ? "Endings 탭에서 엔딩을 먼저 추가하세요"
+                          : undefined
+                    }
                     onCheckedChange={(checked) => {
                       if (checked) {
                         if (endings.length > 0) {

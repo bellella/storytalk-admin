@@ -51,6 +51,7 @@ const dialogueTypes: {
   { value: DialogueType.AI_INPUT_SLOT, label: "AI Input Slot" },
   { value: DialogueType.AI_SLOT, label: "AI Slot" },
   { value: DialogueType.SPEAKING_MISSION, label: "Speaking Mission" },
+  { value: DialogueType.BG_CHANGE, label: "BG Change" },
 ];
 
 // ── Structured Data Editors ──────────────────────────────────────────────────
@@ -957,10 +958,25 @@ export function DialogueEditor({
                   </div>
                 )}
 
-                {/* Image - only for IMAGE type */}
+                {/* Image - for IMAGE type */}
                 {currentTypeValue === DialogueType.IMAGE && (
                   <div>
                     <Label className="text-sm font-medium">Image</Label>
+                    <div className="mt-2">
+                      <ImageUploader
+                        value={form.watch("imageUrl")}
+                        onChange={(url) => form.setValue("imageUrl", url)}
+                        aspectRatio="video"
+                        maxSizeMB={10}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Background Image - for BG_CHANGE type */}
+                {currentTypeValue === DialogueType.BG_CHANGE && (
+                  <div>
+                    <Label className="text-sm font-medium">Background Image</Label>
                     <div className="mt-2">
                       <ImageUploader
                         value={form.watch("imageUrl")}
@@ -1017,7 +1033,8 @@ export function DialogueEditor({
                 {/* Voice Audio - hidden for text-only types */}
                 {currentTypeValue !== DialogueType.IMAGE &&
                   currentTypeValue !== DialogueType.HEADING &&
-                  currentTypeValue !== DialogueType.CHOICE_SLOT && (
+                  currentTypeValue !== DialogueType.CHOICE_SLOT &&
+                  currentTypeValue !== DialogueType.BG_CHANGE && (
                     <div>
                       <Label className="text-sm font-medium">Voice Audio (Optional)</Label>
                       <div className="mt-2 h-20 rounded-xl bg-secondary border-2 border-dashed border-border flex items-center justify-center cursor-pointer hover:bg-secondary/80 transition-colors">
