@@ -45,14 +45,20 @@ interface StoryEpisodesTabProps {
   onCreateEpisode: () => void;
   onReorderEpisodes: (reorderedEpisodes: EpisodeBasic[]) => void;
   reordering?: boolean;
+  onDeleteEpisode?: (episodeId: number) => void;
+  deletingEpisodeId?: number | null;
 }
 
 function SortableEpisodeItem({
   episode,
   storyId,
+  onDeleteEpisode,
+  deleteDisabled,
 }: {
   episode: EpisodeBasic;
   storyId: number;
+  onDeleteEpisode?: (episodeId: number) => void;
+  deleteDisabled?: boolean;
 }) {
   const {
     attributes,
@@ -122,7 +128,20 @@ function SortableEpisodeItem({
               <Copy className="w-4 h-4 mr-2" />
               Duplicate
             </DropdownMenuItem>
-            <DropdownMenuItem className="rounded-lg text-destructive">
+            <DropdownMenuItem
+              className="rounded-lg text-destructive focus:text-destructive"
+              disabled={deleteDisabled || !onDeleteEpisode}
+              onSelect={() => {
+                if (!onDeleteEpisode) return;
+                if (
+                  confirm(
+                    `Delete "${episode.title}"? This cannot be undone.`
+                  )
+                ) {
+                  onDeleteEpisode(episode.id);
+                }
+              }}
+            >
               <Trash2 className="w-4 h-4 mr-2" />
               Delete
             </DropdownMenuItem>
@@ -139,6 +158,8 @@ export function StoryEpisodesTab({
   onCreateEpisode,
   onReorderEpisodes,
   reordering = false,
+  onDeleteEpisode,
+  deletingEpisodeId = null,
 }: StoryEpisodesTabProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -186,6 +207,8 @@ export function StoryEpisodesTab({
                   key={episode.id}
                   episode={episode}
                   storyId={storyId}
+                  onDeleteEpisode={onDeleteEpisode}
+                  deleteDisabled={deletingEpisodeId === episode.id}
                 />
               ))}
             </div>

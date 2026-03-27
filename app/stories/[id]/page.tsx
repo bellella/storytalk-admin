@@ -31,7 +31,7 @@ import {
   useRemoveStoryTag,
   useCreateTag,
 } from "@/hooks/use-tags";
-import { useCreateEpisode } from "@/hooks/use-episodes";
+import { useCreateEpisode, useDeleteEpisode } from "@/hooks/use-episodes";
 import { StoryOverviewTab } from "@/components/stories/story-overview-tab";
 import { StoryEpisodesTab } from "@/components/stories/story-episodes-tab";
 import { StoryCharactersTab } from "@/components/stories/story-characters-tab";
@@ -79,6 +79,7 @@ export default function StoryDetailPage() {
   const unlinkCharacter = useUnlinkCharacter(storyId);
   const updateStoryCharacter = useUpdateStoryCharacter(storyId);
   const createEpisode = useCreateEpisode();
+  const deleteEpisode = useDeleteEpisode();
   const addStoryTag = useAddStoryTag(storyId);
   const removeStoryTag = useRemoveStoryTag(storyId);
   const createTag = useCreateTag();
@@ -138,6 +139,10 @@ export default function StoryDetailPage() {
       title: `Episode ${nextOrder}`,
       order: nextOrder,
     });
+  };
+
+  const handleDeleteEpisode = (episodeId: number) => {
+    deleteEpisode.mutate({ storyId, id: episodeId });
   };
 
   const [reorderingEpisodes, setReorderingEpisodes] = useState(false);
@@ -350,6 +355,12 @@ export default function StoryDetailPage() {
           onCreateEpisode={handleCreateEpisode}
           onReorderEpisodes={handleReorderEpisodes}
           reordering={reorderingEpisodes}
+          onDeleteEpisode={handleDeleteEpisode}
+          deletingEpisodeId={
+            deleteEpisode.isPending && deleteEpisode.variables
+              ? deleteEpisode.variables.id
+              : null
+          }
         />
       )}
 

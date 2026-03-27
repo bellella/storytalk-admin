@@ -6,7 +6,8 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "db:cleanup-review-orphans": "prisma db execute --file prisma/cleanup-review-items-orphan-dialogues.sql"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.978.0",

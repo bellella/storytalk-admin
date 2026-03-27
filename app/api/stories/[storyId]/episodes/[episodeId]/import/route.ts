@@ -107,6 +107,8 @@ type ImportData = {
     dialogueIndex: number;
     description?: string;
   }>;
+  /** true면 기존 리뷰 아이템 전부 삭제 후 JSON만 반영. 생략/false면 같은 대사에 대해 upsert(병합)만 하고 나머지는 유지 */
+  replaceReviewItems?: boolean;
   quizzes?: Array<{
     type: "SENTENCE_BUILD" | "SENTENCE_CLOZE_BUILD";
     questionEnglish: string;
@@ -515,10 +517,7 @@ export async function POST(
 
     // Handle reviewItems import (only if reviewItems array is provided)
     if (importData.reviewItems && importData.reviewItems.length > 0) {
-      // Delete existing review items for this episode
-      await prisma.reviewItem.deleteMany({
-        where: { episodeId: episodeIdNum },
-      });
+      const replaceReviewItems = importData.replaceReviewItems === true;
 
       // Get all scenes with dialogues for this episode to map sceneIndex/dialogueIndex to dialogueId
       const scenes = await prisma.scene.findMany({
@@ -536,22 +535,49 @@ export async function POST(
         });
       });
 
-      // Create review items (use array index for order)
+      if (replaceReviewItems) {
+        await prisma.reviewItem.deleteMany({
+          where: { episodeId: episodeIdNum },
+        });
+      }
+
+      // Create or upsert review items (use array index for order)
       for (let i = 0; i < importData.reviewItems.length; i++) {
         const reviewItem = importData.reviewItems[i];
         const dialogueId =
           dialogueMap[reviewItem.sceneIndex]?.[reviewItem.dialogueIndex];
-        if (dialogueId) {
+        if (!dialogueId) continue;
+
+        if (replaceReviewItems) {
           await prisma.reviewItem.create({
             data: {
               episodeId: episodeIdNum,
-              dialogueId: dialogueId,
+              dialogueId,
               order: i + 1,
               description: reviewItem.description || null,
             },
           });
-          reviewItemsCreated++;
+        } else {
+          await prisma.reviewItem.upsert({
+            where: {
+              episodeId_dialogueId: {
+                episodeId: episodeIdNum,
+                dialogueId,
+              },
+            },
+            create: {
+              episodeId: episodeIdNum,
+              dialogueId,
+              order: i + 1,
+              description: reviewItem.description || null,
+            },
+            update: {
+              order: i + 1,
+              description: reviewItem.description ?? null,
+            },
+          });
         }
+        reviewItemsCreated++;
       }
     }
 

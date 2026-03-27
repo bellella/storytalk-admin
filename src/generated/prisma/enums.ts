@@ -33,10 +33,29 @@ export type Level = (typeof Level)[keyof typeof Level]
 
 export const AuthProvider = {
   GOOGLE: 'GOOGLE',
-  APPLE: 'APPLE'
+  APPLE: 'APPLE',
+  KAKAO: 'KAKAO',
+  NAVER: 'NAVER'
 } as const
 
 export type AuthProvider = (typeof AuthProvider)[keyof typeof AuthProvider]
+
+
+export const UserRole = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const UserGender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+} as const
+
+export type UserGender = (typeof UserGender)[keyof typeof UserGender]
 
 
 export const StoryType = {
@@ -393,3 +412,40 @@ export const PromptType = {
 } as const
 
 export type PromptType = (typeof PromptType)[keyof typeof PromptType]
+
+
+export const UsageFeatureType = {
+  CHARACTER_CHAT: 'CHARACTER_CHAT',
+  EPISODE_READ: 'EPISODE_READ'
+} as const
+
+export type UsageFeatureType = (typeof UsageFeatureType)[keyof typeof UsageFeatureType]
+
+
+export const AdRewardType = {
+  CHARACTER_CHAT: 'CHARACTER_CHAT',
+  EPISODE_READ: 'EPISODE_READ'
+} as const
+
+export type AdRewardType = (typeof AdRewardType)[keyof typeof AdRewardType]
+
+
+export const SupportInquiryType = {
+  GENERAL: 'GENERAL',
+  BUG: 'BUG',
+  PAYMENT: 'PAYMENT',
+  ACCOUNT: 'ACCOUNT',
+  REPORT: 'REPORT'
+} as const
+
+export type SupportInquiryType = (typeof SupportInquiryType)[keyof typeof SupportInquiryType]
+
+
+export const SupportInquiryStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type SupportInquiryStatus = (typeof SupportInquiryStatus)[keyof typeof SupportInquiryStatus]

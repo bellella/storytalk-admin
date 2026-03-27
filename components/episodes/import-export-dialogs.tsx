@@ -253,7 +253,12 @@ export function ImportExportDialogs({
             <DialogTitle>Import Episode Data</DialogTitle>
             <DialogDescription>
               JSON 형식의 episode 데이터를 붙여넣어주세요. scenes,
-              reviewItems, quizzes 중 제공된 항목만 다시 생성됩니다.
+              reviewItems, quizzes 중 제공된 항목만 처리합니다. 리뷰 아이템은
+              기본적으로 병합(같은 대사는 덮어쓰기, 나머지는 유지)이며, JSON 루트에{" "}
+              <code className="text-xs bg-muted px-1 rounded">
+                &quot;replaceReviewItems&quot;: true
+              </code>
+              를 넣으면 기존 리뷰를 모두 지우고 JSON만 반영합니다.
             </DialogDescription>
           </DialogHeader>
           <div className="flex-1 overflow-auto">

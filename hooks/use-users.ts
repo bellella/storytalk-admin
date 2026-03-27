@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { UserGender, UserRole } from "@/src/generated/prisma/enums";
 
 export function useUsers(search = "") {
   return useQuery({
@@ -25,6 +26,28 @@ export function useUser(userId: number) {
       return res.json() as Promise<UserDetail>;
     },
     enabled: !!userId,
+  });
+}
+
+export function usePatchUser(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: { role?: UserRole; gender?: UserGender | null }) => {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err as { error?: string }).error || "Failed to update user");
+      }
+      return res.json() as Promise<UserDetail>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", userId] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
   });
 }
 
@@ -276,6 +299,8 @@ export type UserBasic = {
   name: string | null;
   email: string;
   profileImage: string | null;
+  gender: UserGender | null;
+  role: UserRole;
   XpLevel: number;
   xp: number;
   streakDays: number;

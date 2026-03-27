@@ -97,6 +97,8 @@ export function useDeleteEpisode() {
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["stories", variables.storyId, "episodes"] });
+      queryClient.invalidateQueries({ queryKey: ["stories", variables.storyId] });
+      queryClient.invalidateQueries({ queryKey: ["stories"] });
     },
   });
 }

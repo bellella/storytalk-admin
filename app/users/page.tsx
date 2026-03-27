@@ -136,6 +136,7 @@ export default function UsersPage() {
               <TableHeader>
                 <TableRow className="bg-secondary/50 hover:bg-secondary/50">
                   <TableHead className="font-semibold">유저</TableHead>
+                  <TableHead className="font-semibold">역할</TableHead>
                   <TableHead className="font-semibold">레벨</TableHead>
                   <TableHead className="font-semibold">XP</TableHead>
                   <TableHead className="font-semibold">스트릭</TableHead>
@@ -165,6 +166,14 @@ export default function UsersPage() {
                           <span className="text-xs text-muted-foreground">{user.email}</span>
                         </div>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={user.role === "ADMIN" ? "default" : "secondary"}
+                        className="rounded-lg text-xs font-normal"
+                      >
+                        {user.role === "ADMIN" ? "어드민" : "일반"}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -214,7 +223,7 @@ export default function UsersPage() {
                 ))}
                 {users.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-16 text-muted-foreground text-sm">
+                    <TableCell colSpan={8} className="text-center py-16 text-muted-foreground text-sm">
                       유저가 없습니다
                     </TableCell>
                   </TableRow>

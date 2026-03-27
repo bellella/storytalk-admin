@@ -99,6 +99,9 @@ export const ModelName = {
   CouponUsage: 'CouponUsage',
   UserSubscription: 'UserSubscription',
   PromptTemplate: 'PromptTemplate',
+  UserUsage: 'UserUsage',
+  AdRewardLog: 'AdRewardLog',
+  SupportInquiry: 'SupportInquiry',
   Image: 'Image'
 } as const
 
@@ -125,10 +128,12 @@ export const UserScalarFieldEnum = {
   provider: 'provider',
   providerId: 'providerId',
   profileImage: 'profileImage',
+  gender: 'gender',
   level: 'level',
   XpLevel: 'XpLevel',
   xp: 'xp',
   streakDays: 'streakDays',
+  role: 'role',
   selectedCharacterId: 'selectedCharacterId',
   lastLoginAt: 'lastLoginAt',
   registeredAt: 'registeredAt',
@@ -860,6 +865,56 @@ export const PromptTemplateScalarFieldEnum = {
 } as const
 
 export type PromptTemplateScalarFieldEnum = (typeof PromptTemplateScalarFieldEnum)[keyof typeof PromptTemplateScalarFieldEnum]
+
+
+export const UserUsageScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  featureType: 'featureType',
+  usageDate: 'usageDate',
+  usedCount: 'usedCount',
+  freeLimit: 'freeLimit',
+  adRewardCount: 'adRewardCount',
+  adRewardedCount: 'adRewardedCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserUsageScalarFieldEnum = (typeof UserUsageScalarFieldEnum)[keyof typeof UserUsageScalarFieldEnum]
+
+
+export const AdRewardLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  rewardAmount: 'rewardAmount',
+  rewardKey: 'rewardKey',
+  usageDate: 'usageDate',
+  createdAt: 'createdAt'
+} as const
+
+export type AdRewardLogScalarFieldEnum = (typeof AdRewardLogScalarFieldEnum)[keyof typeof AdRewardLogScalarFieldEnum]
+
+
+export const SupportInquiryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  email: 'email',
+  type: 'type',
+  subject: 'subject',
+  message: 'message',
+  status: 'status',
+  appVersion: 'appVersion',
+  os: 'os',
+  osVersion: 'osVersion',
+  deviceModel: 'deviceModel',
+  adminNote: 'adminNote',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SupportInquiryScalarFieldEnum = (typeof SupportInquiryScalarFieldEnum)[keyof typeof SupportInquiryScalarFieldEnum]
 
 
 export const ImageScalarFieldEnum = {

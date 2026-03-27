@@ -42,6 +42,7 @@ import { RewardsTab } from "@/components/episodes/rewards-tab";
 import { EndingsTab } from "@/components/episodes/endings-tab";
 import { ImportExportDialogs } from "@/components/episodes/import-export-dialogs";
 import { ImageUploader } from "@/components/ui/image-uploader";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -52,6 +53,36 @@ import {
 } from "@/components/ui/dialog";
 import type { SceneBasic, DialogueBasic, EpisodeWithScenes, BranchKeyItem } from "@/types";
 import { DialogueType, EpisodeType, PlayEpisodeMode, PublishStatus } from "@/types";
+
+function dialogueExportSpeakerLabel(d: DialogueBasic): string {
+  if (d.speakerRole === "USER") return "유저";
+  const byName = d.characterName?.trim() || d.character?.name?.trim();
+  if (byName) return byName;
+  if (d.type === "NARRATION") return "내레이션";
+  if (d.type === "HEADING") return "헤딩";
+  if (d.type === "IMAGE") return "이미지";
+  return "시스템";
+}
+
+/** 씬: `영어타이틀 / 한국어타이틀`, 대사: `{이름}: 영어/한국어` (줄바꿈으로 구분, JSON 아님) */
+function buildEpisodeDialoguesPlainText(episode: EpisodeWithScenes): string {
+  const blocks: string[] = [];
+  const scenes = [...(episode.scenes ?? [])].sort((a, b) => a.order - b.order);
+  for (const scene of scenes) {
+    const ko = scene.koreanTitle?.trim() || "";
+    blocks.push(ko ? `${scene.title} / ${ko}` : scene.title);
+    blocks.push("");
+    const dialogues = [...(scene.dialogues ?? [])].sort((a, b) => a.order - b.order);
+    for (const d of dialogues) {
+      const name = dialogueExportSpeakerLabel(d);
+      const en = String(d.englishText ?? "").replace(/\r?\n/g, " ").trim();
+      const kr = String(d.koreanText ?? "").replace(/\r?\n/g, " ").trim();
+      blocks.push(`${name}: ${en}/${kr}`);
+    }
+    blocks.push("");
+  }
+  return `${blocks.join("\n").trim()}\n`;
+}
 
 const tabs = [
   { id: "scenes", label: "Scenes", icon: FileText },
@@ -142,6 +173,8 @@ export default function EpisodeDetailPage() {
   const [isBranchKeysOpen, setIsBranchKeysOpen] = useState(false);
   const [isThumbnailOpen, setIsThumbnailOpen] = useState(false);
   const [tagInput, setTagInput] = useState("");
+  const [isDialoguesPlainModalOpen, setIsDialoguesPlainModalOpen] = useState(false);
+  const [dialoguesPlainExportText, setDialoguesPlainExportText] = useState("");
 
   // Sync query data to local state (only when episodeData from server changes)
   // DO NOT include selectedScene - that would overwrite local updates with stale cache
@@ -200,6 +233,20 @@ export default function EpisodeDetailPage() {
         onError: (e) => setError(e.message),
       }
     );
+  };
+
+  const openDialoguesPlainExportModal = () => {
+    if (!episode) return;
+    const merged: EpisodeWithScenes = {
+      ...episode,
+      scenes: episode.scenes.map((s) =>
+        selectedScene && s.id === selectedScene.id
+          ? { ...s, dialogues }
+          : s
+      ),
+    };
+    setDialoguesPlainExportText(buildEpisodeDialoguesPlainText(merged));
+    setIsDialoguesPlainModalOpen(true);
   };
 
   const tagList = episodeTagsAsStrings(episode?.tags);
@@ -725,6 +772,16 @@ export default function EpisodeDetailPage() {
             onImportComplete={handleImportComplete}
           />
           <Button
+            type="button"
+            variant="outline"
+            className="rounded-xl h-9"
+            onClick={openDialoguesPlainExportModal}
+            disabled={!episode.scenes?.length}
+          >
+            <FileText className="w-4 h-4 mr-2" />
+            대사 텍스트
+          </Button>
+          <Button
             className="rounded-xl shadow-lg shadow-primary/25 h-9"
             onClick={handleSaveEpisode}
             disabled={updateEpisode.isPending}
@@ -748,6 +805,39 @@ export default function EpisodeDetailPage() {
             aspectRatio="video"
             maxSizeMB={5}
           />
+        </DialogContent>
+      </Dialog>
+
+      {/* 대사 줄글 (씬 타이틀 / 대사 나열) — JSON Export와 같이 모달 + 복사 */}
+      <Dialog open={isDialoguesPlainModalOpen} onOpenChange={setIsDialoguesPlainModalOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>대사 텍스트</DialogTitle>
+            <DialogDescription>
+              씬은 <code className="text-xs bg-muted px-1 rounded">영어 / 한국어</code>, 대사는{" "}
+              <code className="text-xs bg-muted px-1 rounded">이름: 영어/한국어</code> 한 줄씩입니다.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex-1 overflow-auto min-h-0">
+            <Label className="sr-only">내보낸 텍스트</Label>
+            <Textarea
+              value={dialoguesPlainExportText}
+              readOnly
+              className="font-mono text-sm min-h-[400px] resize-y rounded-xl"
+            />
+          </div>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" className="rounded-xl" onClick={() => setIsDialoguesPlainModalOpen(false)}>
+              닫기
+            </Button>
+            <Button
+              variant="outline"
+              className="rounded-xl"
+              onClick={() => navigator.clipboard.writeText(dialoguesPlainExportText)}
+            >
+              클립보드에 복사
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 

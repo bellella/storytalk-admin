@@ -50,8 +50,17 @@ import {
   useUpdateUserPlayEpisodeData,
   useResetUserPlayEpisode,
   useUpdateCharacterAffinity,
+  usePatchUser,
 } from "@/hooks/use-users";
 import { PublishStatus } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { UserGender, UserRole } from "@/src/generated/prisma/enums";
 
 function JsonBlock({ label, data }: { label: string; data: unknown }) {
   const [open, setOpen] = useState(false);
@@ -486,6 +495,7 @@ export default function UserDetailPage() {
   const updatePlayEpisodeData = useUpdateUserPlayEpisodeData(userId);
   const resetPlayEpisode = useResetUserPlayEpisode(userId);
   const updateAffinity = useUpdateCharacterAffinity(userId);
+  const patchUser = usePatchUser(userId);
 
   if (userLoading) {
     return (
@@ -550,9 +560,72 @@ export default function UserDetailPage() {
                       Premium
                     </Badge>
                   )}
+                  {user.role === "ADMIN" && (
+                    <Badge variant="outline" className="rounded-lg border-primary/40 text-primary">
+                      Admin
+                    </Badge>
+                  )}
                   <StatusBadge status={user.status as PublishStatus} />
                 </div>
                 <p className="text-muted-foreground">{user.email}</p>
+                <div className="flex flex-col gap-2 mt-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm text-muted-foreground shrink-0 w-10">역할</span>
+                    <Select
+                      value={user.role ?? "USER"}
+                      onValueChange={(v) =>
+                        patchUser.mutate({ role: v as UserRole })
+                      }
+                      disabled={patchUser.isPending}
+                    >
+                      <SelectTrigger className="w-[200px] h-9 rounded-xl bg-secondary/50 border-0 text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        <SelectItem value="USER" className="rounded-lg">
+                          일반 유저
+                        </SelectItem>
+                        <SelectItem value="ADMIN" className="rounded-lg">
+                          어드민
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm text-muted-foreground shrink-0 w-10">성별</span>
+                    <Select
+                      value={user.gender ?? "__none__"}
+                      onValueChange={(v) =>
+                        patchUser.mutate({
+                          gender:
+                            v === "__none__" ? null : (v as UserGender),
+                        })
+                      }
+                      disabled={patchUser.isPending}
+                    >
+                      <SelectTrigger className="w-[200px] h-9 rounded-xl bg-secondary/50 border-0 text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        <SelectItem value="__none__" className="rounded-lg">
+                          미입력
+                        </SelectItem>
+                        <SelectItem value="MALE" className="rounded-lg">
+                          남성
+                        </SelectItem>
+                        <SelectItem value="FEMALE" className="rounded-lg">
+                          여성
+                        </SelectItem>
+                        <SelectItem value="OTHER" className="rounded-lg">
+                          기타
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {patchUser.isPending && (
+                      <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                    )}
+                  </div>
+                </div>
                 {user.registeredAt && (
                   <p className="text-sm text-muted-foreground mt-1">
                     <Calendar className="w-3.5 h-3.5 inline mr-1" />
