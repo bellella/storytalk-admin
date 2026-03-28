@@ -26,6 +26,7 @@ import {
   Image as ImageIcon,
   Ticket,
   Gift,
+  Megaphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,7 @@ const navItems = [
   { icon: Sparkles, label: "XP", href: "/xp" },
   { icon: Ticket, label: "Coupons", href: "/coupons" },
   { icon: Gift, label: "Rewards", href: "/rewards" },
+  { icon: Megaphone, label: "Notices", href: "/notices" },
   { icon: Smile, label: "Stickers", href: "/stickers" },
   { icon: BrainCircuit, label: "Prompts", href: "/prompts" },
   { icon: BarChart3, label: "Analytics", href: "/analytics" },

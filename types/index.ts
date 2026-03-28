@@ -327,6 +327,27 @@ export type AdminGlobalReward = {
   updatedAt: string;
 };
 
+export type NoticeType =
+  | "GENERAL"
+  | "BETA"
+  | "EVENT"
+  | "MAINTENANCE"
+  | "UPDATE";
+
+export type NoticeAdmin = {
+  id: number;
+  title: string;
+  content: string;
+  type: NoticeType;
+  isPopup: boolean;
+  isActive: boolean;
+  version: number;
+  startsAt: string | null;
+  endsAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 // ─────────────────────────────────────────────
 // PRODUCT & COLLECTION
 // ─────────────────────────────────────────────
