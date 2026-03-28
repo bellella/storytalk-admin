@@ -32,6 +32,7 @@ export type UserAvgAggregateOutputType = {
   xp: number | null
   streakDays: number | null
   selectedCharacterId: number | null
+  dismissedNoticeVersion: number | null
 }
 
 export type UserSumAggregateOutputType = {
@@ -40,6 +41,7 @@ export type UserSumAggregateOutputType = {
   xp: number | null
   streakDays: number | null
   selectedCharacterId: number | null
+  dismissedNoticeVersion: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -48,7 +50,6 @@ export type UserMinAggregateOutputType = {
   email: string | null
   provider: $Enums.AuthProvider | null
   providerId: string | null
-  profileImage: string | null
   gender: $Enums.UserGender | null
   level: $Enums.Level | null
   XpLevel: number | null
@@ -56,6 +57,7 @@ export type UserMinAggregateOutputType = {
   streakDays: number | null
   role: $Enums.UserRole | null
   selectedCharacterId: number | null
+  dismissedNoticeVersion: number | null
   lastLoginAt: Date | null
   registeredAt: Date | null
   createdAt: Date | null
@@ -68,7 +70,6 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   provider: $Enums.AuthProvider | null
   providerId: string | null
-  profileImage: string | null
   gender: $Enums.UserGender | null
   level: $Enums.Level | null
   XpLevel: number | null
@@ -76,6 +77,7 @@ export type UserMaxAggregateOutputType = {
   streakDays: number | null
   role: $Enums.UserRole | null
   selectedCharacterId: number | null
+  dismissedNoticeVersion: number | null
   lastLoginAt: Date | null
   registeredAt: Date | null
   createdAt: Date | null
@@ -88,7 +90,6 @@ export type UserCountAggregateOutputType = {
   email: number
   provider: number
   providerId: number
-  profileImage: number
   gender: number
   level: number
   XpLevel: number
@@ -96,6 +97,7 @@ export type UserCountAggregateOutputType = {
   streakDays: number
   role: number
   selectedCharacterId: number
+  dismissedNoticeVersion: number
   lastLoginAt: number
   registeredAt: number
   createdAt: number
@@ -110,6 +112,7 @@ export type UserAvgAggregateInputType = {
   xp?: true
   streakDays?: true
   selectedCharacterId?: true
+  dismissedNoticeVersion?: true
 }
 
 export type UserSumAggregateInputType = {
@@ -118,6 +121,7 @@ export type UserSumAggregateInputType = {
   xp?: true
   streakDays?: true
   selectedCharacterId?: true
+  dismissedNoticeVersion?: true
 }
 
 export type UserMinAggregateInputType = {
@@ -126,7 +130,6 @@ export type UserMinAggregateInputType = {
   email?: true
   provider?: true
   providerId?: true
-  profileImage?: true
   gender?: true
   level?: true
   XpLevel?: true
@@ -134,6 +137,7 @@ export type UserMinAggregateInputType = {
   streakDays?: true
   role?: true
   selectedCharacterId?: true
+  dismissedNoticeVersion?: true
   lastLoginAt?: true
   registeredAt?: true
   createdAt?: true
@@ -146,7 +150,6 @@ export type UserMaxAggregateInputType = {
   email?: true
   provider?: true
   providerId?: true
-  profileImage?: true
   gender?: true
   level?: true
   XpLevel?: true
@@ -154,6 +157,7 @@ export type UserMaxAggregateInputType = {
   streakDays?: true
   role?: true
   selectedCharacterId?: true
+  dismissedNoticeVersion?: true
   lastLoginAt?: true
   registeredAt?: true
   createdAt?: true
@@ -166,7 +170,6 @@ export type UserCountAggregateInputType = {
   email?: true
   provider?: true
   providerId?: true
-  profileImage?: true
   gender?: true
   level?: true
   XpLevel?: true
@@ -174,6 +177,7 @@ export type UserCountAggregateInputType = {
   streakDays?: true
   role?: true
   selectedCharacterId?: true
+  dismissedNoticeVersion?: true
   lastLoginAt?: true
   registeredAt?: true
   createdAt?: true
@@ -273,7 +277,6 @@ export type UserGroupByOutputType = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage: string | null
   gender: $Enums.UserGender | null
   level: $Enums.Level
   XpLevel: number
@@ -281,6 +284,7 @@ export type UserGroupByOutputType = {
   streakDays: number
   role: $Enums.UserRole
   selectedCharacterId: number | null
+  dismissedNoticeVersion: number | null
   lastLoginAt: Date
   registeredAt: Date | null
   createdAt: Date
@@ -316,7 +320,6 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   provider?: Prisma.EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
   providerId?: Prisma.StringFilter<"User"> | string
-  profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   gender?: Prisma.EnumUserGenderNullableFilter<"User"> | $Enums.UserGender | null
   level?: Prisma.EnumLevelFilter<"User"> | $Enums.Level
   XpLevel?: Prisma.IntFilter<"User"> | number
@@ -324,6 +327,7 @@ export type UserWhereInput = {
   streakDays?: Prisma.IntFilter<"User"> | number
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   selectedCharacterId?: Prisma.IntNullableFilter<"User"> | number | null
+  dismissedNoticeVersion?: Prisma.IntNullableFilter<"User"> | number | null
   lastLoginAt?: Prisma.DateTimeFilter<"User"> | Date | string
   registeredAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -350,6 +354,8 @@ export type UserWhereInput = {
   usages?: Prisma.UserUsageListRelationFilter
   adRewardLogs?: Prisma.AdRewardLogListRelationFilter
   supportInquiries?: Prisma.SupportInquiryListRelationFilter
+  attendances?: Prisma.UserAttendanceListRelationFilter
+  rewardHistories?: Prisma.UserRewardHistoryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -358,7 +364,6 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
-  profileImage?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   XpLevel?: Prisma.SortOrder
@@ -366,6 +371,7 @@ export type UserOrderByWithRelationInput = {
   streakDays?: Prisma.SortOrder
   role?: Prisma.SortOrder
   selectedCharacterId?: Prisma.SortOrderInput | Prisma.SortOrder
+  dismissedNoticeVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -392,6 +398,8 @@ export type UserOrderByWithRelationInput = {
   usages?: Prisma.UserUsageOrderByRelationAggregateInput
   adRewardLogs?: Prisma.AdRewardLogOrderByRelationAggregateInput
   supportInquiries?: Prisma.SupportInquiryOrderByRelationAggregateInput
+  attendances?: Prisma.UserAttendanceOrderByRelationAggregateInput
+  rewardHistories?: Prisma.UserRewardHistoryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -404,7 +412,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   email?: Prisma.StringFilter<"User"> | string
   provider?: Prisma.EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
   providerId?: Prisma.StringFilter<"User"> | string
-  profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   gender?: Prisma.EnumUserGenderNullableFilter<"User"> | $Enums.UserGender | null
   level?: Prisma.EnumLevelFilter<"User"> | $Enums.Level
   XpLevel?: Prisma.IntFilter<"User"> | number
@@ -412,6 +419,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   streakDays?: Prisma.IntFilter<"User"> | number
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   selectedCharacterId?: Prisma.IntNullableFilter<"User"> | number | null
+  dismissedNoticeVersion?: Prisma.IntNullableFilter<"User"> | number | null
   lastLoginAt?: Prisma.DateTimeFilter<"User"> | Date | string
   registeredAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -438,6 +446,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   usages?: Prisma.UserUsageListRelationFilter
   adRewardLogs?: Prisma.AdRewardLogListRelationFilter
   supportInquiries?: Prisma.SupportInquiryListRelationFilter
+  attendances?: Prisma.UserAttendanceListRelationFilter
+  rewardHistories?: Prisma.UserRewardHistoryListRelationFilter
 }, "id" | "email_provider">
 
 export type UserOrderByWithAggregationInput = {
@@ -446,7 +456,6 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
-  profileImage?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   XpLevel?: Prisma.SortOrder
@@ -454,6 +463,7 @@ export type UserOrderByWithAggregationInput = {
   streakDays?: Prisma.SortOrder
   role?: Prisma.SortOrder
   selectedCharacterId?: Prisma.SortOrderInput | Prisma.SortOrder
+  dismissedNoticeVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -474,7 +484,6 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   provider?: Prisma.EnumAuthProviderWithAggregatesFilter<"User"> | $Enums.AuthProvider
   providerId?: Prisma.StringWithAggregatesFilter<"User"> | string
-  profileImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   gender?: Prisma.EnumUserGenderNullableWithAggregatesFilter<"User"> | $Enums.UserGender | null
   level?: Prisma.EnumLevelWithAggregatesFilter<"User"> | $Enums.Level
   XpLevel?: Prisma.IntWithAggregatesFilter<"User"> | number
@@ -482,6 +491,7 @@ export type UserScalarWhereWithAggregatesInput = {
   streakDays?: Prisma.IntWithAggregatesFilter<"User"> | number
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   selectedCharacterId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
+  dismissedNoticeVersion?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   lastLoginAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   registeredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -493,13 +503,13 @@ export type UserCreateInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -526,6 +536,8 @@ export type UserCreateInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -534,7 +546,6 @@ export type UserUncheckedCreateInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -542,6 +553,7 @@ export type UserUncheckedCreateInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -567,6 +579,8 @@ export type UserUncheckedCreateInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -574,13 +588,13 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -607,6 +621,8 @@ export type UserUpdateInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -615,7 +631,6 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -623,6 +638,7 @@ export type UserUncheckedUpdateInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -648,6 +664,8 @@ export type UserUncheckedUpdateInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -656,7 +674,6 @@ export type UserCreateManyInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -664,6 +681,7 @@ export type UserCreateManyInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -675,13 +693,13 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -694,7 +712,6 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -702,6 +719,7 @@ export type UserUncheckedUpdateManyInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -719,7 +737,6 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
-  profileImage?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   level?: Prisma.SortOrder
   XpLevel?: Prisma.SortOrder
@@ -727,6 +744,7 @@ export type UserCountOrderByAggregateInput = {
   streakDays?: Prisma.SortOrder
   role?: Prisma.SortOrder
   selectedCharacterId?: Prisma.SortOrder
+  dismissedNoticeVersion?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -739,6 +757,7 @@ export type UserAvgOrderByAggregateInput = {
   xp?: Prisma.SortOrder
   streakDays?: Prisma.SortOrder
   selectedCharacterId?: Prisma.SortOrder
+  dismissedNoticeVersion?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -747,7 +766,6 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
-  profileImage?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   level?: Prisma.SortOrder
   XpLevel?: Prisma.SortOrder
@@ -755,6 +773,7 @@ export type UserMaxOrderByAggregateInput = {
   streakDays?: Prisma.SortOrder
   role?: Prisma.SortOrder
   selectedCharacterId?: Prisma.SortOrder
+  dismissedNoticeVersion?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -767,7 +786,6 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
-  profileImage?: Prisma.SortOrder
   gender?: Prisma.SortOrder
   level?: Prisma.SortOrder
   XpLevel?: Prisma.SortOrder
@@ -775,6 +793,7 @@ export type UserMinOrderByAggregateInput = {
   streakDays?: Prisma.SortOrder
   role?: Prisma.SortOrder
   selectedCharacterId?: Prisma.SortOrder
+  dismissedNoticeVersion?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   registeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -787,6 +806,7 @@ export type UserSumOrderByAggregateInput = {
   xp?: Prisma.SortOrder
   streakDays?: Prisma.SortOrder
   selectedCharacterId?: Prisma.SortOrder
+  dismissedNoticeVersion?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -841,6 +861,14 @@ export type EnumUserRoleFieldUpdateOperationsInput = {
   set?: $Enums.UserRole
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
@@ -851,14 +879,6 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type UserCreateNestedOneWithoutStoryProgressInput = {
@@ -1203,18 +1223,46 @@ export type UserUpdateOneWithoutSupportInquiriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupportInquiriesInput, Prisma.UserUpdateWithoutSupportInquiriesInput>, Prisma.UserUncheckedUpdateWithoutSupportInquiriesInput>
 }
 
+export type UserCreateNestedOneWithoutAttendancesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAttendancesInput, Prisma.UserUncheckedCreateWithoutAttendancesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttendancesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAttendancesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAttendancesInput, Prisma.UserUncheckedCreateWithoutAttendancesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAttendancesInput
+  upsert?: Prisma.UserUpsertWithoutAttendancesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAttendancesInput, Prisma.UserUpdateWithoutAttendancesInput>, Prisma.UserUncheckedUpdateWithoutAttendancesInput>
+}
+
+export type UserCreateNestedOneWithoutRewardHistoriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRewardHistoriesInput, Prisma.UserUncheckedCreateWithoutRewardHistoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRewardHistoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRewardHistoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRewardHistoriesInput, Prisma.UserUncheckedCreateWithoutRewardHistoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRewardHistoriesInput
+  upsert?: Prisma.UserUpsertWithoutRewardHistoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRewardHistoriesInput, Prisma.UserUpdateWithoutRewardHistoriesInput>, Prisma.UserUncheckedUpdateWithoutRewardHistoriesInput>
+}
+
 export type UserCreateWithoutStoryProgressInput = {
   name?: string | null
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1240,6 +1288,8 @@ export type UserCreateWithoutStoryProgressInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryProgressInput = {
@@ -1248,7 +1298,6 @@ export type UserUncheckedCreateWithoutStoryProgressInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -1256,6 +1305,7 @@ export type UserUncheckedCreateWithoutStoryProgressInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1280,6 +1330,8 @@ export type UserUncheckedCreateWithoutStoryProgressInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryProgressInput = {
@@ -1303,13 +1355,13 @@ export type UserUpdateWithoutStoryProgressInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1335,6 +1387,8 @@ export type UserUpdateWithoutStoryProgressInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryProgressInput = {
@@ -1343,7 +1397,6 @@ export type UserUncheckedUpdateWithoutStoryProgressInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1351,6 +1404,7 @@ export type UserUncheckedUpdateWithoutStoryProgressInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1375,6 +1429,8 @@ export type UserUncheckedUpdateWithoutStoryProgressInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserReviewItemsInput = {
@@ -1382,13 +1438,13 @@ export type UserCreateWithoutUserReviewItemsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1414,6 +1470,8 @@ export type UserCreateWithoutUserReviewItemsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserReviewItemsInput = {
@@ -1422,7 +1480,6 @@ export type UserUncheckedCreateWithoutUserReviewItemsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -1430,6 +1487,7 @@ export type UserUncheckedCreateWithoutUserReviewItemsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1454,6 +1512,8 @@ export type UserUncheckedCreateWithoutUserReviewItemsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserReviewItemsInput = {
@@ -1477,13 +1537,13 @@ export type UserUpdateWithoutUserReviewItemsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1509,6 +1569,8 @@ export type UserUpdateWithoutUserReviewItemsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserReviewItemsInput = {
@@ -1517,7 +1579,6 @@ export type UserUncheckedUpdateWithoutUserReviewItemsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1525,6 +1586,7 @@ export type UserUncheckedUpdateWithoutUserReviewItemsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1549,6 +1611,8 @@ export type UserUncheckedUpdateWithoutUserReviewItemsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserQuizSessionsInput = {
@@ -1556,13 +1620,13 @@ export type UserCreateWithoutUserQuizSessionsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1588,6 +1652,8 @@ export type UserCreateWithoutUserQuizSessionsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserQuizSessionsInput = {
@@ -1596,7 +1662,6 @@ export type UserUncheckedCreateWithoutUserQuizSessionsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -1604,6 +1669,7 @@ export type UserUncheckedCreateWithoutUserQuizSessionsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1628,6 +1694,8 @@ export type UserUncheckedCreateWithoutUserQuizSessionsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserQuizSessionsInput = {
@@ -1651,13 +1719,13 @@ export type UserUpdateWithoutUserQuizSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1683,6 +1751,8 @@ export type UserUpdateWithoutUserQuizSessionsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserQuizSessionsInput = {
@@ -1691,7 +1761,6 @@ export type UserUncheckedUpdateWithoutUserQuizSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1699,6 +1768,7 @@ export type UserUncheckedUpdateWithoutUserQuizSessionsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1723,6 +1793,8 @@ export type UserUncheckedUpdateWithoutUserQuizSessionsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSelectedCharacterInput = {
@@ -1730,13 +1802,13 @@ export type UserCreateWithoutSelectedCharacterInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1762,6 +1834,8 @@ export type UserCreateWithoutSelectedCharacterInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSelectedCharacterInput = {
@@ -1770,13 +1844,13 @@ export type UserUncheckedCreateWithoutSelectedCharacterInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1802,6 +1876,8 @@ export type UserUncheckedCreateWithoutSelectedCharacterInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSelectedCharacterInput = {
@@ -1839,7 +1915,6 @@ export type UserScalarWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   provider?: Prisma.EnumAuthProviderFilter<"User"> | $Enums.AuthProvider
   providerId?: Prisma.StringFilter<"User"> | string
-  profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   gender?: Prisma.EnumUserGenderNullableFilter<"User"> | $Enums.UserGender | null
   level?: Prisma.EnumLevelFilter<"User"> | $Enums.Level
   XpLevel?: Prisma.IntFilter<"User"> | number
@@ -1847,6 +1922,7 @@ export type UserScalarWhereInput = {
   streakDays?: Prisma.IntFilter<"User"> | number
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   selectedCharacterId?: Prisma.IntNullableFilter<"User"> | number | null
+  dismissedNoticeVersion?: Prisma.IntNullableFilter<"User"> | number | null
   lastLoginAt?: Prisma.DateTimeFilter<"User"> | Date | string
   registeredAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -1858,13 +1934,13 @@ export type UserCreateWithoutCharacterFriendsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1890,6 +1966,8 @@ export type UserCreateWithoutCharacterFriendsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCharacterFriendsInput = {
@@ -1898,7 +1976,6 @@ export type UserUncheckedCreateWithoutCharacterFriendsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -1906,6 +1983,7 @@ export type UserUncheckedCreateWithoutCharacterFriendsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -1930,6 +2008,8 @@ export type UserUncheckedCreateWithoutCharacterFriendsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCharacterFriendsInput = {
@@ -1953,13 +2033,13 @@ export type UserUpdateWithoutCharacterFriendsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1985,6 +2065,8 @@ export type UserUpdateWithoutCharacterFriendsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCharacterFriendsInput = {
@@ -1993,7 +2075,6 @@ export type UserUncheckedUpdateWithoutCharacterFriendsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2001,6 +2082,7 @@ export type UserUncheckedUpdateWithoutCharacterFriendsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2025,6 +2107,8 @@ export type UserUncheckedUpdateWithoutCharacterFriendsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCharacterChatsInput = {
@@ -2032,13 +2116,13 @@ export type UserCreateWithoutCharacterChatsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2064,6 +2148,8 @@ export type UserCreateWithoutCharacterChatsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCharacterChatsInput = {
@@ -2072,7 +2158,6 @@ export type UserUncheckedCreateWithoutCharacterChatsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -2080,6 +2165,7 @@ export type UserUncheckedCreateWithoutCharacterChatsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2104,6 +2190,8 @@ export type UserUncheckedCreateWithoutCharacterChatsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCharacterChatsInput = {
@@ -2127,13 +2215,13 @@ export type UserUpdateWithoutCharacterChatsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2159,6 +2247,8 @@ export type UserUpdateWithoutCharacterChatsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCharacterChatsInput = {
@@ -2167,7 +2257,6 @@ export type UserUncheckedUpdateWithoutCharacterChatsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2175,6 +2264,7 @@ export type UserUncheckedUpdateWithoutCharacterChatsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2199,6 +2289,8 @@ export type UserUncheckedUpdateWithoutCharacterChatsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMessagesInput = {
@@ -2206,13 +2298,13 @@ export type UserCreateWithoutMessagesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2238,6 +2330,8 @@ export type UserCreateWithoutMessagesInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMessagesInput = {
@@ -2246,7 +2340,6 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -2254,6 +2347,7 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2278,6 +2372,8 @@ export type UserUncheckedCreateWithoutMessagesInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMessagesInput = {
@@ -2301,13 +2397,13 @@ export type UserUpdateWithoutMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2333,6 +2429,8 @@ export type UserUpdateWithoutMessagesInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMessagesInput = {
@@ -2341,7 +2439,6 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2349,6 +2446,7 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2373,6 +2471,8 @@ export type UserUncheckedUpdateWithoutMessagesInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDialogueBookmarksInput = {
@@ -2380,13 +2480,13 @@ export type UserCreateWithoutDialogueBookmarksInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2412,6 +2512,8 @@ export type UserCreateWithoutDialogueBookmarksInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDialogueBookmarksInput = {
@@ -2420,7 +2522,6 @@ export type UserUncheckedCreateWithoutDialogueBookmarksInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -2428,6 +2529,7 @@ export type UserUncheckedCreateWithoutDialogueBookmarksInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2452,6 +2554,8 @@ export type UserUncheckedCreateWithoutDialogueBookmarksInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDialogueBookmarksInput = {
@@ -2475,13 +2579,13 @@ export type UserUpdateWithoutDialogueBookmarksInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2507,6 +2611,8 @@ export type UserUpdateWithoutDialogueBookmarksInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDialogueBookmarksInput = {
@@ -2515,7 +2621,6 @@ export type UserUncheckedUpdateWithoutDialogueBookmarksInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2523,6 +2628,7 @@ export type UserUncheckedUpdateWithoutDialogueBookmarksInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2547,6 +2653,8 @@ export type UserUncheckedUpdateWithoutDialogueBookmarksInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserEpisodesInput = {
@@ -2554,13 +2662,13 @@ export type UserCreateWithoutUserEpisodesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2586,6 +2694,8 @@ export type UserCreateWithoutUserEpisodesInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserEpisodesInput = {
@@ -2594,7 +2704,6 @@ export type UserUncheckedCreateWithoutUserEpisodesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -2602,6 +2711,7 @@ export type UserUncheckedCreateWithoutUserEpisodesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2626,6 +2736,8 @@ export type UserUncheckedCreateWithoutUserEpisodesInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserEpisodesInput = {
@@ -2649,13 +2761,13 @@ export type UserUpdateWithoutUserEpisodesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2681,6 +2793,8 @@ export type UserUpdateWithoutUserEpisodesInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserEpisodesInput = {
@@ -2689,7 +2803,6 @@ export type UserUncheckedUpdateWithoutUserEpisodesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2697,6 +2810,7 @@ export type UserUncheckedUpdateWithoutUserEpisodesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2721,6 +2835,8 @@ export type UserUncheckedUpdateWithoutUserEpisodesInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserEpisodeLikesInput = {
@@ -2728,13 +2844,13 @@ export type UserCreateWithoutUserEpisodeLikesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2760,6 +2876,8 @@ export type UserCreateWithoutUserEpisodeLikesInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserEpisodeLikesInput = {
@@ -2768,7 +2886,6 @@ export type UserUncheckedCreateWithoutUserEpisodeLikesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -2776,6 +2893,7 @@ export type UserUncheckedCreateWithoutUserEpisodeLikesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2800,6 +2918,8 @@ export type UserUncheckedCreateWithoutUserEpisodeLikesInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserEpisodeLikesInput = {
@@ -2823,13 +2943,13 @@ export type UserUpdateWithoutUserEpisodeLikesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2855,6 +2975,8 @@ export type UserUpdateWithoutUserEpisodeLikesInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserEpisodeLikesInput = {
@@ -2863,7 +2985,6 @@ export type UserUncheckedUpdateWithoutUserEpisodeLikesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2871,6 +2992,7 @@ export type UserUncheckedUpdateWithoutUserEpisodeLikesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2895,6 +3017,8 @@ export type UserUncheckedUpdateWithoutUserEpisodeLikesInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserPlayEpisodesInput = {
@@ -2902,13 +3026,13 @@ export type UserCreateWithoutUserPlayEpisodesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2934,6 +3058,8 @@ export type UserCreateWithoutUserPlayEpisodesInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserPlayEpisodesInput = {
@@ -2942,7 +3068,6 @@ export type UserUncheckedCreateWithoutUserPlayEpisodesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -2950,6 +3075,7 @@ export type UserUncheckedCreateWithoutUserPlayEpisodesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -2974,6 +3100,8 @@ export type UserUncheckedCreateWithoutUserPlayEpisodesInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserPlayEpisodesInput = {
@@ -2997,13 +3125,13 @@ export type UserUpdateWithoutUserPlayEpisodesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3029,6 +3157,8 @@ export type UserUpdateWithoutUserPlayEpisodesInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserPlayEpisodesInput = {
@@ -3037,7 +3167,6 @@ export type UserUncheckedUpdateWithoutUserPlayEpisodesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3045,6 +3174,7 @@ export type UserUncheckedUpdateWithoutUserPlayEpisodesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3069,6 +3199,8 @@ export type UserUncheckedUpdateWithoutUserPlayEpisodesInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserEndingsInput = {
@@ -3076,13 +3208,13 @@ export type UserCreateWithoutUserEndingsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3108,6 +3240,8 @@ export type UserCreateWithoutUserEndingsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserEndingsInput = {
@@ -3116,7 +3250,6 @@ export type UserUncheckedCreateWithoutUserEndingsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -3124,6 +3257,7 @@ export type UserUncheckedCreateWithoutUserEndingsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3148,6 +3282,8 @@ export type UserUncheckedCreateWithoutUserEndingsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserEndingsInput = {
@@ -3171,13 +3307,13 @@ export type UserUpdateWithoutUserEndingsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3203,6 +3339,8 @@ export type UserUpdateWithoutUserEndingsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserEndingsInput = {
@@ -3211,7 +3349,6 @@ export type UserUncheckedUpdateWithoutUserEndingsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3219,6 +3356,7 @@ export type UserUncheckedUpdateWithoutUserEndingsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3243,6 +3381,8 @@ export type UserUncheckedUpdateWithoutUserEndingsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProductsInput = {
@@ -3250,13 +3390,13 @@ export type UserCreateWithoutProductsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3282,6 +3422,8 @@ export type UserCreateWithoutProductsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProductsInput = {
@@ -3290,7 +3432,6 @@ export type UserUncheckedCreateWithoutProductsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -3298,6 +3439,7 @@ export type UserUncheckedCreateWithoutProductsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3322,6 +3464,8 @@ export type UserUncheckedCreateWithoutProductsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProductsInput = {
@@ -3345,13 +3489,13 @@ export type UserUpdateWithoutProductsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3377,6 +3521,8 @@ export type UserUpdateWithoutProductsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProductsInput = {
@@ -3385,7 +3531,6 @@ export type UserUncheckedUpdateWithoutProductsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3393,6 +3538,7 @@ export type UserUncheckedUpdateWithoutProductsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3417,6 +3563,8 @@ export type UserUncheckedUpdateWithoutProductsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserPurchasesInput = {
@@ -3424,13 +3572,13 @@ export type UserCreateWithoutUserPurchasesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3456,6 +3604,8 @@ export type UserCreateWithoutUserPurchasesInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserPurchasesInput = {
@@ -3464,7 +3614,6 @@ export type UserUncheckedCreateWithoutUserPurchasesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -3472,6 +3621,7 @@ export type UserUncheckedCreateWithoutUserPurchasesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3496,6 +3646,8 @@ export type UserUncheckedCreateWithoutUserPurchasesInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserPurchasesInput = {
@@ -3519,13 +3671,13 @@ export type UserUpdateWithoutUserPurchasesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3551,6 +3703,8 @@ export type UserUpdateWithoutUserPurchasesInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserPurchasesInput = {
@@ -3559,7 +3713,6 @@ export type UserUncheckedUpdateWithoutUserPurchasesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3567,6 +3720,7 @@ export type UserUncheckedUpdateWithoutUserPurchasesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3591,6 +3745,8 @@ export type UserUncheckedUpdateWithoutUserPurchasesInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCoinTransactionsInput = {
@@ -3598,13 +3754,13 @@ export type UserCreateWithoutCoinTransactionsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3630,6 +3786,8 @@ export type UserCreateWithoutCoinTransactionsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCoinTransactionsInput = {
@@ -3638,7 +3796,6 @@ export type UserUncheckedCreateWithoutCoinTransactionsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -3646,6 +3803,7 @@ export type UserUncheckedCreateWithoutCoinTransactionsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3670,6 +3828,8 @@ export type UserUncheckedCreateWithoutCoinTransactionsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCoinTransactionsInput = {
@@ -3693,13 +3853,13 @@ export type UserUpdateWithoutCoinTransactionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3725,6 +3885,8 @@ export type UserUpdateWithoutCoinTransactionsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
@@ -3733,7 +3895,6 @@ export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3741,6 +3902,7 @@ export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3765,6 +3927,8 @@ export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCouponCodesInput = {
@@ -3772,13 +3936,13 @@ export type UserCreateWithoutCouponCodesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3804,6 +3968,8 @@ export type UserCreateWithoutCouponCodesInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCouponCodesInput = {
@@ -3812,7 +3978,6 @@ export type UserUncheckedCreateWithoutCouponCodesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -3820,6 +3985,7 @@ export type UserUncheckedCreateWithoutCouponCodesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3844,6 +4010,8 @@ export type UserUncheckedCreateWithoutCouponCodesInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCouponCodesInput = {
@@ -3867,13 +4035,13 @@ export type UserUpdateWithoutCouponCodesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3899,6 +4067,8 @@ export type UserUpdateWithoutCouponCodesInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCouponCodesInput = {
@@ -3907,7 +4077,6 @@ export type UserUncheckedUpdateWithoutCouponCodesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -3915,6 +4084,7 @@ export type UserUncheckedUpdateWithoutCouponCodesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3939,6 +4109,8 @@ export type UserUncheckedUpdateWithoutCouponCodesInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserCouponsInput = {
@@ -3946,13 +4118,13 @@ export type UserCreateWithoutUserCouponsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -3978,6 +4150,8 @@ export type UserCreateWithoutUserCouponsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserCouponsInput = {
@@ -3986,7 +4160,6 @@ export type UserUncheckedCreateWithoutUserCouponsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -3994,6 +4167,7 @@ export type UserUncheckedCreateWithoutUserCouponsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4018,6 +4192,8 @@ export type UserUncheckedCreateWithoutUserCouponsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserCouponsInput = {
@@ -4041,13 +4217,13 @@ export type UserUpdateWithoutUserCouponsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4073,6 +4249,8 @@ export type UserUpdateWithoutUserCouponsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserCouponsInput = {
@@ -4081,7 +4259,6 @@ export type UserUncheckedUpdateWithoutUserCouponsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4089,6 +4266,7 @@ export type UserUncheckedUpdateWithoutUserCouponsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4113,6 +4291,8 @@ export type UserUncheckedUpdateWithoutUserCouponsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCouponUsagesInput = {
@@ -4120,13 +4300,13 @@ export type UserCreateWithoutCouponUsagesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4152,6 +4332,8 @@ export type UserCreateWithoutCouponUsagesInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCouponUsagesInput = {
@@ -4160,7 +4342,6 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -4168,6 +4349,7 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4192,6 +4374,8 @@ export type UserUncheckedCreateWithoutCouponUsagesInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCouponUsagesInput = {
@@ -4215,13 +4399,13 @@ export type UserUpdateWithoutCouponUsagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4247,6 +4431,8 @@ export type UserUpdateWithoutCouponUsagesInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCouponUsagesInput = {
@@ -4255,7 +4441,6 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4263,6 +4448,7 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4287,6 +4473,8 @@ export type UserUncheckedUpdateWithoutCouponUsagesInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUserSubscriptionsInput = {
@@ -4294,13 +4482,13 @@ export type UserCreateWithoutUserSubscriptionsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4326,6 +4514,8 @@ export type UserCreateWithoutUserSubscriptionsInput = {
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUserSubscriptionsInput = {
@@ -4334,7 +4524,6 @@ export type UserUncheckedCreateWithoutUserSubscriptionsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -4342,6 +4531,7 @@ export type UserUncheckedCreateWithoutUserSubscriptionsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4366,6 +4556,8 @@ export type UserUncheckedCreateWithoutUserSubscriptionsInput = {
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUserSubscriptionsInput = {
@@ -4389,13 +4581,13 @@ export type UserUpdateWithoutUserSubscriptionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4421,6 +4613,8 @@ export type UserUpdateWithoutUserSubscriptionsInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserSubscriptionsInput = {
@@ -4429,7 +4623,6 @@ export type UserUncheckedUpdateWithoutUserSubscriptionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4437,6 +4630,7 @@ export type UserUncheckedUpdateWithoutUserSubscriptionsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4461,6 +4655,8 @@ export type UserUncheckedUpdateWithoutUserSubscriptionsInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUsagesInput = {
@@ -4468,13 +4664,13 @@ export type UserCreateWithoutUsagesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4500,6 +4696,8 @@ export type UserCreateWithoutUsagesInput = {
   couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUsagesInput = {
@@ -4508,7 +4706,6 @@ export type UserUncheckedCreateWithoutUsagesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -4516,6 +4713,7 @@ export type UserUncheckedCreateWithoutUsagesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4540,6 +4738,8 @@ export type UserUncheckedCreateWithoutUsagesInput = {
   couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUsagesInput = {
@@ -4563,13 +4763,13 @@ export type UserUpdateWithoutUsagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4595,6 +4795,8 @@ export type UserUpdateWithoutUsagesInput = {
   couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUsagesInput = {
@@ -4603,7 +4805,6 @@ export type UserUncheckedUpdateWithoutUsagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4611,6 +4812,7 @@ export type UserUncheckedUpdateWithoutUsagesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4635,6 +4837,8 @@ export type UserUncheckedUpdateWithoutUsagesInput = {
   couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdRewardLogsInput = {
@@ -4642,13 +4846,13 @@ export type UserCreateWithoutAdRewardLogsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4674,6 +4878,8 @@ export type UserCreateWithoutAdRewardLogsInput = {
   couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdRewardLogsInput = {
@@ -4682,7 +4888,6 @@ export type UserUncheckedCreateWithoutAdRewardLogsInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -4690,6 +4895,7 @@ export type UserUncheckedCreateWithoutAdRewardLogsInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4714,6 +4920,8 @@ export type UserUncheckedCreateWithoutAdRewardLogsInput = {
   couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdRewardLogsInput = {
@@ -4737,13 +4945,13 @@ export type UserUpdateWithoutAdRewardLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4769,6 +4977,8 @@ export type UserUpdateWithoutAdRewardLogsInput = {
   couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdRewardLogsInput = {
@@ -4777,7 +4987,6 @@ export type UserUncheckedUpdateWithoutAdRewardLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4785,6 +4994,7 @@ export type UserUncheckedUpdateWithoutAdRewardLogsInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4809,6 +5019,8 @@ export type UserUncheckedUpdateWithoutAdRewardLogsInput = {
   couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSupportInquiriesInput = {
@@ -4816,13 +5028,13 @@ export type UserCreateWithoutSupportInquiriesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4848,6 +5060,8 @@ export type UserCreateWithoutSupportInquiriesInput = {
   couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
   usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSupportInquiriesInput = {
@@ -4856,7 +5070,6 @@ export type UserUncheckedCreateWithoutSupportInquiriesInput = {
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
@@ -4864,6 +5077,7 @@ export type UserUncheckedCreateWithoutSupportInquiriesInput = {
   streakDays?: number
   role?: $Enums.UserRole
   selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
@@ -4888,6 +5102,8 @@ export type UserUncheckedCreateWithoutSupportInquiriesInput = {
   couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
   usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSupportInquiriesInput = {
@@ -4911,13 +5127,13 @@ export type UserUpdateWithoutSupportInquiriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4943,6 +5159,8 @@ export type UserUpdateWithoutSupportInquiriesInput = {
   couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSupportInquiriesInput = {
@@ -4951,7 +5169,6 @@ export type UserUncheckedUpdateWithoutSupportInquiriesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
@@ -4959,6 +5176,7 @@ export type UserUncheckedUpdateWithoutSupportInquiriesInput = {
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4983,43 +5201,126 @@ export type UserUncheckedUpdateWithoutSupportInquiriesInput = {
   couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateManySelectedCharacterInput = {
-  id?: number
+export type UserCreateWithoutAttendancesInput = {
   name?: string | null
   email: string
   provider: $Enums.AuthProvider
   providerId: string
-  profileImage?: string | null
   gender?: $Enums.UserGender | null
   level?: $Enums.Level
   XpLevel?: number
   xp?: number
   streakDays?: number
   role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
   lastLoginAt?: Date | string
   registeredAt?: Date | string | null
   createdAt?: Date | string
   isNew?: boolean
+  selectedCharacter?: Prisma.CharacterCreateNestedOneWithoutUsersInput
+  storyProgress?: Prisma.StoryProgressCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
+  usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
+  adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
+  supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryCreateNestedManyWithoutUserInput
 }
 
-export type UserUpdateWithoutSelectedCharacterInput = {
+export type UserUncheckedCreateWithoutAttendancesInput = {
+  id?: number
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  gender?: $Enums.UserGender | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  role?: $Enums.UserRole
+  selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  storyProgress?: Prisma.StoryProgressUncheckedCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendUncheckedCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
+  usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
+  adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
+  supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAttendancesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAttendancesInput, Prisma.UserUncheckedCreateWithoutAttendancesInput>
+}
+
+export type UserUpsertWithoutAttendancesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAttendancesInput, Prisma.UserUncheckedUpdateWithoutAttendancesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAttendancesInput, Prisma.UserUncheckedCreateWithoutAttendancesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAttendancesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAttendancesInput, Prisma.UserUncheckedUpdateWithoutAttendancesInput>
+}
+
+export type UserUpdateWithoutAttendancesInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  selectedCharacter?: Prisma.CharacterUpdateOneWithoutUsersNestedInput
   storyProgress?: Prisma.StoryProgressUpdateManyWithoutUserNestedInput
   userEpisodes?: Prisma.UserEpisodeUpdateManyWithoutUserNestedInput
   dialogueBookmarks?: Prisma.dialogueBookmarkUpdateManyWithoutUserNestedInput
@@ -5041,21 +5342,23 @@ export type UserUpdateWithoutSelectedCharacterInput = {
   usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutSelectedCharacterInput = {
+export type UserUncheckedUpdateWithoutAttendancesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5081,6 +5384,291 @@ export type UserUncheckedUpdateWithoutSelectedCharacterInput = {
   usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
   adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
   supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutRewardHistoriesInput = {
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  gender?: $Enums.UserGender | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  selectedCharacter?: Prisma.CharacterCreateNestedOneWithoutUsersInput
+  storyProgress?: Prisma.StoryProgressCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeCreateNestedManyWithoutAssignedUserInput
+  usages?: Prisma.UserUsageCreateNestedManyWithoutUserInput
+  adRewardLogs?: Prisma.AdRewardLogCreateNestedManyWithoutUserInput
+  supportInquiries?: Prisma.SupportInquiryCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRewardHistoriesInput = {
+  id?: number
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  gender?: $Enums.UserGender | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  role?: $Enums.UserRole
+  selectedCharacterId?: number | null
+  dismissedNoticeVersion?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+  storyProgress?: Prisma.StoryProgressUncheckedCreateNestedManyWithoutUserInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedCreateNestedManyWithoutUserInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedCreateNestedManyWithoutUserInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedCreateNestedManyWithoutUserInput
+  characterFriends?: Prisma.CharacterFriendUncheckedCreateNestedManyWithoutUserInput
+  Messages?: Prisma.MessageUncheckedCreateNestedManyWithoutUserInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedCreateNestedManyWithoutUserInput
+  characterChats?: Prisma.CharacterChatUncheckedCreateNestedManyWithoutUserInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedCreateNestedManyWithoutUserInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.EpisodeProductUncheckedCreateNestedManyWithoutUserInput
+  userPurchases?: Prisma.UserPurchaseUncheckedCreateNestedManyWithoutUserInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedCreateNestedManyWithoutUserInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  userEndings?: Prisma.UserEndingUncheckedCreateNestedManyWithoutUserInput
+  userCoupons?: Prisma.UserCouponUncheckedCreateNestedManyWithoutUserInput
+  couponUsages?: Prisma.CouponUsageUncheckedCreateNestedManyWithoutUserInput
+  couponCodes?: Prisma.CouponCodeUncheckedCreateNestedManyWithoutAssignedUserInput
+  usages?: Prisma.UserUsageUncheckedCreateNestedManyWithoutUserInput
+  adRewardLogs?: Prisma.AdRewardLogUncheckedCreateNestedManyWithoutUserInput
+  supportInquiries?: Prisma.SupportInquiryUncheckedCreateNestedManyWithoutUserInput
+  attendances?: Prisma.UserAttendanceUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRewardHistoriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRewardHistoriesInput, Prisma.UserUncheckedCreateWithoutRewardHistoriesInput>
+}
+
+export type UserUpsertWithoutRewardHistoriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRewardHistoriesInput, Prisma.UserUncheckedUpdateWithoutRewardHistoriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRewardHistoriesInput, Prisma.UserUncheckedCreateWithoutRewardHistoriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRewardHistoriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRewardHistoriesInput, Prisma.UserUncheckedUpdateWithoutRewardHistoriesInput>
+}
+
+export type UserUpdateWithoutRewardHistoriesInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  selectedCharacter?: Prisma.CharacterUpdateOneWithoutUsersNestedInput
+  storyProgress?: Prisma.StoryProgressUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
+  usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
+  adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
+  supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRewardHistoriesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  selectedCharacterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  storyProgress?: Prisma.StoryProgressUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUncheckedUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
+  usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
+  adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
+  supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateManySelectedCharacterInput = {
+  id?: number
+  name?: string | null
+  email: string
+  provider: $Enums.AuthProvider
+  providerId: string
+  gender?: $Enums.UserGender | null
+  level?: $Enums.Level
+  XpLevel?: number
+  xp?: number
+  streakDays?: number
+  role?: $Enums.UserRole
+  dismissedNoticeVersion?: number | null
+  lastLoginAt?: Date | string
+  registeredAt?: Date | string | null
+  createdAt?: Date | string
+  isNew?: boolean
+}
+
+export type UserUpdateWithoutSelectedCharacterInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  storyProgress?: Prisma.StoryProgressUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUpdateManyWithoutAssignedUserNestedInput
+  usages?: Prisma.UserUsageUpdateManyWithoutUserNestedInput
+  adRewardLogs?: Prisma.AdRewardLogUpdateManyWithoutUserNestedInput
+  supportInquiries?: Prisma.SupportInquiryUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSelectedCharacterInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
+  providerId?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
+  level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
+  XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streakDays?: Prisma.IntFieldUpdateOperationsInput | number
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isNew?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  storyProgress?: Prisma.StoryProgressUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodes?: Prisma.UserEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  dialogueBookmarks?: Prisma.dialogueBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  userReviewItems?: Prisma.UserReviewItemUncheckedUpdateManyWithoutUserNestedInput
+  characterFriends?: Prisma.CharacterFriendUncheckedUpdateManyWithoutUserNestedInput
+  Messages?: Prisma.MessageUncheckedUpdateManyWithoutUserNestedInput
+  userQuizSessions?: Prisma.UserQuizSessionUncheckedUpdateManyWithoutUserNestedInput
+  characterChats?: Prisma.CharacterChatUncheckedUpdateManyWithoutUserNestedInput
+  userPlayEpisodes?: Prisma.UserPlayEpisodeUncheckedUpdateManyWithoutUserNestedInput
+  userEpisodeLikes?: Prisma.UserEpisodeLikeUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.EpisodeProductUncheckedUpdateManyWithoutUserNestedInput
+  userPurchases?: Prisma.UserPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  coinTransactions?: Prisma.CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  userSubscriptions?: Prisma.UserSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  userEndings?: Prisma.UserEndingUncheckedUpdateManyWithoutUserNestedInput
+  userCoupons?: Prisma.UserCouponUncheckedUpdateManyWithoutUserNestedInput
+  couponUsages?: Prisma.CouponUsageUncheckedUpdateManyWithoutUserNestedInput
+  couponCodes?: Prisma.CouponCodeUncheckedUpdateManyWithoutAssignedUserNestedInput
+  usages?: Prisma.UserUsageUncheckedUpdateManyWithoutUserNestedInput
+  adRewardLogs?: Prisma.AdRewardLogUncheckedUpdateManyWithoutUserNestedInput
+  supportInquiries?: Prisma.SupportInquiryUncheckedUpdateManyWithoutUserNestedInput
+  attendances?: Prisma.UserAttendanceUncheckedUpdateManyWithoutUserNestedInput
+  rewardHistories?: Prisma.UserRewardHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutSelectedCharacterInput = {
@@ -5089,13 +5677,13 @@ export type UserUncheckedUpdateManyWithoutSelectedCharacterInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.EnumAuthProviderFieldUpdateOperationsInput | $Enums.AuthProvider
   providerId?: Prisma.StringFieldUpdateOperationsInput | string
-  profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumUserGenderFieldUpdateOperationsInput | $Enums.UserGender | null
   level?: Prisma.EnumLevelFieldUpdateOperationsInput | $Enums.Level
   XpLevel?: Prisma.IntFieldUpdateOperationsInput | number
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   streakDays?: Prisma.IntFieldUpdateOperationsInput | number
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  dismissedNoticeVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   lastLoginAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   registeredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5129,6 +5717,8 @@ export type UserCountOutputType = {
   usages: number
   adRewardLogs: number
   supportInquiries: number
+  attendances: number
+  rewardHistories: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5153,6 +5743,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   usages?: boolean | UserCountOutputTypeCountUsagesArgs
   adRewardLogs?: boolean | UserCountOutputTypeCountAdRewardLogsArgs
   supportInquiries?: boolean | UserCountOutputTypeCountSupportInquiriesArgs
+  attendances?: boolean | UserCountOutputTypeCountAttendancesArgs
+  rewardHistories?: boolean | UserCountOutputTypeCountRewardHistoriesArgs
 }
 
 /**
@@ -5312,6 +5904,20 @@ export type UserCountOutputTypeCountSupportInquiriesArgs<ExtArgs extends runtime
   where?: Prisma.SupportInquiryWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAttendancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserAttendanceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRewardHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserRewardHistoryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -5319,7 +5925,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   provider?: boolean
   providerId?: boolean
-  profileImage?: boolean
   gender?: boolean
   level?: boolean
   XpLevel?: boolean
@@ -5327,6 +5932,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   streakDays?: boolean
   role?: boolean
   selectedCharacterId?: boolean
+  dismissedNoticeVersion?: boolean
   lastLoginAt?: boolean
   registeredAt?: boolean
   createdAt?: boolean
@@ -5353,6 +5959,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   usages?: boolean | Prisma.User$usagesArgs<ExtArgs>
   adRewardLogs?: boolean | Prisma.User$adRewardLogsArgs<ExtArgs>
   supportInquiries?: boolean | Prisma.User$supportInquiriesArgs<ExtArgs>
+  attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
+  rewardHistories?: boolean | Prisma.User$rewardHistoriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -5362,7 +5970,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   provider?: boolean
   providerId?: boolean
-  profileImage?: boolean
   gender?: boolean
   level?: boolean
   XpLevel?: boolean
@@ -5370,6 +5977,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   streakDays?: boolean
   role?: boolean
   selectedCharacterId?: boolean
+  dismissedNoticeVersion?: boolean
   lastLoginAt?: boolean
   registeredAt?: boolean
   createdAt?: boolean
@@ -5383,7 +5991,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   provider?: boolean
   providerId?: boolean
-  profileImage?: boolean
   gender?: boolean
   level?: boolean
   XpLevel?: boolean
@@ -5391,6 +5998,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   streakDays?: boolean
   role?: boolean
   selectedCharacterId?: boolean
+  dismissedNoticeVersion?: boolean
   lastLoginAt?: boolean
   registeredAt?: boolean
   createdAt?: boolean
@@ -5404,7 +6012,6 @@ export type UserSelectScalar = {
   email?: boolean
   provider?: boolean
   providerId?: boolean
-  profileImage?: boolean
   gender?: boolean
   level?: boolean
   XpLevel?: boolean
@@ -5412,13 +6019,14 @@ export type UserSelectScalar = {
   streakDays?: boolean
   role?: boolean
   selectedCharacterId?: boolean
+  dismissedNoticeVersion?: boolean
   lastLoginAt?: boolean
   registeredAt?: boolean
   createdAt?: boolean
   isNew?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "provider" | "providerId" | "profileImage" | "gender" | "level" | "XpLevel" | "xp" | "streakDays" | "role" | "selectedCharacterId" | "lastLoginAt" | "registeredAt" | "createdAt" | "isNew", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "provider" | "providerId" | "gender" | "level" | "XpLevel" | "xp" | "streakDays" | "role" | "selectedCharacterId" | "dismissedNoticeVersion" | "lastLoginAt" | "registeredAt" | "createdAt" | "isNew", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   selectedCharacter?: boolean | Prisma.User$selectedCharacterArgs<ExtArgs>
   storyProgress?: boolean | Prisma.User$storyProgressArgs<ExtArgs>
@@ -5442,6 +6050,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   usages?: boolean | Prisma.User$usagesArgs<ExtArgs>
   adRewardLogs?: boolean | Prisma.User$adRewardLogsArgs<ExtArgs>
   supportInquiries?: boolean | Prisma.User$supportInquiriesArgs<ExtArgs>
+  attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
+  rewardHistories?: boolean | Prisma.User$rewardHistoriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5476,6 +6086,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     usages: Prisma.$UserUsagePayload<ExtArgs>[]
     adRewardLogs: Prisma.$AdRewardLogPayload<ExtArgs>[]
     supportInquiries: Prisma.$SupportInquiryPayload<ExtArgs>[]
+    attendances: Prisma.$UserAttendancePayload<ExtArgs>[]
+    rewardHistories: Prisma.$UserRewardHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -5483,7 +6095,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     provider: $Enums.AuthProvider
     providerId: string
-    profileImage: string | null
     gender: $Enums.UserGender | null
     level: $Enums.Level
     XpLevel: number
@@ -5491,6 +6102,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     streakDays: number
     role: $Enums.UserRole
     selectedCharacterId: number | null
+    dismissedNoticeVersion: number | null
     lastLoginAt: Date
     registeredAt: Date | null
     createdAt: Date
@@ -5911,6 +6523,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   usages<T extends Prisma.User$usagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$usagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   adRewardLogs<T extends Prisma.User$adRewardLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adRewardLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdRewardLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportInquiries<T extends Prisma.User$supportInquiriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportInquiriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportInquiryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  attendances<T extends Prisma.User$attendancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  rewardHistories<T extends Prisma.User$rewardHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rewardHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRewardHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5945,7 +6559,6 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly provider: Prisma.FieldRef<"User", 'AuthProvider'>
   readonly providerId: Prisma.FieldRef<"User", 'String'>
-  readonly profileImage: Prisma.FieldRef<"User", 'String'>
   readonly gender: Prisma.FieldRef<"User", 'UserGender'>
   readonly level: Prisma.FieldRef<"User", 'Level'>
   readonly XpLevel: Prisma.FieldRef<"User", 'Int'>
@@ -5953,6 +6566,7 @@ export interface UserFieldRefs {
   readonly streakDays: Prisma.FieldRef<"User", 'Int'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly selectedCharacterId: Prisma.FieldRef<"User", 'Int'>
+  readonly dismissedNoticeVersion: Prisma.FieldRef<"User", 'Int'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly registeredAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -6873,6 +7487,54 @@ export type User$supportInquiriesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.SupportInquiryScalarFieldEnum | Prisma.SupportInquiryScalarFieldEnum[]
+}
+
+/**
+ * User.attendances
+ */
+export type User$attendancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserAttendance
+   */
+  select?: Prisma.UserAttendanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserAttendance
+   */
+  omit?: Prisma.UserAttendanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserAttendanceInclude<ExtArgs> | null
+  where?: Prisma.UserAttendanceWhereInput
+  orderBy?: Prisma.UserAttendanceOrderByWithRelationInput | Prisma.UserAttendanceOrderByWithRelationInput[]
+  cursor?: Prisma.UserAttendanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserAttendanceScalarFieldEnum | Prisma.UserAttendanceScalarFieldEnum[]
+}
+
+/**
+ * User.rewardHistories
+ */
+export type User$rewardHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserRewardHistory
+   */
+  select?: Prisma.UserRewardHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserRewardHistory
+   */
+  omit?: Prisma.UserRewardHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserRewardHistoryInclude<ExtArgs> | null
+  where?: Prisma.UserRewardHistoryWhereInput
+  orderBy?: Prisma.UserRewardHistoryOrderByWithRelationInput | Prisma.UserRewardHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.UserRewardHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserRewardHistoryScalarFieldEnum | Prisma.UserRewardHistoryScalarFieldEnum[]
 }
 
 /**

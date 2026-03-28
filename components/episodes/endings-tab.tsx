@@ -22,18 +22,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2, Gift, Loader2, UserPlus, Trophy, ChevronDown, ChevronRight } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Gift,
+  Loader2,
+  UserPlus,
+  Trophy,
+  ChevronDown,
+  ChevronRight,
+  Sparkles,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { ImageUploader } from "@/components/ui/image-uploader";
 
 const REWARD_TYPE_LABELS: Record<EndingRewardBasic["type"], string> = {
+  COIN: "코인",
+  COUPON: "쿠폰",
   CHARACTER_INVITE: "캐릭터 해금",
+  XP: "XP",
   ITEM: "아이템",
 };
 
 const REWARD_TYPE_STYLES: Record<EndingRewardBasic["type"], string> = {
+  COIN: "bg-amber-500/10 text-amber-700",
+  COUPON: "bg-sky-500/10 text-sky-700",
   CHARACTER_INVITE: "bg-violet-500/10 text-violet-600",
+  XP: "bg-emerald-500/10 text-emerald-700",
   ITEM: "bg-blue-500/10 text-blue-600",
 };
 
@@ -49,6 +65,10 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
   const [addRewardEndingId, setAddRewardEndingId] = useState<number | null>(null);
   const [selectedType, setSelectedType] = useState<EndingRewardBasic["type"]>("CHARACTER_INVITE");
   const [selectedCharacterId, setSelectedCharacterId] = useState<string>("");
+  const [rewardDescription, setRewardDescription] = useState("");
+  const [coinAmount, setCoinAmount] = useState("");
+  const [xpAmount, setXpAmount] = useState("");
+  const [couponId, setCouponId] = useState("");
   const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
 
   const { data: endings = [], isLoading } = useQuery<EndingWithRewards[]>({
@@ -122,12 +142,24 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
     mutationFn: async (endingId: number) => {
       const payload =
         selectedType === "CHARACTER_INVITE"
-          ? { characterId: parseInt(selectedCharacterId) }
-          : {};
+          ? { characterId: parseInt(selectedCharacterId, 10) }
+          : selectedType === "COIN"
+            ? { amount: Number(coinAmount) || 0 }
+            : selectedType === "XP"
+              ? { amount: Number(xpAmount) || 0 }
+              : selectedType === "COUPON"
+                ? { couponId: Number(couponId) || 0 }
+              : selectedType === "ITEM"
+                ? ({} as Record<string, unknown>)
+                : {};
       const res = await fetch(`/api/episodes/${episodeId}/endings/${endingId}/rewards`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: selectedType, payload }),
+        body: JSON.stringify({
+          type: selectedType,
+          payload,
+          description: rewardDescription.trim() || undefined,
+        }),
       });
       if (!res.ok) throw new Error("Failed to add reward");
       return res.json();
@@ -137,6 +169,10 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
       toast.success("리워드가 추가되었습니다.");
       setAddRewardEndingId(null);
       setSelectedCharacterId("");
+      setRewardDescription("");
+      setCoinAmount("");
+      setXpAmount("");
+      setCouponId("");
     },
     onError: () => toast.error("리워드 추가 실패"),
   });
@@ -161,6 +197,15 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
       const charId = reward.payload.characterId as number;
       const sc = storyCharacters.find((c) => c.characterId === charId);
       return sc ? sc.name : `Character #${charId}`;
+    }
+    if (reward.type === "COIN") {
+      return `코인 ${(reward.payload.amount as number) ?? "?"}`;
+    }
+    if (reward.type === "XP") {
+      return `XP ${(reward.payload.amount as number) ?? "?"}`;
+    }
+    if (reward.type === "COUPON") {
+      return `쿠폰 #${(reward.payload.couponId as number) ?? "?"}`;
     }
     return JSON.stringify(reward.payload);
   };
@@ -297,6 +342,8 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
                           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                             {reward.type === "CHARACTER_INVITE" ? (
                               <UserPlus className="w-4 h-4 text-primary" />
+                            ) : reward.type === "COIN" || reward.type === "XP" ? (
+                              <Sparkles className="w-4 h-4 text-primary" />
                             ) : (
                               <Gift className="w-4 h-4 text-primary" />
                             )}
@@ -440,6 +487,15 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
+                    <SelectItem value="COIN" className="rounded-lg">
+                      코인
+                    </SelectItem>
+                    <SelectItem value="XP" className="rounded-lg">
+                      XP
+                    </SelectItem>
+                    <SelectItem value="COUPON" className="rounded-lg">
+                      쿠폰
+                    </SelectItem>
                     <SelectItem value="CHARACTER_INVITE" className="rounded-lg">
                       캐릭터 해금
                     </SelectItem>
@@ -449,6 +505,51 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
                   </SelectContent>
                 </Select>
               </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium">설명 (선택)</Label>
+                <Input
+                  value={rewardDescription}
+                  onChange={(e) => setRewardDescription(e.target.value)}
+                  placeholder="관리용 메모"
+                  className="rounded-xl bg-secondary border-0 h-9 text-sm"
+                />
+              </div>
+              {selectedType === "COIN" && (
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium">코인 양</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={coinAmount}
+                    onChange={(e) => setCoinAmount(e.target.value)}
+                    className="rounded-xl bg-secondary border-0 h-9 text-sm"
+                  />
+                </div>
+              )}
+              {selectedType === "XP" && (
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium">XP 양</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={xpAmount}
+                    onChange={(e) => setXpAmount(e.target.value)}
+                    className="rounded-xl bg-secondary border-0 h-9 text-sm"
+                  />
+                </div>
+              )}
+              {selectedType === "COUPON" && (
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium">쿠폰 ID</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={couponId}
+                    onChange={(e) => setCouponId(e.target.value)}
+                    className="rounded-xl bg-secondary border-0 h-9 text-sm"
+                  />
+                </div>
+              )}
               {selectedType === "CHARACTER_INVITE" && (
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium">캐릭터</Label>
@@ -486,7 +587,10 @@ export function EndingsTab({ storyId, episodeId }: EndingsTabProps) {
                 onClick={() => addReward.mutate(addRewardEndingId)}
                 disabled={
                   addReward.isPending ||
-                  (selectedType === "CHARACTER_INVITE" ? !selectedCharacterId : false)
+                  (selectedType === "CHARACTER_INVITE" && !selectedCharacterId) ||
+                  (selectedType === "COIN" && !coinAmount.trim()) ||
+                  (selectedType === "XP" && !xpAmount.trim()) ||
+                  (selectedType === "COUPON" && !couponId.trim())
                 }
               >
                 {addReward.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

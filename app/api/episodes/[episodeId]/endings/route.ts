@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { rewardEndingToClient } from "@/lib/reward-helpers";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -6,12 +7,33 @@ export async function GET(
   { params }: { params: Promise<{ episodeId: string }> }
 ) {
   const { episodeId } = await params;
+  const eid = parseInt(episodeId);
   const endings = await prisma.ending.findMany({
-    where: { episodeId: parseInt(episodeId) },
-    include: { rewards: true },
+    where: { episodeId: eid },
     orderBy: { order: "asc" },
   });
-  return NextResponse.json(endings);
+  if (endings.length === 0) {
+    return NextResponse.json([]);
+  }
+  const endingIds = endings.map((e) => e.id);
+  const rewards = await prisma.reward.findMany({
+    where: {
+      sourceType: "ENDING",
+      sourceId: { in: endingIds },
+    },
+    orderBy: { id: "asc" },
+  });
+  const byEnding = new Map<number, typeof rewards>();
+  for (const r of rewards) {
+    const list = byEnding.get(r.sourceId) ?? [];
+    list.push(r);
+    byEnding.set(r.sourceId, list);
+  }
+  const out = endings.map((e) => ({
+    ...e,
+    rewards: (byEnding.get(e.id) ?? []).map(rewardEndingToClient),
+  }));
+  return NextResponse.json(out);
 }
 
 export async function POST(

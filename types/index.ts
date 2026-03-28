@@ -292,10 +292,35 @@ export type EndingWithRewards = EndingBasic & {
   rewards: EndingRewardBasic[];
 };
 
+/** 엔딩 탭: Reward (sourceType=ENDING) — API에서 endingId = sourceId */
 export type EndingRewardBasic = {
   id: number;
   endingId: number;
-  type: "CHARACTER_INVITE" | "ITEM";
+  type:
+    | "COIN"
+    | "COUPON"
+    | "CHARACTER_INVITE"
+    | "XP"
+    | "ITEM";
+  description: string | null;
+  payload: Record<string, unknown>;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+/** 출석/회원가입 리워드 관리 페이지 */
+export type AdminGlobalReward = {
+  id: number;
+  sourceType: "ATTENDANCE" | "SIGNUP";
+  sourceId: number;
+  type:
+    | "COIN"
+    | "COUPON"
+    | "CHARACTER_INVITE"
+    | "XP"
+    | "ITEM";
+  description: string | null;
   payload: Record<string, unknown>;
   isActive: boolean;
   createdAt: string;

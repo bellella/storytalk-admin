@@ -85,7 +85,6 @@ export const ModelName = {
   PlayEpisodeSlot: 'PlayEpisodeSlot',
   SlotDialogue: 'SlotDialogue',
   Ending: 'Ending',
-  EndingReward: 'EndingReward',
   UserEnding: 'UserEnding',
   Collection: 'Collection',
   CollectionProduct: 'CollectionProduct',
@@ -102,6 +101,10 @@ export const ModelName = {
   UserUsage: 'UserUsage',
   AdRewardLog: 'AdRewardLog',
   SupportInquiry: 'SupportInquiry',
+  Notice: 'Notice',
+  UserAttendance: 'UserAttendance',
+  Reward: 'Reward',
+  UserRewardHistory: 'UserRewardHistory',
   Image: 'Image'
 } as const
 
@@ -127,7 +130,6 @@ export const UserScalarFieldEnum = {
   email: 'email',
   provider: 'provider',
   providerId: 'providerId',
-  profileImage: 'profileImage',
   gender: 'gender',
   level: 'level',
   XpLevel: 'XpLevel',
@@ -135,6 +137,7 @@ export const UserScalarFieldEnum = {
   streakDays: 'streakDays',
   role: 'role',
   selectedCharacterId: 'selectedCharacterId',
+  dismissedNoticeVersion: 'dismissedNoticeVersion',
   lastLoginAt: 'lastLoginAt',
   registeredAt: 'registeredAt',
   createdAt: 'createdAt',
@@ -649,19 +652,6 @@ export const EndingScalarFieldEnum = {
 export type EndingScalarFieldEnum = (typeof EndingScalarFieldEnum)[keyof typeof EndingScalarFieldEnum]
 
 
-export const EndingRewardScalarFieldEnum = {
-  id: 'id',
-  endingId: 'endingId',
-  type: 'type',
-  payload: 'payload',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type EndingRewardScalarFieldEnum = (typeof EndingRewardScalarFieldEnum)[keyof typeof EndingRewardScalarFieldEnum]
-
-
 export const UserEndingScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -915,6 +905,65 @@ export const SupportInquiryScalarFieldEnum = {
 } as const
 
 export type SupportInquiryScalarFieldEnum = (typeof SupportInquiryScalarFieldEnum)[keyof typeof SupportInquiryScalarFieldEnum]
+
+
+export const NoticeScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  type: 'type',
+  isPopup: 'isPopup',
+  isActive: 'isActive',
+  version: 'version',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NoticeScalarFieldEnum = (typeof NoticeScalarFieldEnum)[keyof typeof NoticeScalarFieldEnum]
+
+
+export const UserAttendanceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  attendanceDate: 'attendanceDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserAttendanceScalarFieldEnum = (typeof UserAttendanceScalarFieldEnum)[keyof typeof UserAttendanceScalarFieldEnum]
+
+
+export const RewardScalarFieldEnum = {
+  id: 'id',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  type: 'type',
+  description: 'description',
+  payload: 'payload',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RewardScalarFieldEnum = (typeof RewardScalarFieldEnum)[keyof typeof RewardScalarFieldEnum]
+
+
+export const UserRewardHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  rewardId: 'rewardId',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  type: 'type',
+  description: 'description',
+  payload: 'payload',
+  grantKey: 'grantKey',
+  grantedAt: 'grantedAt'
+} as const
+
+export type UserRewardHistoryScalarFieldEnum = (typeof UserRewardHistoryScalarFieldEnum)[keyof typeof UserRewardHistoryScalarFieldEnum]
 
 
 export const ImageScalarFieldEnum = {

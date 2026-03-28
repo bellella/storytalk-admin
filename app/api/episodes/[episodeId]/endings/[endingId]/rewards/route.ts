@@ -1,5 +1,15 @@
 import { prisma } from "@/lib/prisma";
+import { rewardEndingToClient } from "@/lib/reward-helpers";
 import { NextResponse } from "next/server";
+import type { RewardType } from "@/src/generated/prisma/enums";
+
+const REWARD_TYPES: RewardType[] = [
+  "COIN",
+  "COUPON",
+  "CHARACTER_INVITE",
+  "XP",
+  "ITEM",
+];
 
 export async function GET(
   _: Request,
@@ -11,10 +21,13 @@ export async function GET(
       id: parseInt(endingId),
       episodeId: parseInt(episodeId),
     },
-    include: { rewards: true },
   });
   if (!ending) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json(ending.rewards);
+  const rewards = await prisma.reward.findMany({
+    where: { sourceType: "ENDING", sourceId: ending.id },
+    orderBy: { id: "asc" },
+  });
+  return NextResponse.json(rewards.map(rewardEndingToClient));
 }
 
 export async function POST(
@@ -23,14 +36,7 @@ export async function POST(
 ) {
   const { episodeId, endingId } = await params;
   const body = await req.json();
-  const { type, payload, isActive } = body;
-
-  if (!type || !payload) {
-    return NextResponse.json(
-      { error: "type and payload required" },
-      { status: 400 }
-    );
-  }
+  const { type, payload, isActive, description } = body;
 
   const ending = await prisma.ending.findFirst({
     where: {
@@ -40,15 +46,25 @@ export async function POST(
   });
   if (!ending) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const reward = await prisma.endingReward.create({
+  if (!type || !REWARD_TYPES.includes(type)) {
+    return NextResponse.json({ error: "invalid type" }, { status: 400 });
+  }
+  const p = payload !== undefined && payload !== null ? payload : {};
+  if (typeof p !== "object") {
+    return NextResponse.json({ error: "payload must be a JSON object" }, { status: 400 });
+  }
+
+  const reward = await prisma.reward.create({
     data: {
-      endingId: parseInt(endingId),
+      sourceType: "ENDING",
+      sourceId: ending.id,
       type,
-      payload,
+      description: description ?? null,
+      payload: p as object,
       isActive: isActive ?? true,
     },
   });
-  return NextResponse.json(reward);
+  return NextResponse.json(rewardEndingToClient(reward));
 }
 
 export async function DELETE(
@@ -63,15 +79,25 @@ export async function DELETE(
     return NextResponse.json({ error: "id required" }, { status: 400 });
   }
 
-  const reward = await prisma.endingReward.findFirst({
-    where: { id: parseInt(id), endingId: parseInt(endingId) },
-    include: { ending: true },
+  const reward = await prisma.reward.findFirst({
+    where: {
+      id: parseInt(id),
+      sourceType: "ENDING",
+      sourceId: parseInt(endingId),
+    },
   });
-  if (!reward || reward.ending.episodeId !== parseInt(episodeId)) {
+  if (!reward) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  await prisma.endingReward.delete({
+  const ending = await prisma.ending.findFirst({
+    where: { id: parseInt(endingId), episodeId: parseInt(episodeId) },
+  });
+  if (!ending) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  await prisma.reward.delete({
     where: { id: parseInt(id) },
   });
   return NextResponse.json({ ok: true });

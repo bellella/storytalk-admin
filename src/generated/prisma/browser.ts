@@ -188,11 +188,6 @@ export type SlotDialogue = Prisma.SlotDialogueModel
  */
 export type Ending = Prisma.EndingModel
 /**
- * Model EndingReward
- * 
- */
-export type EndingReward = Prisma.EndingRewardModel
-/**
  * Model UserEnding
  * 
  */
@@ -272,6 +267,26 @@ export type AdRewardLog = Prisma.AdRewardLogModel
  * 
  */
 export type SupportInquiry = Prisma.SupportInquiryModel
+/**
+ * Model Notice
+ * 
+ */
+export type Notice = Prisma.NoticeModel
+/**
+ * Model UserAttendance
+ * 
+ */
+export type UserAttendance = Prisma.UserAttendanceModel
+/**
+ * Model Reward
+ * 
+ */
+export type Reward = Prisma.RewardModel
+/**
+ * Model UserRewardHistory
+ * 
+ */
+export type UserRewardHistory = Prisma.UserRewardHistoryModel
 /**
  * Model Image
  * 
