@@ -14,3 +14,17 @@ export function rewardEndingToClient(r: Reward) {
     updatedAt: r.updatedAt.toISOString(),
   };
 }
+
+/** 에피소드 리워드 API: Reward(EPISODE) — sourceId = episode id */
+export function rewardEpisodeToClient(r: Reward) {
+  return {
+    id: r.id,
+    episodeId: r.sourceId,
+    type: r.type as RewardType,
+    description: r.description,
+    payload: r.payload as Record<string, unknown>,
+    isActive: r.isActive,
+    createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt.toISOString(),
+  };
+}

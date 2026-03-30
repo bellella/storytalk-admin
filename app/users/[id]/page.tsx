@@ -51,6 +51,7 @@ import {
   useResetUserPlayEpisode,
   useUpdateCharacterAffinity,
   usePatchUser,
+  useResetUserEpisodeProgress,
 } from "@/hooks/use-users";
 import { PublishStatus } from "@/types";
 import {
@@ -60,7 +61,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { UserGender, UserRole } from "@/src/generated/prisma/enums";
+import type { EpisodeStage, UserGender, UserRole } from "@/src/generated/prisma/enums";
+import { toast } from "sonner";
+
+function episodeProgressBadge(stage: EpisodeStage | string, isCompleted: boolean) {
+  if (isCompleted || stage === "QUIZ_COMPLETED") {
+    return { label: "완료", className: "bg-primary text-primary-foreground border-0" };
+  }
+  switch (stage) {
+    case "STORY_IN_PROGRESS":
+      return {
+        label: "스토리 진행 중",
+        className: "bg-sky-500/15 text-sky-800 border-0",
+      };
+    case "STORY_COMPLETED":
+      return {
+        label: "스토리 완료 · 퀴즈 전",
+        className: "bg-amber-500/15 text-amber-900 border-0",
+      };
+    case "QUIZ_IN_PROGRESS":
+      return {
+        label: "퀴즈 진행 중",
+        className: "bg-violet-500/15 text-violet-900 border-0",
+      };
+    default:
+      return { label: String(stage), className: "bg-secondary text-secondary-foreground border-0" };
+  }
+}
 
 function JsonBlock({ label, data }: { label: string; data: unknown }) {
   const [open, setOpen] = useState(false);
@@ -496,6 +523,7 @@ export default function UserDetailPage() {
   const resetPlayEpisode = useResetUserPlayEpisode(userId);
   const updateAffinity = useUpdateCharacterAffinity(userId);
   const patchUser = usePatchUser(userId);
+  const resetEpisodeProgress = useResetUserEpisodeProgress(userId);
 
   if (userLoading) {
     return (
@@ -821,44 +849,95 @@ export default function UserDetailPage() {
                     <TableRow className="bg-secondary/50 hover:bg-secondary/50">
                       <TableHead className="font-semibold">에피소드</TableHead>
                       <TableHead className="font-semibold">스토리</TableHead>
-                      <TableHead className="font-semibold">상태</TableHead>
+                      <TableHead className="font-semibold">단계</TableHead>
                       <TableHead className="font-semibold">완료일</TableHead>
                       <TableHead className="font-semibold">시작일</TableHead>
+                      <TableHead className="font-semibold w-[100px] text-right">
+                        기록
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {(episodeProgress ?? []).map((ep: any) => (
-                      <TableRow key={ep.id} className="hover:bg-secondary/30">
-                        <TableCell className="font-medium">
-                          {ep.episode.title}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {ep.episode.story.title}
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={ep.isCompleted ? "default" : "secondary"}
-                            className="rounded-lg text-xs"
-                          >
-                            {ep.isCompleted ? "완료" : "진행 중"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-muted-foreground text-sm">
-                          {ep.completedAt
-                            ? new Date(ep.completedAt).toLocaleDateString(
-                                "ko-KR"
-                              )
-                            : "-"}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground text-sm">
-                          {new Date(ep.startedAt).toLocaleDateString("ko-KR")}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {(episodeProgress ?? []).map((ep: {
+                      id: number;
+                      episodeId: number;
+                      currentStage: EpisodeStage;
+                      isCompleted: boolean;
+                      startedAt: string;
+                      completedAt: string | null;
+                      episode: { title: string; story: { title: string } };
+                    }) => {
+                      const badge = episodeProgressBadge(ep.currentStage, ep.isCompleted);
+                      return (
+                        <TableRow key={ep.id} className="hover:bg-secondary/30">
+                          <TableCell className="font-medium">
+                            {ep.episode.title}
+                          </TableCell>
+                          <TableCell className="text-muted-foreground">
+                            {ep.episode.story.title}
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={`rounded-lg text-xs font-medium ${badge.className}`}>
+                              {badge.label}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-muted-foreground text-sm">
+                            {ep.completedAt
+                              ? new Date(ep.completedAt).toLocaleDateString("ko-KR")
+                              : "—"}
+                          </TableCell>
+                          <TableCell className="text-muted-foreground text-sm">
+                            {new Date(ep.startedAt).toLocaleDateString("ko-KR")}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10"
+                              disabled={
+                                resetEpisodeProgress.isPending &&
+                                resetEpisodeProgress.variables === ep.episodeId
+                              }
+                              onClick={() => {
+                                if (
+                                  !confirm(
+                                    `「${ep.episode.title}」에 대한 진행·에피소드 퀴즈·복습·좋아요·엔딩·XP(해당 에피) 기록을 모두 삭제할까요?`
+                                  )
+                                ) {
+                                  return;
+                                }
+                                resetEpisodeProgress.mutate(ep.episodeId, {
+                                  onSuccess: (data) => {
+                                    toast.success(
+                                      `삭제 완료 (UserEpisode ${data.deleted.userEpisodes}건 등)`
+                                    );
+                                  },
+                                  onError: (e) =>
+                                    toast.error(
+                                      e instanceof Error ? e.message : "삭제 실패"
+                                    ),
+                                });
+                              }}
+                            >
+                              {resetEpisodeProgress.isPending &&
+                              resetEpisodeProgress.variables === ep.episodeId ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <>
+                                  <Trash2 className="w-4 h-4 mr-1" />
+                                  전체 삭제
+                                </>
+                              )}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                     {(episodeProgress ?? []).length === 0 && (
                       <TableRow>
                         <TableCell
-                          colSpan={5}
+                          colSpan={6}
                           className="text-center py-16 text-muted-foreground text-sm"
                         >
                           에피소드 진행 기록이 없습니다

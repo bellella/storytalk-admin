@@ -75,7 +75,6 @@ export const ModelName = {
   Sticker: 'Sticker',
   FaceTalkSession: 'FaceTalkSession',
   dialogueBookmark: 'dialogueBookmark',
-  EpisodeReward: 'EpisodeReward',
   XpLevel: 'XpLevel',
   XpRule: 'XpRule',
   UserXpHistory: 'UserXpHistory',
@@ -494,19 +493,6 @@ export const DialogueBookmarkScalarFieldEnum = {
 } as const
 
 export type DialogueBookmarkScalarFieldEnum = (typeof DialogueBookmarkScalarFieldEnum)[keyof typeof DialogueBookmarkScalarFieldEnum]
-
-
-export const EpisodeRewardScalarFieldEnum = {
-  id: 'id',
-  episodeId: 'episodeId',
-  type: 'type',
-  payload: 'payload',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type EpisodeRewardScalarFieldEnum = (typeof EpisodeRewardScalarFieldEnum)[keyof typeof EpisodeRewardScalarFieldEnum]
 
 
 export const XpLevelScalarFieldEnum = {

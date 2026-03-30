@@ -450,6 +450,10 @@ export type EnumRewardSourceTypeFieldUpdateOperationsInput = {
   set?: $Enums.RewardSourceType
 }
 
+export type EnumRewardTypeFieldUpdateOperationsInput = {
+  set?: $Enums.RewardType
+}
+
 export type RewardCreateNestedOneWithoutHistoriesInput = {
   create?: Prisma.XOR<Prisma.RewardCreateWithoutHistoriesInput, Prisma.RewardUncheckedCreateWithoutHistoriesInput>
   connectOrCreate?: Prisma.RewardCreateOrConnectWithoutHistoriesInput

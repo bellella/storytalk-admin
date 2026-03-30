@@ -1,12 +1,14 @@
 import { prisma } from "@/lib/prisma";
+import { rewardEpisodeToClient } from "@/lib/reward-helpers";
 import { NextResponse } from "next/server";
 
 export async function GET(
   _: Request,
   { params }: { params: Promise<{ episodeId: string }> }
 ) {
+  const episodeId = parseInt((await params).episodeId, 10);
   const episode = await prisma.episode.findUnique({
-    where: { id: parseInt((await params).episodeId) },
+    where: { id: episodeId },
     include: {
       scenes: {
         orderBy: { order: "asc" },
@@ -19,11 +21,22 @@ export async function GET(
           },
         },
       },
-      rewards: true,
       endings: { orderBy: { order: "asc" } },
     },
   });
-  return NextResponse.json(episode);
+  if (!episode) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const rewardRows = await prisma.reward.findMany({
+    where: { sourceType: "EPISODE", sourceId: episodeId },
+    orderBy: { id: "asc" },
+  });
+
+  return NextResponse.json({
+    ...episode,
+    rewards: rewardRows.map(rewardEpisodeToClient),
+  });
 }
 
 export async function PATCH(

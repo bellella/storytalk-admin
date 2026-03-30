@@ -63,6 +63,32 @@ export function useUserEpisodeProgress(userId: number) {
   });
 }
 
+export function useResetUserEpisodeProgress(userId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (episodeId: number) => {
+      const res = await fetch(
+        `/api/users/${userId}/progress/episodes/${episodeId}`,
+        { method: "DELETE" }
+      );
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err as { error?: string }).error || "진행 기록 삭제 실패");
+      }
+      return res.json() as Promise<{
+        ok: boolean;
+        deleted: Record<string, number>;
+      }>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users", userId, "progress", "episodes"],
+      });
+      queryClient.invalidateQueries({ queryKey: ["users", userId] });
+    },
+  });
+}
+
 export function useUserStoryProgress(userId: number) {
   return useQuery({
     queryKey: ["users", userId, "progress", "stories"],

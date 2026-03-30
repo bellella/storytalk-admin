@@ -197,7 +197,6 @@ model Episode {
 
   story            Story?            @relation(fields: [storyId], references: [id])
   scenes           Scene[]
-  rewards          EpisodeReward[]
   endings          Ending[]
   userEpisodes     UserEpisode[]
   userPlayEpisodes UserPlayEpisode[]
@@ -687,22 +686,6 @@ model dialogueBookmark {
   dialogue Dialogue @relation(fields: [dialogueId], references: [id], onDelete: Cascade)
 
   @@unique([userId, dialogueId])
-}
-
-//////////////////////////////////////////////////////
-// EPISODE REWARD SYSTEM
-//////////////////////////////////////////////////////
-
-model EpisodeReward {
-  id        Int        @id @default(autoincrement())
-  episodeId Int
-  type      RewardType
-  payload   Json
-  isActive  Boolean    @default(true)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-
-  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
 }
 
 /////////////

@@ -411,6 +411,19 @@ function ChoiceSlotEditor({
 
 // ── Shared AI fields used by both AI_INPUT_SLOT and AI_SLOT ──────────────────
 
+/** Legacy: constraints were string[]; now stored as a single multiline string. */
+function aiConstraintsToText(parsed: Record<string, unknown>): string {
+  const c = parsed.constraints;
+  if (typeof c === "string") return c;
+  if (Array.isArray(c)) {
+    return (c as unknown[])
+      .map((x) => (typeof x === "string" ? x : String(x)))
+      .filter((s) => s.length > 0)
+      .join("\n\n");
+  }
+  return "";
+}
+
 function AiSharedFields({
   parsed,
   emit,
@@ -421,9 +434,7 @@ function AiSharedFields({
   characters?: StoryCharacterWithCharacter[];
 }) {
   const situation = typeof parsed.situation === "string" ? parsed.situation : "";
-  const constraints: string[] = Array.isArray(parsed.constraints)
-    ? (parsed.constraints as string[])
-    : [];
+  const constraintsText = aiConstraintsToText(parsed);
   const partnerCharacterIds: number[] = Array.isArray(parsed.partnerCharacterIds)
     ? (parsed.partnerCharacterIds as number[])
     : [];
@@ -443,48 +454,15 @@ function AiSharedFields({
         />
       </div>
 
-      {/* Constraints */}
+      {/* Constraints (plain text; legacy JSON arrays are joined on load) */}
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <Label className="text-xs text-muted-foreground">Constraints</Label>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-5 text-xs rounded-lg px-2"
-            onClick={() => emit({ constraints: [...constraints, ""] })}
-          >
-            <Plus className="w-3 h-3 mr-1" /> Add
-          </Button>
-        </div>
-        <div className="space-y-1.5">
-          {constraints.map((c, i) => (
-            <div key={i} className="flex items-center gap-1.5">
-              <Input
-                value={c}
-                placeholder={`제약조건 ${i + 1}`}
-                onChange={(e) => {
-                  const next = [...constraints];
-                  next[i] = e.target.value;
-                  emit({ constraints: next });
-                }}
-                className="rounded-xl bg-secondary border-0 h-7 text-xs flex-1"
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 rounded-lg text-destructive hover:bg-destructive/10 flex-shrink-0"
-                onClick={() => emit({ constraints: constraints.filter((_, j) => j !== i) })}
-              >
-                <X className="w-3 h-3" />
-              </Button>
-            </div>
-          ))}
-          {constraints.length === 0 && (
-            <p className="text-xs text-muted-foreground/60">없음</p>
-          )}
-        </div>
+        <Label className="text-xs text-muted-foreground">Constraints</Label>
+        <Textarea
+          value={constraintsText}
+          placeholder="제약조건 (자유 텍스트, 여러 줄 가능)"
+          onChange={(e) => emit({ constraints: e.target.value })}
+          className="mt-1 rounded-xl bg-secondary border-0 min-h-[100px] text-xs"
+        />
       </div>
 
       {/* Partner Character IDs */}

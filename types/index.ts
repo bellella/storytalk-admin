@@ -13,7 +13,6 @@ export type {
   StoryCharacterModel,
   UnitModel,
   ReviewItemModel,
-  EpisodeRewardModel,
 } from "@/src/generated/prisma/models";
 
 export {
@@ -267,16 +266,6 @@ export type ReviewItemBasic = {
   dialogueOrder?: number;
 };
 
-export type EpisodeRewardBasic = {
-  id: number;
-  episodeId: number;
-  type: "CHARACTER_INVITE" | "ITEM";
-  payload: Record<string, unknown>;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
-
 export type EndingBasic = {
   id: number;
   episodeId: number;
@@ -307,6 +296,11 @@ export type EndingRewardBasic = {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+};
+
+/** 에피소드 리워드: Reward (sourceType=EPISODE) — API에서 episodeId = sourceId */
+export type EpisodeRewardBasic = Omit<EndingRewardBasic, "endingId"> & {
+  episodeId: number;
 };
 
 /** 출석/회원가입 리워드 관리 페이지 */

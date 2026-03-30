@@ -138,11 +138,6 @@ export type FaceTalkSession = Prisma.FaceTalkSessionModel
  */
 export type dialogueBookmark = Prisma.dialogueBookmarkModel
 /**
- * Model EpisodeReward
- * 
- */
-export type EpisodeReward = Prisma.EpisodeRewardModel
-/**
  * Model XpLevel
  * 
  */

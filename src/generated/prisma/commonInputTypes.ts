@@ -701,23 +701,6 @@ export type EnumFaceTalkStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumFaceTalkStatusFilter<$PrismaModel>
 }
 
-export type EnumRewardTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel> | $Enums.RewardType
-}
-
-export type EnumRewardTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRewardTypeWithAggregatesFilter<$PrismaModel> | $Enums.RewardType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
-}
-
 export type EnumXpTriggerTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.XpTriggerType | Prisma.EnumXpTriggerTypeFieldRefInput<$PrismaModel>
   in?: $Enums.XpTriggerType[] | Prisma.ListEnumXpTriggerTypeFieldRefInput<$PrismaModel>
@@ -1184,6 +1167,13 @@ export type EnumRewardSourceTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumRewardSourceTypeFilter<$PrismaModel> | $Enums.RewardSourceType
 }
 
+export type EnumRewardTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel> | $Enums.RewardType
+}
+
 export type EnumRewardSourceTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.RewardSourceType | Prisma.EnumRewardSourceTypeFieldRefInput<$PrismaModel>
   in?: $Enums.RewardSourceType[] | Prisma.ListEnumRewardSourceTypeFieldRefInput<$PrismaModel>
@@ -1192,6 +1182,16 @@ export type EnumRewardSourceTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumRewardSourceTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumRewardSourceTypeFilter<$PrismaModel>
+}
+
+export type EnumRewardTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRewardTypeWithAggregatesFilter<$PrismaModel> | $Enums.RewardType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
 }
 
 export type NestedIntFilter<$PrismaModel = never> = {
@@ -1829,23 +1829,6 @@ export type NestedEnumFaceTalkStatusWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumFaceTalkStatusFilter<$PrismaModel>
 }
 
-export type NestedEnumRewardTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel> | $Enums.RewardType
-}
-
-export type NestedEnumRewardTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRewardTypeWithAggregatesFilter<$PrismaModel> | $Enums.RewardType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
-}
-
 export type NestedEnumXpTriggerTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.XpTriggerType | Prisma.EnumXpTriggerTypeFieldRefInput<$PrismaModel>
   in?: $Enums.XpTriggerType[] | Prisma.ListEnumXpTriggerTypeFieldRefInput<$PrismaModel>
@@ -2312,6 +2295,13 @@ export type NestedEnumRewardSourceTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumRewardSourceTypeFilter<$PrismaModel> | $Enums.RewardSourceType
 }
 
+export type NestedEnumRewardTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel> | $Enums.RewardType
+}
+
 export type NestedEnumRewardSourceTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.RewardSourceType | Prisma.EnumRewardSourceTypeFieldRefInput<$PrismaModel>
   in?: $Enums.RewardSourceType[] | Prisma.ListEnumRewardSourceTypeFieldRefInput<$PrismaModel>
@@ -2320,6 +2310,16 @@ export type NestedEnumRewardSourceTypeWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumRewardSourceTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumRewardSourceTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumRewardTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RewardType | Prisma.EnumRewardTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RewardType[] | Prisma.ListEnumRewardTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRewardTypeWithAggregatesFilter<$PrismaModel> | $Enums.RewardType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRewardTypeFilter<$PrismaModel>
 }
 
 

@@ -408,7 +408,6 @@ export const ModelName = {
   Sticker: 'Sticker',
   FaceTalkSession: 'FaceTalkSession',
   dialogueBookmark: 'dialogueBookmark',
-  EpisodeReward: 'EpisodeReward',
   XpLevel: 'XpLevel',
   XpRule: 'XpRule',
   UserXpHistory: 'UserXpHistory',
@@ -454,7 +453,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "story" | "tag" | "storyTag" | "unit" | "episode" | "scene" | "dialogue" | "storyProgress" | "reviewItem" | "userReviewItem" | "quiz" | "userQuizSession" | "quizSessionItem" | "userQuizAnswer" | "character" | "storyCharacter" | "characterImage" | "characterFriend" | "characterChat" | "message" | "sticker" | "faceTalkSession" | "dialogueBookmark" | "episodeReward" | "xpLevel" | "xpRule" | "userXpHistory" | "userEpisode" | "userEpisodeLike" | "userPlayEpisode" | "playEpisodeSlot" | "slotDialogue" | "ending" | "userEnding" | "collection" | "collectionProduct" | "product" | "episodeProduct" | "userPurchase" | "coinTransaction" | "coupon" | "couponCode" | "userCoupon" | "couponUsage" | "userSubscription" | "promptTemplate" | "userUsage" | "adRewardLog" | "supportInquiry" | "notice" | "userAttendance" | "reward" | "userRewardHistory" | "image"
+    modelProps: "user" | "story" | "tag" | "storyTag" | "unit" | "episode" | "scene" | "dialogue" | "storyProgress" | "reviewItem" | "userReviewItem" | "quiz" | "userQuizSession" | "quizSessionItem" | "userQuizAnswer" | "character" | "storyCharacter" | "characterImage" | "characterFriend" | "characterChat" | "message" | "sticker" | "faceTalkSession" | "dialogueBookmark" | "xpLevel" | "xpRule" | "userXpHistory" | "userEpisode" | "userEpisodeLike" | "userPlayEpisode" | "playEpisodeSlot" | "slotDialogue" | "ending" | "userEnding" | "collection" | "collectionProduct" | "product" | "episodeProduct" | "userPurchase" | "coinTransaction" | "coupon" | "couponCode" | "userCoupon" | "couponUsage" | "userSubscription" | "promptTemplate" | "userUsage" | "adRewardLog" | "supportInquiry" | "notice" | "userAttendance" | "reward" | "userRewardHistory" | "image"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2231,80 +2230,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.dialogueBookmarkCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DialogueBookmarkCountAggregateOutputType> | number
-        }
-      }
-    }
-    EpisodeReward: {
-      payload: Prisma.$EpisodeRewardPayload<ExtArgs>
-      fields: Prisma.EpisodeRewardFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.EpisodeRewardFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.EpisodeRewardFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>
-        }
-        findFirst: {
-          args: Prisma.EpisodeRewardFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.EpisodeRewardFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>
-        }
-        findMany: {
-          args: Prisma.EpisodeRewardFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>[]
-        }
-        create: {
-          args: Prisma.EpisodeRewardCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>
-        }
-        createMany: {
-          args: Prisma.EpisodeRewardCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.EpisodeRewardCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>[]
-        }
-        delete: {
-          args: Prisma.EpisodeRewardDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>
-        }
-        update: {
-          args: Prisma.EpisodeRewardUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>
-        }
-        deleteMany: {
-          args: Prisma.EpisodeRewardDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.EpisodeRewardUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.EpisodeRewardUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>[]
-        }
-        upsert: {
-          args: Prisma.EpisodeRewardUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$EpisodeRewardPayload>
-        }
-        aggregate: {
-          args: Prisma.EpisodeRewardAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateEpisodeReward>
-        }
-        groupBy: {
-          args: Prisma.EpisodeRewardGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.EpisodeRewardGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.EpisodeRewardCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.EpisodeRewardCountAggregateOutputType> | number
         }
       }
     }
@@ -4939,19 +4864,6 @@ export const DialogueBookmarkScalarFieldEnum = {
 export type DialogueBookmarkScalarFieldEnum = (typeof DialogueBookmarkScalarFieldEnum)[keyof typeof DialogueBookmarkScalarFieldEnum]
 
 
-export const EpisodeRewardScalarFieldEnum = {
-  id: 'id',
-  episodeId: 'episodeId',
-  type: 'type',
-  payload: 'payload',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type EpisodeRewardScalarFieldEnum = (typeof EpisodeRewardScalarFieldEnum)[keyof typeof EpisodeRewardScalarFieldEnum]
-
-
 export const XpLevelScalarFieldEnum = {
   level: 'level',
   requiredTotalXp: 'requiredTotalXp',
@@ -5847,20 +5759,6 @@ export type ListEnumFaceTalkStatusFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
- * Reference to a field of type 'RewardType'
- */
-export type EnumRewardTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardType'>
-    
-
-
-/**
- * Reference to a field of type 'RewardType[]'
- */
-export type ListEnumRewardTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardType[]'>
-    
-
-
-/**
  * Reference to a field of type 'XpTriggerType'
  */
 export type EnumXpTriggerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'XpTriggerType'>
@@ -6237,6 +6135,20 @@ export type EnumRewardSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumRewardSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardSourceType[]'>
     
 
+
+/**
+ * Reference to a field of type 'RewardType'
+ */
+export type EnumRewardTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardType'>
+    
+
+
+/**
+ * Reference to a field of type 'RewardType[]'
+ */
+export type ListEnumRewardTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RewardType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -6356,7 +6268,6 @@ export type GlobalOmitConfig = {
   sticker?: Prisma.StickerOmit
   faceTalkSession?: Prisma.FaceTalkSessionOmit
   dialogueBookmark?: Prisma.dialogueBookmarkOmit
-  episodeReward?: Prisma.EpisodeRewardOmit
   xpLevel?: Prisma.XpLevelOmit
   xpRule?: Prisma.XpRuleOmit
   userXpHistory?: Prisma.UserXpHistoryOmit
