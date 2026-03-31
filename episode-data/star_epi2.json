@@ -116,15 +116,7 @@
           "data": {
             "replyMode": "auto",
             "situation": "You are Lady Ivelia, lover of Sir Kaiel. Lucian and Priest Edric interrogate you about a royal guard assassination. Provide an English alibi for Kaiel. This input determines whether Kaiel survives. You must sound like medieval nobility, calm and precise, focusing on facts only.",
-            "constraints": [
-              "Output must be in English only.",
-              "Write at least 2 complete sentences.",
-              "Include a clear time reference (e.g., ninth bell) and a specific location within the palace grounds.",
-              "Include at least one witness (named role or person) OR a verifiable physical/record detail (e.g., chapel ledger, lantern watch log).",
-              "Do not flirt with Edric or Lucian.",
-              "Do not accuse or imply Kaiel is guilty.",
-              "Do not mention game rules or scoring."
-            ],
+            "constraints": "Output must be in English only.\n\nWrite at least 2 complete sentences.\n\nInclude a clear time reference (e.g., ninth bell) and a specific location within the palace grounds.\n\nInclude at least one witness (named role or person) OR a verifiable physical/record detail (e.g., chapel ledger, lantern watch log).\n\nDo not flirt with Edric or Lucian.\n\nDo not accuse or imply Kaiel is guilty.\n\nDo not mention game rules or scoring.",
             "includeDialogues": true,
             "partnerCharacterIds": [1, 2, 3],
             "dataTablePrompt": "Persistent DataTable Setup (NPC ids: 1=Kaiel, 2=Lucian, 3=Edric). Create global columns: alibiPass (0/1), priestFriendly (0/1). Initialize both to 0 at episode start. After this user input, set alibiPass=1 only if the message is English, has 2+ sentences, and includes (time+place) and (witness or verifiable detail). Otherwise keep alibiPass=0. Do not reveal these variables directly to the user."
@@ -184,13 +176,7 @@
           "data": {
             "replyMode": "auto",
             "situation": "Priest Edric confesses feelings as a manipulation tactic to extract Kaiel's crimes. Your response sets a hidden flag. Any friendly, tender, trusting, or flirtatious tone toward Edric triggers a fatal ending later. A formal, distant, or case-focused reply avoids that flag.",
-            "constraints": [
-              "Output must be in Korean only.",
-              "Keep a ropan-style noble tone (formal, poised).",
-              "If you show friendliness/affection/trust toward Edric, set priestFriendly=1; otherwise keep priestFriendly=0.",
-              "Do not mention game rules or flags.",
-              "Do not ask the user questions; just provide your reply."
-            ],
+            "constraints": "Output must be in Korean only.\n\nKeep a ropan-style noble tone (formal, poised).\n\nIf you show friendliness/affection/trust toward Edric, set priestFriendly=1; otherwise keep priestFriendly=0.\n\nDo not mention game rules or flags.\n\nDo not ask the user questions; just provide your reply.",
             "includeDialogues": true,
             "partnerCharacterIds": [3],
             "dataTablePrompt": "Update DataTable global column priestFriendly (0/1) based on the user's tone/content. Set priestFriendly=1 if the reply contains friendliness, affection, emotional reliance, thanks that feels intimate, or trust toward Edric. Otherwise keep priestFriendly=0. Never reveal the flag."

@@ -157,6 +157,16 @@ export type DialogueBasic = {
   } | null;
 };
 
+/** Character.data JSON — 확장 시 동일 객체에 필드 추가 */
+export type CharacterGreetingMessage = {
+  englishText?: string;
+  koreanText?: string;
+};
+
+export type CharacterDataJson = {
+  greetingMessage?: CharacterGreetingMessage;
+};
+
 export type CharacterBasic = {
   id: number;
   scope: "GLOBAL" | "STORY";
@@ -166,6 +176,8 @@ export type CharacterBasic = {
   mainImage: string | null;
   description: string;
   personality: string | null;
+  /** greetingMessage 등 — Prisma Json */
+  data?: CharacterDataJson | Record<string, unknown> | null;
   chatPrompt: string | null;
   playEpisodePrompt: string | null;
   status: "DRAFT" | "PUBLISHED" | "HIDDEN" | "ARCHIVED" | "DELETED";

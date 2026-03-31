@@ -44,7 +44,7 @@ type Character = {
   personality: string | null;
   chatPrompt: string | null;
   playEpisodePrompt: string | null;
-  greetingMessage: string | null;
+  data: unknown;
   images: CharacterImage[];
 };
 
@@ -54,7 +54,8 @@ type CharacterFormData = {
   personality: string;
   chatPrompt: string;
   playEpisodePrompt: string;
-  greetingMessage: string;
+  greetingEnglish: string;
+  greetingKorean: string;
   avatarImage: string;
   mainImage: string;
   isUserSelectable: boolean;
@@ -75,6 +76,8 @@ export default function CharacterEditPage() {
     { imageUrl: string; label: string; isDefault: boolean }[]
   >([]);
   const [deletedImageIds, setDeletedImageIds] = useState<string[]>([]);
+  /** data JSON minus greetingMessage merge target on save */
+  const [characterDataRest, setCharacterDataRest] = useState<Record<string, unknown>>({});
 
   const { register, handleSubmit, control, reset, watch } =
     useForm<CharacterFormData>({
@@ -84,7 +87,8 @@ export default function CharacterEditPage() {
         personality: "",
         chatPrompt: "",
         playEpisodePrompt: "",
-        greetingMessage: "",
+        greetingEnglish: "",
+        greetingKorean: "",
         avatarImage: "",
         mainImage: "",
         isUserSelectable: false,
@@ -107,13 +111,27 @@ export default function CharacterEditPage() {
         const data = await res.json();
         setCharacter(data);
         setImages(data.images || []);
+        const rawData =
+          data.data &&
+          typeof data.data === "object" &&
+          !Array.isArray(data.data)
+            ? (data.data as Record<string, unknown>)
+            : {};
+        const gm = rawData.greetingMessage as
+          | { englishText?: string; koreanText?: string }
+          | undefined;
+        const { greetingMessage: _omit, ...rest } = rawData;
+        setCharacterDataRest(rest);
         reset({
           name: data.name,
           description: data.description,
           personality: data.personality || "",
           chatPrompt: data.chatPrompt || "",
           playEpisodePrompt: data.playEpisodePrompt || "",
-          greetingMessage: data.greetingMessage || "",
+          greetingEnglish:
+            typeof gm?.englishText === "string" ? gm.englishText : "",
+          greetingKorean:
+            typeof gm?.koreanText === "string" ? gm.koreanText : "",
           avatarImage: data.avatarImage,
           mainImage: data.mainImage,
           isUserSelectable: data.isUserSelectable ?? false,
@@ -131,6 +149,13 @@ export default function CharacterEditPage() {
 
   const onSubmit = async (data: CharacterFormData) => {
     setSaving(true);
+    const dataJson = {
+      ...characterDataRest,
+      greetingMessage: {
+        englishText: data.greetingEnglish.trim(),
+        koreanText: data.greetingKorean.trim(),
+      },
+    };
     const body = {
       name: data.name,
       avatarImage: data.avatarImage || "/placeholder-avatar.png",
@@ -138,7 +163,7 @@ export default function CharacterEditPage() {
       personality: data.personality || null,
       chatPrompt: data.chatPrompt || null,
       playEpisodePrompt: data.playEpisodePrompt || null,
-      greetingMessage: data.greetingMessage || null,
+      data: dataJson,
       mainImage: data.mainImage ?? null,
       isUserSelectable: data.isUserSelectable,
       minUserLevel: data.isUserSelectable ? data.minUserLevel : 1,
@@ -338,15 +363,34 @@ export default function CharacterEditPage() {
                   />
                 </div>
 
-                <div>
+                <div className="space-y-3">
                   <Label className="text-sm font-medium">
                     Greeting Message
                   </Label>
-                  <Textarea
-                    {...register("greetingMessage")}
-                    className="mt-2 rounded-xl bg-secondary border-0 min-h-[80px]"
-                    placeholder="First message when user starts a conversation with this character..."
-                  />
+                  <p className="text-xs text-muted-foreground">
+                    채팅 시작 시 인사 — 영어 / 한국어 각각 저장됩니다 (
+                    <code className="text-[11px]">data.greetingMessage</code>)
+                  </p>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">
+                      English
+                    </Label>
+                    <Textarea
+                      {...register("greetingEnglish")}
+                      className="mt-1 rounded-xl bg-secondary border-0 min-h-[72px]"
+                      placeholder="First message in English..."
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">
+                      Korean
+                    </Label>
+                    <Textarea
+                      {...register("greetingKorean")}
+                      className="mt-1 rounded-xl bg-secondary border-0 min-h-[72px]"
+                      placeholder="첫 인사 (한국어)..."
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-4">

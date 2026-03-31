@@ -34,7 +34,7 @@
       "data": {
         "replyMode": "auto",
         "situation": "The other guy greets you on a speed date. he is kind but doesn't like rude or weired girls",
-        "constraints": [],
+        "constraints": "",
         "includeDialogues": true,
         "partnerCharacterIds": [10]
       }
@@ -51,7 +51,7 @@
       "data": {
         "replyMode": "auto",
         "situation": "They are doing speed dating",
-        "constraints": [],
+        "constraints": "",
         "includeDialogues": true,
         "partnerCharacterIds": [10]
       }
@@ -68,7 +68,7 @@
       "data": {
         "replyMode": "auto",
         "situation": "They are doing speed dating",
-        "constraints": [],
+        "constraints": "",
         "includeDialogues": true,
         "partnerCharacterIds": [10]
       }
@@ -85,7 +85,7 @@
       "data": {
         "replyMode": "auto",
         "situation": "They are doing speed dating",
-        "constraints": ["Reply and say it's finishing time"],
+        "constraints": "Reply and say it's finishing time",
         "dataTablePrompt": "Store each NPC's affinity score in the 'affinity' column (0–100),based on message interactions, emotional bonding, and the NPC’s level of affection toward the user.",
         "includeDialogues": true,
         "partnerCharacterIds": [10]

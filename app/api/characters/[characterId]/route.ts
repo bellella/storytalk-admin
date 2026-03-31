@@ -22,7 +22,7 @@ const ALLOWED_FIELDS = [
   "personality",
   "chatPrompt",
   "playEpisodePrompt",
-  "greetingMessage",
+  "data",
   "isUserSelectable",
   "minUserLevel",
 ] as const;

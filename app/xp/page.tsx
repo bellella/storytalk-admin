@@ -50,8 +50,16 @@ type XpRuleFormValues = {
 
 const TRIGGER_OPTIONS = [
   { value: "EPISODE_COMPLETE", label: "Episode Complete" },
+  { value: "PLAY_EPISODE_COMPLETE", label: "Play Episode Complete" },
   { value: "DAILY_QUIZ_COMPLETE", label: "Daily Quiz Complete" },
-];
+  { value: "ATTENDANCE", label: "Attendance" },
+] as const;
+
+function triggerTypeLabel(triggerType: string) {
+  return (
+    TRIGGER_OPTIONS.find((o) => o.value === triggerType)?.label ?? triggerType
+  );
+}
 
 export default function XpSettingsPage() {
   const { data: levels = [], isLoading: levelsLoading } = useXpLevels();
@@ -457,7 +465,7 @@ export default function XpSettingsPage() {
                     >
                       <div>
                         <div className="text-xs font-semibold">
-                          #{rule.id} · {rule.triggerType}
+                          #{rule.id} · {triggerTypeLabel(rule.triggerType)}
                         </div>
                         <div className="text-xs text-muted-foreground">
                           {rule.xpAmount} XP · priority {rule.priority}
